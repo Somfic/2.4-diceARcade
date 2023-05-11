@@ -9,16 +9,20 @@
 using namespace cv;
 using namespace std;
 
-int main(int argc, char** argv)
+DiceDetection::DiceDetection() {
+
+}
+
+void DiceDetection::startDetection()
 {
     // Open the default video camera
-    VideoCapture cap(0);
+    VideoCapture cap(1);
 
     // Check if the camera was opened successfully
     if (!cap.isOpened())
     {
         cout << "Error opening video stream or file" << endl;
-        return -1;
+        return;
     }
 
     while (true)
@@ -33,7 +37,7 @@ int main(int argc, char** argv)
 
         // Threshold the grayscale image to create a binary image
         Mat binaryImage;
-        threshold(grayImage, binaryImage, 100, 255, THRESH_BINARY);
+        threshold(grayImage, binaryImage, 50, 255, THRESH_BINARY);
 
         // Set up SimpleBlobDetector parameters
         SimpleBlobDetector::Params params;
@@ -72,7 +76,8 @@ int main(int argc, char** argv)
 
         // Show the image with keypoints in a window
         namedWindow("Die Image", WINDOW_NORMAL);
-        imshow("Die Image", grayImage);
+        imshow("Die Image", imageWithKeypoints);
+        imshow("Die Image2", binaryImage);
 
         // Press ESC to exit
         char c = waitKey(1);
@@ -85,6 +90,5 @@ int main(int argc, char** argv)
     // Release the camera and close all windows
     cap.release();
     destroyAllWindows();
-
-    return 0;
 }
+

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "DiceDetection.h"
 using tigl::Vertex;
 
 #pragma comment(lib, "glfw3.lib")
@@ -16,6 +17,8 @@ void draw();
 
 int main(void)
 {
+    DiceDetection dd = DiceDetection::DiceDetection();
+    dd.startDetection();
     if (!glfwInit())
         throw "Could not initialize glwf";
     window = glfwCreateWindow(1400, 800, "Hello World", NULL, NULL);
