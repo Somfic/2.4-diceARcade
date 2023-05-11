@@ -10,6 +10,7 @@ using tigl::Vertex;
 #pragma comment(lib, "opengl32.lib")
 
 GLFWwindow* window;
+DiceDetection dd;
 
 void init();
 void update();
@@ -17,8 +18,6 @@ void draw();
 
 int main(void)
 {
-    DiceDetection dd = DiceDetection::DiceDetection();
-    dd.startDetection();
     if (!glfwInit())
         throw "Could not initialize glwf";
     window = glfwCreateWindow(1400, 800, "Hello World", NULL, NULL);
@@ -52,16 +51,20 @@ void init()
 {
     glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        if (key == GLFW_KEY_ESCAPE)
+        if (key == GLFW_KEY_ESCAPE) {
             glfwSetWindowShouldClose(window, true);
+            dd.stop();
+        }
+            
     });
 
+    dd = DiceDetection::DiceDetection();
 }
 
 
 void update()
 {
-
+    dd.startDetection();
 }
 
 void draw()
