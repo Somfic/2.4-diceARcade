@@ -65,21 +65,51 @@ int DiceDetection::startDetection()
 	// Detect blobs in the binary image
 	vector<KeyPoint> keypoints;
 	detector->detect(binaryImage, keypoints);
-
+	
 	// Count the number of dice
 	int numDice = 0;
-	for (size_t i = 0; i < keypoints.size(); i++)
+	int dice1 = 0;
+	int dice2 = 0;
+	if (keypoints.size() > 0)
 	{
-		if (keypoints[i].size > 50)
+		numDice = 1;
+		// Sort keypoints based on the x-coordinate
+		sort(keypoints.begin(), keypoints.end(), [](const KeyPoint& a, const KeyPoint& b) {
+			return a.pt.x < b.pt.x;
+			});
+
+		float smallestDistance = 0;
+
+		// Initialize the first keypoint as the reference for comparison
+		float referenceX = keypoints[0].pt.x;
+		float referenceY = keypoints[0].pt.y;
+
+		for (size_t i = 1; i < keypoints.size(); i++)
 		{
-			numDice++;
+			float currentX = keypoints[i].pt.x;
+			float currentY = keypoints[i].pt.y;
+
+			float distance = sqrt(pow(currentX - referenceX, 2) + pow(currentY - referenceY, 2));
+			
+			if (smallestDistance == 0) {
+				smallestDistance = distance;
+				continue;
+			}
+			if (smallestDistance *3 < distance) {
+				numDice = 2;
+				dice1++;
+				continue;
+			}
+			if (smallestDistance > distance)
+				smallestDistance = distance;
 		}
 	}
 
 	// Print the number of dice and the number of blobs
 	cout << "Number of dice: " << numDice << endl;
 	cout << "Number of blobs: " << keypoints.size() << endl;
-
+	cout << "dice 1: " << dice1 << endl;
+	cout << "dice 2: " << keypoints.size() - dice1 << endl;
 	// Draw the keypoints on the original image
 	Mat imageWithKeypoints;
 	Mat binaryImageWithKeypoints;
