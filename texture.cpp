@@ -15,15 +15,16 @@ Texture::Texture(const std::string& fileName)
 	unsigned char* imgData = stbi_load(fileName.c_str(), &width, &height, &bpp, 4);
 
 
-	//flipping textures because open gl stores textures upside down.
-	for (int i = 0; i < height / 2; i++)
-	{
-		for (int j = 0; j < width * 4; j++) {
-			char s = imgData[i * width * 4 + j];
-			imgData[i * width * 4 + j] = imgData[(height - i - 1) * width * 4 + j];
-			imgData[(height - i - 1) * width * 4 + j] = s;
-		}
-	}
+	////flipping textures because open gl stores textures upside down.
+	//for (int i = 0; i < height / 2; i++)
+	//{
+	//	for (int j = 0; j < width * 4; j++) {
+	//		char s = imgData[i * width * 4 + j];
+	//		imgData[i * width * 4 + j] = imgData[(height - i - 1) * width * 4 + j];
+	//		imgData[(height - i - 1) * width * 4 + j] = s;
+	//	}
+	//}
+	stbi_set_flip_vertically_on_load(true);
 
 	glTexImage2D(GL_TEXTURE_2D,
 		0, //level
