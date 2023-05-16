@@ -38,16 +38,19 @@ int DiceDetection::startDetection()
 
 	// Threshold the grayscale image to create a binary image
 	Mat binaryImage;
-	
 	threshold(grayImage, binaryImage, 100, 255, THRESH_BINARY);
 
+	Mat invertedImage;
+	bitwise_not(binaryImage, invertedImage);
+
 	Mat erodedImage;
-	erodeImage(&binaryImage, &erodedImage);
+	erodeImage(&invertedImage, &erodedImage);
 
 	Mat dilatedImage;
-	dilateImage(&binaryImage, &dilatedImage);
+	dilateImage(&invertedImage, &dilatedImage);
 
-
+	bitwise_not(erodedImage, erodedImage);
+	bitwise_not(dilatedImage, dilatedImage);
 
 	// Set up SimpleBlobDetector parameters
 	SimpleBlobDetector::Params params;
@@ -123,7 +126,8 @@ int DiceDetection::startDetection()
 	// Show the image with keypoints in a window
 	namedWindow("Die Image", WINDOW_NORMAL);
 	imshow("Die Image", imageWithKeypoints);
-	imshow("Die Image2", binaryImageWithKeypoints);
+	imshow("binary Image", binaryImageWithKeypoints);
+	imshow("inverted image", invertedImage);
 	imshow("eroded Image", erodedImageWithKeypoints);
 	imshow("dilated Image", dilatedImageWithKeypoints);
 
@@ -146,7 +150,7 @@ void erodeImage(Mat *originalImage, Mat *newImage) {
 
 void dilateImage(Mat *originalImage, Mat *newImage) {
 	int dilation_type = 2;
-	int dilation_size = 5;
+	int dilation_size = 2;
 	int dilation_elem = MORPH_ELLIPSE;
 	Mat element = getStructuringElement(dilation_type,
 		Size(2 * dilation_size + 1, 2 * dilation_size + 1),
