@@ -11,6 +11,7 @@ using tigl::Vertex;
 
 GLFWwindow* window;
 ObjModel* model;
+ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(0.0f);
 int speed = 20;
 
@@ -56,7 +57,8 @@ void init()
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
     });
-    model = new ObjModel("model"); //add filepath here
+    model = new ObjModel("models/steve/steve.obj"); 
+    model2 = new ObjModel("models/steve/steve.obj");//add filepath here
 }
 float rotation = 0;
 double lastFrameTime = 0;
@@ -102,4 +104,6 @@ void draw()
 
     glPointSize(10.0f);
     model->draw();
+    tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), -rotation, glm::vec3(0, 1, 0)));
+    model2->draw();
 }

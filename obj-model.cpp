@@ -205,9 +205,9 @@ void ObjModel::draw()
 		bool hascolor = false;
 		glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 		//tigl::shader->setColorMult(color);
-		for (auto face : group->faces) {
+		for (const auto &face : group->faces) {
 			tigl::begin(GL_TRIANGLES);
-			for (auto vertex : face.vertices) {
+			for (const auto &vertex : face.vertices) {
 				if (vertex.position < 0) throw "no position found";
 				;				bool hasnormal = vertex.normal >= 0;
 				bool hastexcoord = vertex.texcoord >= 0;

@@ -8,7 +8,7 @@
 # Object files
 *.o
 *.ko
-*.obj
+#.obj
 *.elf
 
 # Linker output
@@ -625,7 +625,7 @@ Temporary Items
 *.slo
 *.lo
 *.o
-*.obj
+#*.obj
 
 # Precompiled Headers
 *.gch
