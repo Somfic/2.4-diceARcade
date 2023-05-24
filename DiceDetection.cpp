@@ -13,6 +13,7 @@ VideoCapture cap(1);
 
 void erodeImage(Mat *originalImage, Mat *newImage);
 void dilateImage(Mat *originalImage, Mat *newImage);
+float calculateDistance(const KeyPoint& p1, const KeyPoint& p2);
 
 DiceDetection::DiceDetection() {
 
@@ -82,34 +83,42 @@ int DiceDetection::startDetection()
 			});
 
 		float smallestDistance = 0;
+		int smallestDistanceIndex = 0;
 
-		// Initialize the first keypoint as the reference for comparison
-		float referenceX = keypoints[0].pt.x;
-		float referenceY = keypoints[0].pt.y;
+		// Find smallest distance between 2 keypoints
+		KeyPoint lastPoint = keypoints[keypoints.size() - 1];
+		for (int j = 0; j < keypoints.size(); j++) {
+			KeyPoint referencePoint = keypoints[j];
+			for (int i = 0; i < keypoints.size(); i++) {
+				KeyPoint currentPoint = keypoints[i];
+				float distance = calculateDistance(currentPoint, referencePoint);
 
-		for (size_t i = 1; i < keypoints.size(); i++)
-		{
-			float currentX = keypoints[i].pt.x;
-			float currentY = keypoints[i].pt.y;
-
-			float distance = sqrt(pow(currentX - referenceX, 2) + pow(currentY - referenceY, 2));
-			
-			if (smallestDistance == 0) {
-				smallestDistance = distance;
-				continue;
+				if (smallestDistance == 0 || smallestDistance > distance && distance != 0) {
+					smallestDistance = distance;
+					smallestDistanceIndex = j;
+				}
+					
 			}
+		}
+		cout << "smallest distance " << smallestDistance << endl;
+		KeyPoint referencePoint = keypoints[smallestDistanceIndex];
+		for (int i = 0; i < keypoints.size(); i++)
+		{
+			KeyPoint currentPoint = keypoints[i];
+			float distance = calculateDistance(currentPoint, referencePoint);
+			
+			cout << "distance: " << distance << endl ;
 			if (smallestDistance *3 < distance) {
+
 				numDice = 2;
 				dice1++;
 				continue;
 			}
-			if (smallestDistance > distance)
-				smallestDistance = distance;
 		}
 	}
 
 	// Print the number of dice and the number of blobs
-	cout << "Number of dice: " << numDice << endl;
+	
 	cout << "Number of blobs: " << keypoints.size() << endl;
 	cout << "dice 1: " << dice1 << endl;
 	cout << "dice 2: " << keypoints.size() - dice1 << endl;
@@ -137,6 +146,10 @@ int DiceDetection::startDetection()
 void DiceDetection::stop() {
 	destroyAllWindows();
 	cap.release();
+}
+
+float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
+	return sqrt(pow(p1.pt.x - p2.pt.x, 2) + pow(p1.pt.y - p2.pt.y, 2));
 }
 
 void erodeImage(Mat *originalImage, Mat *newImage) {
