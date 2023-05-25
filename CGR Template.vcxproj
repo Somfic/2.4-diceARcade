@@ -159,16 +159,22 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DrawComponent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ModelComponent.cpp" />
+    <ClCompile Include="MoveToComponent.cpp" />
     <ClCompile Include="obj-model.cpp" />
-    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="SpinComponent.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="tigl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="DrawComponent.h" />
+    <ClInclude Include="ModelComponent.h" />
+    <ClInclude Include="MoveToComponent.h" />
     <ClInclude Include="obj-model.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="SpinComponent.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="tigl.h" />
   </ItemGroup>

@@ -1,17 +1,17 @@
 #pragma once
-
-class Object;
+#include "GameObject.h"
+//class GameObject;
 
 class Component
 {
 protected:
-	Object* object;
+	GameObject* object;
 public:
 	Component();
 	~Component();
 
 	virtual void update(float elapsedTime) {};
 
-	inline void setObject(Object* object) { this->object = object; }
+	inline void setObject(GameObject* object) { this->object = object; }
 };
 

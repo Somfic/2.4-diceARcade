@@ -7,16 +7,15 @@
 
 class Component;
 class DrawComponent;
-class BoundingBoxComponent;
 
-class Object
+class GameObject
 {
 	std::shared_ptr<DrawComponent> drawComponent;
 
 	std::list<std::shared_ptr<Component>> components;
 public:
-	Object();
-	~Object();
+	GameObject();
+	~GameObject();
 
 
 	glm::vec3 position;
