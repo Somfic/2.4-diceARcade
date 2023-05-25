@@ -1,4 +1,4 @@
-#include "obj-model.h"
+#include "ModelComponent.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -74,13 +74,7 @@ static inline std::string cleanLine(std::string line)
 	return line;
 }
 
-
-
-
-/**
-* Loads an object model
-*/
-ObjModel::ObjModel(const std::string& fileName)
+ModelComponent::ModelComponent(const std::string& fileName)
 {
 	std::cout << "Loading " << fileName << std::endl;
 	std::string dirName = fileName;
@@ -175,15 +169,15 @@ ObjModel::ObjModel(const std::string& fileName)
 		}
 	}
 	groups.push_back(currentGroup);
+	initModel();
 }
 
 
-ObjModel::~ObjModel(void)
+ModelComponent::~ModelComponent()
 {
 }
 
-
-void ObjModel::draw()
+void ModelComponent::initModel()
 {
 	for (auto group : groups)
 	{
@@ -192,7 +186,7 @@ void ObjModel::draw()
 			if (materials[group->materialIndex]->texture != NULL) {
 				tigl::shader->enableTexture(true);
 				materials[group->materialIndex]->texture->bind();
-				//std::cout << "Ik was hier" << std::endl;
+				std::cout << "Ik was hier" << std::endl;
 			}
 			else {
 				tigl::shader->enableTexture(false);
@@ -202,47 +196,44 @@ void ObjModel::draw()
 			tigl::shader->enableTexture(false);
 
 		}
-		bool hascolor = false;
+		bool hascolor = true;
 		glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 		//tigl::shader->setColorMult(color);
-		for (const auto &face : group->faces) {
-			tigl::begin(GL_TRIANGLES);
-			for (const auto &vertex : face.vertices) {
+		for (const auto& face : group->faces) {
+			for (const auto& vertex : face.vertices) {
 				if (vertex.position < 0) throw "no position found";
-				;				bool hasnormal = vertex.normal >= 0;
+				bool hasnormal = vertex.normal >= 0;
 				bool hastexcoord = vertex.texcoord >= 0;
 				char vertexCode = (hascolor << 2) | (hasnormal << 1) | hastexcoord;
 
 				switch (vertexCode) {
 				case 0:
-					tigl::addVertex(tigl::Vertex::P(vertices[vertex.position]));
+					verts.push_back(tigl::Vertex::P(vertices[vertex.position]));
 					break;
 				case 1:
-					tigl::addVertex(tigl::Vertex::PT(vertices[vertex.position], texcoords[vertex.texcoord]));
+					verts.push_back(tigl::Vertex::PT(vertices[vertex.position], texcoords[vertex.texcoord]));
 					break;
 				case 2:
-					tigl::addVertex(tigl::Vertex::PN(vertices[vertex.position], normals[vertex.normal]));
+					verts.push_back(tigl::Vertex::PN(vertices[vertex.position], normals[vertex.normal]));
 					break;
 				case 3:
-					tigl::addVertex(tigl::Vertex::PTN(vertices[vertex.position], texcoords[vertex.texcoord], normals[vertex.normal]));
+					verts.push_back(tigl::Vertex::PTN(vertices[vertex.position], texcoords[vertex.texcoord], normals[vertex.normal]));
 					break;
 				case 4:
-					tigl::addVertex(tigl::Vertex::PC(vertices[vertex.position], color));
+					verts.push_back(tigl::Vertex::PC(vertices[vertex.position], color));
 					break;
 				case 5:
-					tigl::addVertex(tigl::Vertex::PTC(vertices[vertex.position], texcoords[vertex.texcoord], color));
+					verts.push_back(tigl::Vertex::PTC(vertices[vertex.position], texcoords[vertex.texcoord], color));
 					break;
 				case 6:
-					tigl::addVertex(tigl::Vertex::PCN(vertices[vertex.position], color, normals[vertex.normal]));
+					verts.push_back(tigl::Vertex::PCN(vertices[vertex.position], color, normals[vertex.normal]));
 					break;
 				case 7:
-					tigl::addVertex(tigl::Vertex::PCTN(vertices[vertex.position], color, texcoords[vertex.texcoord], normals[vertex.normal]));
+					verts.push_back(tigl::Vertex::PCTN(vertices[vertex.position], color, texcoords[vertex.texcoord], normals[vertex.normal]));
 					break;
 				}
 
 			}
-			tigl::end();
-
 		}
 		tigl::shader->enableColorMult(false);
 	}
@@ -254,8 +245,7 @@ void ObjModel::draw()
 	//    foreach vertex in face
 	//      emit vertex
 }
-
-void ObjModel::loadMaterialFile(const std::string& fileName, const std::string& dirName)
+void ModelComponent::loadMaterialFile(const std::string& fileName, const std::string& dirName)
 {
 	std::cout << "Loading " << fileName << std::endl;
 	std::ifstream pFile(fileName.c_str());
@@ -331,9 +321,21 @@ void ObjModel::loadMaterialFile(const std::string& fileName, const std::string& 
 
 }
 
-ObjModel::MaterialInfo::MaterialInfo()
+void ModelComponent::draw()
+{
+	for (auto group : groups) {
+		if (group->materialIndex >= 0) {
+			if (materials[group->materialIndex]->texture != NULL) {
+				tigl::shader->enableTexture(true);
+				materials[group->materialIndex]->texture->bind();
+			}
+		}
+	}
+	tigl::drawVertices(GL_TRIANGLES, verts);
+	tigl::shader->enableTexture(false);
+}
+
+ModelComponent::MaterialInfo::MaterialInfo()
 {
 	texture = NULL;
 }
-
-

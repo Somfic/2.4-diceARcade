@@ -2,7 +2,11 @@
 #include <GLFW/glfw3.h>
 #include "tigl.h"
 #include "obj-model.h"
+#include "GameObject.h"
+#include "ModelComponent.h"
+#include "SpinComponent.h"
 #include <glm/gtc/matrix_transform.hpp>
+
 using tigl::Vertex;
 
 #pragma comment(lib, "glfw3.lib")
@@ -10,7 +14,9 @@ using tigl::Vertex;
 #pragma comment(lib, "opengl32.lib")
 
 GLFWwindow* window;
-ObjModel* model;
+std::shared_ptr<GameObject> model;
+std::shared_ptr<GameObject> model3;
+std::list<std::shared_ptr<GameObject>> objects;
 ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(0.0f);
 int speed = 20;
@@ -57,7 +63,16 @@ void init()
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
     });
-    model = new ObjModel("models/steve/steve.obj"); 
+
+    model = std::make_shared<GameObject>();
+    model->position = glm::vec3(0, 1, 5);
+    model->addComponent(std::make_shared<ModelComponent>("models/steve/steve.obj"));
+    model->addComponent(std::make_shared<SpinComponent>(5));
+    model3 = std::make_shared<GameObject>();
+    model3->position = glm::vec3(10, 1, 5);
+    model3->addComponent(std::make_shared<ModelComponent>("models/car/honda_jazz.obj"));
+    objects.push_back(model3);
+    objects.push_back(model);
     model2 = new ObjModel("models/steve/steve.obj");//add filepath here
 }
 float rotation = 0;
@@ -82,6 +97,9 @@ void update()
     if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
         camPostion.y += speed * deltaTime;
     }
+    for (auto& object : objects) {
+        object->update(deltaTime);
+    }
 }
 
 void draw()
@@ -94,7 +112,7 @@ void draw()
     glm::mat4 projection = glm::perspective(glm::radians(75.0f), viewport[2] / (float)viewport[3], 0.01f, 500.0f);
 
     tigl::shader->setProjectionMatrix(projection);
-    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), glm::vec3(0, 1, 5), glm::vec3(0, 1, 0)));
     tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 1, 0)));
 
     tigl::shader->enableColor(true);
@@ -103,7 +121,9 @@ void draw()
 
 
     glPointSize(10.0f);
-    model->draw();
+    for (auto& object : objects) {
+        object->draw();
+    }
     tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), -rotation, glm::vec3(0, 1, 0)));
-    model2->draw();
+    //model2->draw();
 }

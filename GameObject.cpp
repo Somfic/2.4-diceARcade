@@ -1,18 +1,19 @@
-#include "Object.h"
+#include "GameObject.h"
 #include "DrawComponent.h"
+#include <iostream>
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 //#include "BoundingBoxComponent.h"
 
-Object::Object()
+GameObject::GameObject()
 {
 }
 
-Object::~Object()
+GameObject::~GameObject()
 {
 }
 
-void Object::addComponent(std::shared_ptr<Component> component)
+void GameObject::addComponent(std::shared_ptr<Component> component)
 {
 	component->setObject(this);
 	components.push_back(component);
@@ -22,13 +23,13 @@ void Object::addComponent(std::shared_ptr<Component> component)
 
 }
 
-std::list<std::shared_ptr<Component>> Object::getComponents()
+std::list<std::shared_ptr<Component>> GameObject::getComponents()
 {
 	return components;
 }
 
 
-void Object::draw(const glm::mat4& parentMatrix)
+void GameObject::draw(const glm::mat4& parentMatrix)
 {
 	if (!drawComponent)
 		return;
@@ -44,7 +45,7 @@ void Object::draw(const glm::mat4& parentMatrix)
 	drawComponent->draw();
 }
 
-void Object::update(float elapsedTime)
+void GameObject::update(float elapsedTime)
 {
 	for (auto& c : components)
 		c->update(elapsedTime);
