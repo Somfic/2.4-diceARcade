@@ -160,7 +160,10 @@
     <ClCompile Include="DrawComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="MoveToComponent.cpp" />
+=======
+>>>>>>> components
     <ClCompile Include="obj-model.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="SpinComponent.cpp" />
@@ -171,7 +174,10 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="DrawComponent.h" />
     <ClInclude Include="ModelComponent.h" />
+<<<<<<< HEAD
     <ClInclude Include="MoveToComponent.h" />
+=======
+>>>>>>> components
     <ClInclude Include="obj-model.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="SpinComponent.h" />

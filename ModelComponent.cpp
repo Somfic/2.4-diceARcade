@@ -186,9 +186,23 @@ void ModelComponent::initModel()
 			if (materials[group->materialIndex]->texture != NULL) {
 				tigl::shader->enableTexture(true);
 				materials[group->materialIndex]->texture->bind();
+<<<<<<< HEAD
 			}
 		} 
 		bool hascolor = false;
+=======
+				std::cout << "Ik was hier" << std::endl;
+			}
+			else {
+				tigl::shader->enableTexture(false);
+			}
+		}
+		else {
+			tigl::shader->enableTexture(false);
+
+		}
+		bool hascolor = true;
+>>>>>>> components
 		glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 		//tigl::shader->setColorMult(color);
 		for (const auto& face : group->faces) {

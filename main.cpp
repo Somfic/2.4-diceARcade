@@ -124,4 +124,9 @@ void draw()
     for (auto& object : objects) {
         object->draw();
     }
+<<<<<<< HEAD
+=======
+    tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), -rotation, glm::vec3(0, 1, 0)));
+    //model2->draw();
+>>>>>>> components
 }
