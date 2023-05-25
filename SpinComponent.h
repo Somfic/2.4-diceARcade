@@ -5,14 +5,8 @@ class SpinComponent : public Component
 {
 	
 public:
-
-<<<<<<< HEAD
 	float speed;
 	SpinComponent(float speed);
-=======
-	int speed;
-	SpinComponent(int speed);
->>>>>>> components
 	SpinComponent();
 	~SpinComponent();
 

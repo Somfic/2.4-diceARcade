@@ -1,11 +1,7 @@
 #include "SpinComponent.h"
 
 
-<<<<<<< HEAD
 SpinComponent::SpinComponent(float speed) {
-=======
-SpinComponent::SpinComponent(int speed) {
->>>>>>> components
 	this->speed = speed;
 }
 SpinComponent::SpinComponent() {
