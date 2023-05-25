@@ -53,6 +53,13 @@ int DiceDetection::startDetection()
 	bitwise_not(erodedImage, erodedImage);
 	bitwise_not(dilatedImage, dilatedImage);
 
+	Mat cannyImage;
+	int treshold = 50;
+	int ratio = 3;
+	blur(grayImage, cannyImage, Size(3, 3));
+	Canny(cannyImage, cannyImage, treshold, treshold * ratio, 3);
+	imshow("canny Image", cannyImage);
+
 	// Set up SimpleBlobDetector parameters
 	SimpleBlobDetector::Params params;
 	params.filterByArea = true;
