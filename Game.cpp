@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <vector>
 #include <string>
+#include "Space.cpp"
 
 class Game
 {
@@ -32,24 +33,5 @@ class Game
 
 	std::vector<Space> getSpaces() {
 		return spaces;
-	}
-};
-
-
-// class player has an id, a color and a current space
-class Player
-{
-	Game game;
-	int id;
-	std::string color;
-	Space currentSpace;
-	// constructor with an id and a color as parameters
-	Player(int i, std::string c, Game g) {
-		game = g;
-		// set the id and the color
-		id = i;
-		color = c;
-		// set the current space to the first space
-		currentSpace = game.getSpaces[0];
 	}
 };
