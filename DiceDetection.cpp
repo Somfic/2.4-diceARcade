@@ -5,11 +5,17 @@
 #include <opencv2/features2d.hpp>
 #include <iostream>
 #include <vector>
+#include <thread>
+#include <queue>
 
 using namespace cv;
 using namespace std;
 
-VideoCapture cap(1);
+VideoCapture cap(0);
+bool isRunning = false;
+Mat imageWithKeypoints;
+mutex mtx; // Mutex to protect the image queue
+std::queue<cv::Mat> imageQueue; // Queue to store processed images
 
 void erodeImage(Mat *originalImage, Mat *newImage);
 void dilateImage(Mat *originalImage, Mat *newImage);
@@ -19,13 +25,14 @@ DiceDetection::DiceDetection() {
 
 }
 
-int DiceDetection::startDetection()
-{
+void DiceDetection::startDetection(int* result)
+{	
+	*result = -1;
 	// Check if the camera was opened successfully
 	if (!cap.isOpened())
 	{
 		cout << "Error opening video stream or file" << endl;
-		return -1;
+		return;
 	}
 
 
@@ -58,7 +65,7 @@ int DiceDetection::startDetection()
 	int ratio = 3;
 	blur(grayImage, cannyImage, Size(3, 3));
 	Canny(cannyImage, cannyImage, treshold, treshold * ratio, 3);
-	imshow("canny Image", cannyImage);
+	//imshow("canny Image", cannyImage);
 
 	// Set up SimpleBlobDetector parameters
 	SimpleBlobDetector::Params params;
@@ -144,7 +151,7 @@ int DiceDetection::startDetection()
 	cout << "dice 1: " << dice1 << endl;
 	cout << "dice 2: " << keypoints.size() - dice1 << endl;
 	// Draw the keypoints on the original image
-	Mat imageWithKeypoints;
+	
 	Mat binaryImageWithKeypoints;
 	Mat erodedImageWithKeypoints;
 	Mat dilatedImageWithKeypoints;
@@ -168,17 +175,65 @@ int DiceDetection::startDetection()
 	cv::drawContours(result, diceContours, -1, cv::Scalar(0, 255, 0), 2);
 	cv::imshow("Result", result);*/
 
-	cv::Mat result = imageWithKeypoints.clone();
+	cv::Mat resultImage = imageWithKeypoints.clone();
 	for (const auto& rect : diceContours) {
-		cv::rectangle(result, rect, cv::Scalar(0, 255, 0), 2);
+		cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 0), 2);
 	}
-	cv::imshow("Result", result);
-	return keypoints.size();
+
+	mtx.lock();
+	imageQueue.push(imageWithKeypoints);
+	//imageQueue.push(cannyImage);
+	imageQueue.push(resultImage);
+	mtx.unlock();
+
+	*result = keypoints.size();
+}
+
+void DiceDetection::startDetectionWrapper(int* result) {
+	if (isRunning) {
+		std::cout << "already running" << std::endl;
+		return;
+	}
+
+	isRunning = true;
+	while (isRunning)
+	{
+		startDetection(result);
+		//this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	
 }
 
 void DiceDetection::stop() {
+	isRunning = false;
 	destroyAllWindows();
 	cap.release();
+}
+
+void DiceDetection::displayThread()
+{
+	while (true) {
+		mtx.lock();
+
+		// Check if there are new images in the queue
+		int windows = 0;
+		while (!imageQueue.empty()) {
+			// Get the front image from the queue
+			cv::Mat image = imageQueue.front();
+			imageQueue.pop();
+
+			// Create a new window and display the image
+			//cv::namedWindow("Image Display", cv::WINDOW_NORMAL);
+			string windowName = "Image Display ";
+			windowName += to_string(windows);
+			cv::imshow(windowName, image);
+			cv::waitKey(0);
+			windows++;
+		}
+		
+		mtx.unlock();
+		
+	}
 }
 
 float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {

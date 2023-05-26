@@ -3,7 +3,9 @@ class DiceDetection
 {
 public:
 	DiceDetection();
-	int startDetection();
+	void startDetection(int* result);
+	void startDetectionWrapper(int* result);
 	void stop();
+	void displayThread();
 };
 

@@ -3,6 +3,7 @@
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "DiceDetection.h"
+#include <thread>
 using tigl::Vertex;
 
 #pragma comment(lib, "glfw3.lib")
@@ -15,6 +16,9 @@ DiceDetection dd;
 void init();
 void update();
 void draw();
+
+int result = -1;
+
 
 int main(void)
 {
@@ -59,12 +63,18 @@ void init()
     });
 
     dd = DiceDetection::DiceDetection();
+    static std::thread dice_thread([]() {
+        dd.startDetectionWrapper(&result);
+        });
+    static std::thread display([]() {
+        dd.displayThread();
+        });
 }
 
 
 void update()
 {
-    dd.startDetection();
+
 }
 
 void draw()
