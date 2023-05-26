@@ -10,6 +10,7 @@ using namespace cv;
 using namespace std;
 
 VideoCapture cap(1);
+float calibratedDistance = 0;
 
 void erodeImage(Mat *originalImage, Mat *newImage);
 void dilateImage(Mat *originalImage, Mat *newImage);
@@ -26,9 +27,8 @@ int DiceDetection::startDetection()
 	{
 		cout << "Error opening video stream or file" << endl;
 		return -1;
+
 	}
-
-
 	// Capture a frame from the camera
 	Mat frame;
 	cap.read(frame);
@@ -56,10 +56,10 @@ int DiceDetection::startDetection()
 	// Set up SimpleBlobDetector parameters
 	SimpleBlobDetector::Params params;
 	params.filterByArea = true;
-	params.minArea = 100;
+	params.minArea = 50;
 	params.maxArea = 5000;
 	params.filterByCircularity = true;
-	params.minCircularity = 0.8;
+	params.minCircularity = 0.6;
 	params.filterByConvexity = false;
 	params.filterByInertia = false;
 
@@ -68,12 +68,13 @@ int DiceDetection::startDetection()
 
 	// Detect blobs in the binary image
 	vector<KeyPoint> keypoints;
-	detector->detect(binaryImage, keypoints);
+	detector->detect(erodedImage, keypoints);
 	
 	// Count the number of dice
 	int numDice = 0;
 	int dice1 = 0;
 	int dice2 = 0;
+	float smallestDistance = 0;
 	if (keypoints.size() > 0)
 	{
 		numDice = 1;
@@ -82,7 +83,6 @@ int DiceDetection::startDetection()
 			return a.pt.x < b.pt.x;
 			});
 
-		float smallestDistance = 0;
 		int smallestDistanceIndex = 0;
 
 		// Find smallest distance between 2 keypoints
@@ -101,6 +101,9 @@ int DiceDetection::startDetection()
 			}
 		}
 		cout << "smallest distance " << smallestDistance << endl;
+		if (calibratedDistance != 0) {
+			smallestDistance = calibratedDistance;
+		}
 		KeyPoint referencePoint = keypoints[smallestDistanceIndex];
 		for (int i = 0; i < keypoints.size(); i++)
 		{
@@ -116,12 +119,21 @@ int DiceDetection::startDetection()
 			}
 		}
 	}
+	if ((calibratedDistance == 0) && (numDice == 1) && (keypoints.size() == 6)) {
+		calibratedDistance = smallestDistance;
+	}
 
 	// Print the number of dice and the number of blobs
+	if (dice1 > 6 || keypoints.size() - dice1 > 6) {
+		cout << "Error, dice may be too nearby: " << keypoints.size() << endl;
+	}
+	else {
+		cout << "Number of blobs: " << keypoints.size() << endl;
+		cout << "dice 1: " << dice1 << endl;
+		cout << "dice 2: " << keypoints.size() - dice1 << endl;
+		cout << "calibratedDistance: " << calibratedDistance << endl;
+	}
 	
-	cout << "Number of blobs: " << keypoints.size() << endl;
-	cout << "dice 1: " << dice1 << endl;
-	cout << "dice 2: " << keypoints.size() - dice1 << endl;
 	// Draw the keypoints on the original image
 	Mat imageWithKeypoints;
 	Mat binaryImageWithKeypoints;
