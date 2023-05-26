@@ -15,6 +15,7 @@ VideoCapture cap(0);
 bool isRunning = false;
 Mat imageWithKeypoints;
 
+bool validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
 void dilateImage(Mat *originalImage, Mat *newImage);
 float calculateDistance(const KeyPoint& p1, const KeyPoint& p2);
@@ -23,9 +24,8 @@ DiceDetection::DiceDetection() {
 
 }
 
-void DiceDetection::startDetection(int* result)
+void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 {	
-	*result = -1;
 	// Check if the camera was opened successfully
 	if (!cap.isOpened())
 	{
@@ -145,10 +145,16 @@ void DiceDetection::startDetection(int* result)
 
 	// Print the number of dice and the number of blobs
 	
-	cout << "Number of blobs: " << keypoints.size() << endl;
-	cout << "dice 1: " << dice1 << endl;
-	cout << "dice 2: " << keypoints.size() - dice1 << endl;
+	//cout << "Number of blobs: " << keypoints.size() << endl;
+	//cout << "dice 1: " << dice1 << endl;
+	//cout << "dice 2: " << keypoints.size() - dice1 << endl;
 	// Draw the keypoints on the original image
+
+	vector<int> result = { dice1, (int)(keypoints.size() - dice1)};
+
+	if (validResult(result)) {
+		callback(result);
+	}
 	
 	Mat binaryImageWithKeypoints;
 	Mat erodedImageWithKeypoints;
@@ -180,20 +186,20 @@ void DiceDetection::startDetection(int* result)
 
 	imshow("Resulting image", resultImage);
 
-	*result = keypoints.size();
-
 }
 
-void DiceDetection::startDetectionWrapper(int* result) {
+void DiceDetection::startDetectionWrapper(void (*callback)(const std::vector<int>&)) {
 	if (isRunning) {
 		std::cout << "already running" << std::endl;
 		return;
 	}
 
+	auto savedCallback = callback;
+
 	isRunning = true;
 	while (isRunning)
 	{
-		startDetection(result);
+		startDetection(savedCallback);
 		//this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		//NEEDED TO SHOW IMAGES ON SEPARATE THREAD, REMOVE ON FINAL BUILD
@@ -210,6 +216,10 @@ void DiceDetection::stop() {
 
 float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
 	return sqrt(pow(p1.pt.x - p2.pt.x, 2) + pow(p1.pt.y - p2.pt.y, 2));
+}
+
+bool validResult(vector<int> result) {
+	return true;
 }
 
 void erodeImage(Mat *originalImage, Mat *newImage) {

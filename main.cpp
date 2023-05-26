@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "DiceDetection.h"
 #include <thread>
+#include <iostream>
 using tigl::Vertex;
 
 #pragma comment(lib, "glfw3.lib")
@@ -16,8 +17,9 @@ DiceDetection dd;
 void init();
 void update();
 void draw();
+void tempDiceCallback(const std::vector<int>& dice);
 
-int result = -1;
+std::vector<int> result = {};
 
 
 int main(void)
@@ -61,10 +63,10 @@ void init()
         }
             
     });
-
+    void (*callback)(const std::vector<int>&) = tempDiceCallback;
     dd = DiceDetection::DiceDetection();
-    static std::thread dice_thread([]() {
-        dd.startDetectionWrapper(&result);
+    static std::thread dice_thread([callback]() {
+        dd.startDetectionWrapper(callback);
         });
 }
 
@@ -78,4 +80,11 @@ void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void tempDiceCallback(const std::vector<int>& dice) {
+    for (int i = 0; i < dice.size(); i++) {
+        std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
+    }
+
 }
