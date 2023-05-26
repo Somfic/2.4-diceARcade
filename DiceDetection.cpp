@@ -77,8 +77,22 @@ int DiceDetection::startDetection()
 	vector<KeyPoint> keypoints;
 	detector->detect(binaryImage, keypoints);
 	
+	vector<vector<Point>> contours;
+	findContours(cannyImage, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+	std::vector<cv::Rect> diceContours;
+	for (const auto& contour : contours) {
+		double area = cv::contourArea(contour);
+		cv::Rect boundingRect = cv::boundingRect(contour);
+		double aspectRatio = static_cast<double>(boundingRect.width) / boundingRect.height;
+		if (area > 500 && aspectRatio >= 0.9 && aspectRatio <= 1.1) {  // Adjust the parameters as needed
+			diceContours.push_back(boundingRect);
+		}
+	}
+
+	int numDice = diceContours.size();
+	std::cout << "Number of dice: " << numDice << std::endl;
 	// Count the number of dice
-	int numDice = 0;
+	//int numDice = 0;
 	int dice1 = 0;
 	int dice2 = 0;
 	if (keypoints.size() > 0)
@@ -134,19 +148,31 @@ int DiceDetection::startDetection()
 	Mat binaryImageWithKeypoints;
 	Mat erodedImageWithKeypoints;
 	Mat dilatedImageWithKeypoints;
-	drawKeypoints(frame, keypoints, imageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+	for (auto& keypoint : keypoints) {
+		keypoint.size *= 1.2; // Adjust the size multiplier as needed
+	}
+	drawKeypoints(frame, keypoints, imageWithKeypoints, Scalar(255, 0, 0), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 	drawKeypoints(binaryImage, keypoints, binaryImageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 	drawKeypoints(erodedImage, keypoints, erodedImageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 	drawKeypoints(dilatedImage, keypoints, dilatedImageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
 	// Show the image with keypoints in a window
-	namedWindow("Die Image", WINDOW_NORMAL);
-	imshow("Die Image", imageWithKeypoints);
-	imshow("binary Image", binaryImageWithKeypoints);
-	imshow("inverted image", invertedImage);
-	imshow("eroded Image", erodedImageWithKeypoints);
-	imshow("dilated Image", dilatedImageWithKeypoints);
+	//namedWindow("Die Image", WINDOW_NORMAL);
+	//imshow("Die Image", imageWithKeypoints);
+	//imshow("binary Image", binaryImageWithKeypoints);
+	//imshow("inverted image", invertedImage);
+	//imshow("eroded Image", erodedImageWithKeypoints);
+	//imshow("dilated Image", dilatedImageWithKeypoints);
 
+	/*cv::Mat result = frame.clone();
+	cv::drawContours(result, diceContours, -1, cv::Scalar(0, 255, 0), 2);
+	cv::imshow("Result", result);*/
+
+	cv::Mat result = imageWithKeypoints.clone();
+	for (const auto& rect : diceContours) {
+		cv::rectangle(result, rect, cv::Scalar(0, 255, 0), 2);
+	}
+	cv::imshow("Result", result);
 	return keypoints.size();
 }
 
