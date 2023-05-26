@@ -37,6 +37,9 @@ private:
 		MaterialInfo();
 		std::string name;
 		Texture* texture;
+		glm::vec4 deffuseColor = glm::vec4(0.5f);
+		glm::vec4 ambientColor = glm::vec4(0.0f);
+		glm::vec4 specularColor = glm::vec4(0.5f);
 	};
 
 	class ObjGroup

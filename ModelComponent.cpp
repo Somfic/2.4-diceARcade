@@ -188,8 +188,8 @@ void ModelComponent::initModel()
 				materials[group->materialIndex]->texture->bind();
 			}
 		} 
-		bool hascolor = false;
-		glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+		bool hascolor = true;
+		glm::vec4 color = materials[0]->deffuseColor;
 		//tigl::shader->setColorMult(color);
 		for (const auto& face : group->faces) {
 			for (const auto& vertex : face.vertices) {
@@ -281,12 +281,15 @@ void ModelComponent::loadMaterialFile(const std::string& fileName, const std::st
 		}
 		else if (params[0] == "kd")
 		{//TODO, diffuse color
+			currentMaterial->deffuseColor = glm::vec4(std::stof(params[1]), std::stof(params[2]), std::stof(params[3]),1.0f);
 		}
 		else if (params[0] == "ka")
 		{//TODO, ambient color
+			currentMaterial->ambientColor = glm::vec4(std::stof(params[1]), std::stof(params[2]), std::stof(params[3]), 1.0f);
 		}
 		else if (params[0] == "ks")
 		{//TODO, specular color
+			currentMaterial->specularColor = glm::vec4(std::stof(params[1]), std::stof(params[2]), std::stof(params[3]), 1.0f);
 		}
 		else if (
 			params[0] == "illum" ||
