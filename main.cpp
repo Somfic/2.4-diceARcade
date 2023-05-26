@@ -66,9 +66,6 @@ void init()
     static std::thread dice_thread([]() {
         dd.startDetectionWrapper(&result);
         });
-    static std::thread display([]() {
-        dd.displayThread();
-        });
 }
 
 
