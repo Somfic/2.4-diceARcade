@@ -59,7 +59,7 @@ int DiceDetection::startDetection()
 	params.minArea = 50;
 	params.maxArea = 5000;
 	params.filterByCircularity = true;
-	params.minCircularity = 0.6;
+	params.minCircularity = 0.8;
 	params.filterByConvexity = false;
 	params.filterByInertia = false;
 
@@ -68,13 +68,14 @@ int DiceDetection::startDetection()
 
 	// Detect blobs in the binary image
 	vector<KeyPoint> keypoints;
-	detector->detect(erodedImage, keypoints);
+	detector->detect(binaryImage, keypoints);
 	
 	// Count the number of dice
 	int numDice = 0;
 	int dice1 = 0;
 	int dice2 = 0;
 	float smallestDistance = 0;
+	float greatestDistance = 0;
 	if (keypoints.size() > 0)
 	{
 		numDice = 1;
@@ -97,10 +98,15 @@ int DiceDetection::startDetection()
 					smallestDistance = distance;
 					smallestDistanceIndex = j;
 				}
+				if (greatestDistance == 0 || greatestDistance < distance && distance != 0) {
+					greatestDistance = distance;
+				
+				}
 					
 			}
 		}
 		cout << "smallest distance " << smallestDistance << endl;
+		cout << "greatest distance " << smallestDistance << endl;
 		if (calibratedDistance != 0) {
 			smallestDistance = calibratedDistance;
 		}
