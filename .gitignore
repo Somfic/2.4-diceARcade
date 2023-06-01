@@ -650,3 +650,5 @@ Temporary Items
 *.exe
 *.out
 *.app
+
+*.props

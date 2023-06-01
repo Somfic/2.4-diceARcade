@@ -63,7 +63,7 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	int ratio = 3;
 	blur(grayImage, cannyImage, Size(3, 3));
 	Canny(cannyImage, cannyImage, treshold, treshold * ratio, 3);
-	imshow("canny Image", cannyImage);
+	
 
 	// Set up SimpleBlobDetector parameters
 	SimpleBlobDetector::Params params;
@@ -169,11 +169,7 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 
 	//Show the image with keypoints in a window
 	//namedWindow("Die Image", WINDOW_NORMAL);
-	imshow("Die Image", imageWithKeypoints);
-	imshow("binary Image", binaryImageWithKeypoints);
-	imshow("inverted image", invertedImage);
-	imshow("eroded Image", erodedImageWithKeypoints);
-	imshow("dilated Image", dilatedImageWithKeypoints);
+	
 
 	/*cv::Mat result = frame.clone();
 	cv::drawContours(result, diceContours, -1, cv::Scalar(0, 255, 0), 2);
@@ -183,8 +179,13 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	for (const auto& rect : diceContours) {
 		cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 0), 2);
 	}
-
-	imshow("Resulting image", resultImage);
+	/*imshow("Die Image", imageWithKeypoints);
+	imshow("binary Image", binaryImageWithKeypoints);
+	imshow("inverted image", invertedImage);
+	imshow("eroded Image", erodedImageWithKeypoints);
+	imshow("dilated Image", dilatedImageWithKeypoints);
+	imshow("canny Image", cannyImage);
+	imshow("Resulting image", resultImage);*/
 
 }
 
@@ -200,10 +201,10 @@ void DiceDetection::startDetectionWrapper(void (*callback)(const std::vector<int
 	while (isRunning)
 	{
 		startDetection(savedCallback);
-		//this_thread::sleep_for(std::chrono::milliseconds(100));
+		this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		//NEEDED TO SHOW IMAGES ON SEPARATE THREAD, REMOVE ON FINAL BUILD
-		cv::waitKey(0);
+		//cv::waitKey(0);
 	}
 	
 }
