@@ -11,9 +11,9 @@
 using namespace cv;
 using namespace std;
 
-VideoCapture cap(0);
 bool isRunning = false;
-Mat imageWithKeypoints;
+VideoCapture cap(1);
+float calibratedDistance = 0;
 
 bool validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
@@ -32,8 +32,6 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 		cout << "Error opening video stream or file" << endl;
 		return;
 	}
-
-
 	// Capture a frame from the camera
 	Mat frame;
 	cap.read(frame);
@@ -69,7 +67,7 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	// Set up SimpleBlobDetector parameters
 	SimpleBlobDetector::Params params;
 	params.filterByArea = true;
-	params.minArea = 100;
+	params.minArea = 50;
 	params.maxArea = 5000;
 	params.filterByCircularity = true;
 	params.minCircularity = 0.8;
@@ -101,6 +99,8 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	//int numDice = 0;
 	int dice1 = 0;
 	int dice2 = 0;
+	float smallestDistance = 0;
+	float greatestDistance = 0;
 	if (keypoints.size() > 0)
 	{
 		numDice = 1;
@@ -109,7 +109,6 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 			return a.pt.x < b.pt.x;
 			});
 
-		float smallestDistance = 0;
 		int smallestDistanceIndex = 0;
 
 		// Find smallest distance between 2 keypoints
@@ -124,10 +123,18 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 					smallestDistance = distance;
 					smallestDistanceIndex = j;
 				}
+				if (greatestDistance == 0 || greatestDistance < distance && distance != 0) {
+					greatestDistance = distance;
+				
+				}
 					
 			}
 		}
 		cout << "smallest distance " << smallestDistance << endl;
+		cout << "greatest distance " << smallestDistance << endl;
+		if (calibratedDistance != 0) {
+			smallestDistance = calibratedDistance;
+		}
 		KeyPoint referencePoint = keypoints[smallestDistanceIndex];
 		for (int i = 0; i < keypoints.size(); i++)
 		{
@@ -143,6 +150,9 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 			}
 		}
 	}
+	if ((calibratedDistance == 0) && (numDice == 1) && (keypoints.size() == 6)) {
+		calibratedDistance = smallestDistance;
+	}
 
 	vector<int> result = { dice1, (int)(keypoints.size() - dice1)};
 
@@ -150,6 +160,19 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 		callback(result);
 	}
 	
+	// Print the number of dice and the number of blobs
+	if (dice1 > 6 || keypoints.size() - dice1 > 6) {
+		cout << "Error, dice may be too nearby: " << keypoints.size() << endl;
+	}
+	else {
+		cout << "Number of blobs: " << keypoints.size() << endl;
+		cout << "dice 1: " << dice1 << endl;
+		cout << "dice 2: " << keypoints.size() - dice1 << endl;
+		cout << "calibratedDistance: " << calibratedDistance << endl;
+	}
+	
+	// Draw the keypoints on the original image
+	Mat imageWithKeypoints;
 	Mat binaryImageWithKeypoints;
 	Mat erodedImageWithKeypoints;
 	Mat dilatedImageWithKeypoints;
