@@ -6,6 +6,9 @@
 #include "ModelComponent.h"
 #include "SpinComponent.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "DiceDetection.h"
+#include <thread>
+#include <iostream>
 
 #define PI 3.14
 
@@ -16,6 +19,7 @@ using tigl::Vertex;
 #pragma comment(lib, "opengl32.lib")
 
 GLFWwindow* window;
+DiceDetection dd;
 std::shared_ptr<GameObject> model;
 std::shared_ptr<GameObject> model3;
 std::list<std::shared_ptr<GameObject>> objects;
@@ -26,6 +30,10 @@ int speed = 20;
 void init();
 void update();
 void draw();
+void tempDiceCallback(const std::vector<int>& dice);
+
+std::vector<int> result = {};
+
 
 int main(void)
 {
@@ -62,8 +70,11 @@ void init()
 {
     glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        if (key == GLFW_KEY_ESCAPE)
+        if (key == GLFW_KEY_ESCAPE) {
             glfwSetWindowShouldClose(window, true);
+            dd.stop();
+        }
+            
     });
     for (int i = 0; i < 4; i++)
     {
@@ -102,6 +113,11 @@ void init()
     objects.push_back(model3);
     
     model2 = new ObjModel("models/steve/steve.obj");//add filepath here
+    void (*callback)(const std::vector<int>&) = tempDiceCallback;
+    dd = DiceDetection::DiceDetection();
+    static std::thread dice_thread([callback]() {
+        dd.startDetectionWrapper(callback);
+        });
 }
 float rotation = 0;
 double lastFrameTime = 0;
@@ -152,4 +168,11 @@ void draw()
     for (auto& object : objects) {
         object->draw();
     }
+}
+
+void tempDiceCallback(const std::vector<int>& dice) {
+    for (int i = 0; i < dice.size(); i++) {
+        std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
+    }
+
 }

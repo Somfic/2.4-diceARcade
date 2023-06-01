@@ -51,9 +51,15 @@
     <ClCompile Include="MoveToComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="DiceDetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tigl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiceDetection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
