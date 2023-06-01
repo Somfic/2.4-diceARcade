@@ -208,15 +208,18 @@ float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
 	return sqrt(pow(p1.pt.x - p2.pt.x, 2) + pow(p1.pt.y - p2.pt.y, 2));
 }
 
-bool validResult(vector<int> result) {
-	if (result.size() == 2) {
-		if (result.at(0) > 0 && result.at(0) < 7) {
-			if (result.at(1) > 0 && result.at(1) < 7) {
-				return true;
+bool validResult(vector<int> result, int expectedDice) {
+	if (result.size() == expectedDice) {
+		for (int i = 0; i < result.size(); i++) {
+			if (result.at(i) < 1 || result.at(i) > 6) {
+				return false;
 			}
 		}
 	}
-	return false;
+	else {
+		return false;
+	}
+	return true;
 }
 
 void erodeImage(Mat *originalImage, Mat *newImage) {
