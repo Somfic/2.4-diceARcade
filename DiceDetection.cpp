@@ -49,13 +49,14 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	Mat invertedImage;
 	bitwise_not(binaryImage, invertedImage);
 
-	Mat erodedImage;
-	erodeImage(&invertedImage, &erodedImage);
+	Mat morphedImage;
+	morphologyEx(binaryImage, morphedImage, MORPH_GRADIENT, 1);
+	//erodeImage(&invertedImage, &erodedImage);
 
 	Mat dilatedImage;
 	dilateImage(&invertedImage, &dilatedImage);
 
-	bitwise_not(erodedImage, erodedImage);
+	//bitwise_not(morphedImage, morphedImage);
 	bitwise_not(dilatedImage, dilatedImage);
 
 	Mat cannyImage;
@@ -143,13 +144,6 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 		}
 	}
 
-	// Print the number of dice and the number of blobs
-	
-	//cout << "Number of blobs: " << keypoints.size() << endl;
-	//cout << "dice 1: " << dice1 << endl;
-	//cout << "dice 2: " << keypoints.size() - dice1 << endl;
-	// Draw the keypoints on the original image
-
 	vector<int> result = { dice1, (int)(keypoints.size() - dice1)};
 
 	if (validResult(result)) {
@@ -164,20 +158,16 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	}
 	drawKeypoints(frame, keypoints, imageWithKeypoints, Scalar(255, 0, 0), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 	drawKeypoints(binaryImage, keypoints, binaryImageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-	drawKeypoints(erodedImage, keypoints, erodedImageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+	drawKeypoints(morphedImage, keypoints, erodedImageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 	drawKeypoints(dilatedImage, keypoints, dilatedImageWithKeypoints, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
 	//Show the image with keypoints in a window
 	//namedWindow("Die Image", WINDOW_NORMAL);
-	imshow("Die Image", imageWithKeypoints);
-	imshow("binary Image", binaryImageWithKeypoints);
-	imshow("inverted image", invertedImage);
-	imshow("eroded Image", erodedImageWithKeypoints);
-	imshow("dilated Image", dilatedImageWithKeypoints);
-
-	/*cv::Mat result = frame.clone();
-	cv::drawContours(result, diceContours, -1, cv::Scalar(0, 255, 0), 2);
-	cv::imshow("Result", result);*/
+	//imshow("Die Image", imageWithKeypoints);
+	//imshow("binary Image", binaryImageWithKeypoints);
+	//imshow("inverted image", invertedImage);
+	//imshow("morphed Image", erodedImageWithKeypoints);
+	//imshow("dilated Image", dilatedImageWithKeypoints);
 
 	cv::Mat resultImage = imageWithKeypoints.clone();
 	for (const auto& rect : diceContours) {
@@ -219,7 +209,14 @@ float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
 }
 
 bool validResult(vector<int> result) {
-	return true;
+	if (result.size() == 2) {
+		if (result.at(0) > 0 && result.at(0) < 7) {
+			if (result.at(1) > 0 && result.at(1) < 7) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 void erodeImage(Mat *originalImage, Mat *newImage) {
