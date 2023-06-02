@@ -160,11 +160,8 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DrawComponent.cpp" />
     <ClCompile Include="DiceDetection.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Space.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="MoveToComponent.cpp" />
     <ClCompile Include="obj-model.cpp" />
@@ -185,9 +182,6 @@
     <ClInclude Include="SpinComponent.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="DiceDetection.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Space.h" />
     <ClInclude Include="tigl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

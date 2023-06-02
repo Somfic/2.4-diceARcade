@@ -3,11 +3,9 @@
 #include "tigl.h"
 #include "obj-model.h"
 #include "GameObject.h"
-#include "ModelComponent.h"
-#include "SpinComponent.h"
+#include "ObjectManager.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include "Game.h"
-#include "Space.cpp"
+//#include "Game.h"
 #include "DiceDetection.h"
 #include <thread>
 #include <iostream>
@@ -24,7 +22,7 @@ GLFWwindow* window;
 DiceDetection dd;
 std::shared_ptr<GameObject> model;
 std::shared_ptr<GameObject> model3;
-std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects;
+std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
 ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(0.0f);
 int speed = 20;
@@ -40,13 +38,14 @@ std::vector<int> result = {};
 int main(void)
 {
     // make a new Game object and print the spaces
-    Game game = Game();
-    std::vector<Space> spaces = game.getSpaces();
-    // print all spaces
-    for (Space space : spaces)
-    {
-		std::cout << space << std::endl;
-	}
+    //Game game = Game();
+ //   std::vector<Space> spaces = game.getSpaces();
+ //   // print all spaces
+ //   for (Space space : spaces)
+ //   {
+	//	std::cout << space << std::endl;
+	//}
+    
 
 
     if (!glfwInit())
@@ -88,43 +87,7 @@ void init()
         }
             
     });
-    for (int i = 0; i < 4; i++)
-    {
-        model = std::make_shared<GameObject>();
-        model->position = glm::vec3(0, i, 5);
-        model->rotation = glm::vec3(0, PI * i * 0.5, 0);
-        model->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj"));
-        model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects->push_back(model);
-        model = std::make_shared<GameObject>();
-        model->position = glm::vec3(0, i, 5);
-        model->rotation = glm::vec3(0, PI * i * 0.5, 0);
-        model->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj"));
-        model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects->push_back(model);
-    }
-    for (int i = 0; i < 4; i++)
-    {
-        model = std::make_shared<GameObject>();
-        model->position = glm::vec3(4, i, 5);
-        model->rotation = glm::vec3(0, PI * i * 0.5, 0);
-        model->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_curved.obj"));
-        model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects->push_back(model);
-        model = std::make_shared<GameObject>();
-        model->position = glm::vec3(4, i, 5);
-        model->rotation = glm::vec3(0, PI * i * 0.5, 0);
-        model->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj"));
-        model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects->push_back(model);
-    }
-    
-    model3 = std::make_shared<GameObject>();
-    model3->position = glm::vec3(10, 1, 5);
-    model3->addComponent(std::make_shared<ModelComponent>("models/car/honda_jazz.obj"));
-    objects->push_back(model3);
-    
-    model2 = new ObjModel("models/steve/steve.obj");//add filepath here
+    ObjectManager::ObjectManager(objects);//game, 
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
     dd = DiceDetection::DiceDetection();
     static std::thread dice_thread([callback]() {
