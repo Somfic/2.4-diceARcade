@@ -6,6 +6,8 @@
 #include "ModelComponent.h"
 #include "SpinComponent.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "Game.h"
+#include "Space.cpp"
 #include "DiceDetection.h"
 #include <thread>
 #include <iostream>
@@ -37,6 +39,16 @@ std::vector<int> result = {};
 
 int main(void)
 {
+    // make a new Game object and print the spaces
+    Game game = Game();
+    std::vector<Space> spaces = game.getSpaces();
+    // print all spaces
+    for (Space space : spaces)
+    {
+		std::cout << space << std::endl;
+	}
+
+
     if (!glfwInit())
         throw "Could not initialize glwf";
     window = glfwCreateWindow(1400, 800, "Hello World", NULL, NULL);

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\GameLogic">
+      <UniqueIdentifier>{49ef9a48-77b8-47d3-b85e-746156f81bdd}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Modelloading">
       <UniqueIdentifier>{b1778fec-e11e-4e3e-9b75-b18ea5aa9f68}</UniqueIdentifier>
     </Filter>
@@ -26,6 +29,15 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Space.cpp">
+      <Filter>Source Files\GameLogic</Filter>
     </ClCompile>
     <ClCompile Include="obj-model.cpp">
       <Filter>Modelloading</Filter>
@@ -57,6 +69,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tigl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Space.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DiceDetection.h">
