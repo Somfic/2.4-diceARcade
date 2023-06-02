@@ -84,7 +84,7 @@ void draw()
 
 void tempDiceCallback(const std::vector<int>& dice) {
     for (int i = 0; i < dice.size(); i++) {
-        std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
+        std::cout << "CALLBACK: value of dice " << i << ": " << dice.at(i) << std::endl;
     }
 
 }

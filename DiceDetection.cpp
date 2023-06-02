@@ -19,6 +19,11 @@ bool validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
 void dilateImage(Mat *originalImage, Mat *newImage);
 float calculateDistance(const KeyPoint& p1, const KeyPoint& p2);
+bool checkAllSame(const std::queue<std::vector<int>>& queue);
+
+queue<vector<int>> diceQueue;
+const int maxQueueSize = 5;
+const int totalDice = 2;
 
 DiceDetection::DiceDetection() {
 
@@ -231,8 +236,8 @@ float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
 	return sqrt(pow(p1.pt.x - p2.pt.x, 2) + pow(p1.pt.y - p2.pt.y, 2));
 }
 
-bool validResult(vector<int> result, int expectedDice) {
-	if (result.size() == expectedDice) {
+bool validResult(vector<int> result) {
+	if (result.size() == totalDice) {
 		for (int i = 0; i < result.size(); i++) {
 			if (result.at(i) < 1 || result.at(i) > 6) {
 				return false;
@@ -242,7 +247,36 @@ bool validResult(vector<int> result, int expectedDice) {
 	else {
 		return false;
 	}
-	return true;
+
+	diceQueue.push(result); // Add the vector to the queue
+
+	if (diceQueue.size() > maxQueueSize) {
+		diceQueue.pop(); // Remove the oldest vector if the queue exceeds the maximum size
+	}
+
+	return checkAllSame(diceQueue);
+}
+
+bool checkAllSame(const std::queue<std::vector<int>>& queue) {
+	if (queue.empty()) {
+		return false; // If the queue is empty it means there are no dice detected
+	}
+
+	const std::vector<int>& reference = queue.front();
+	std::queue<std::vector<int>> tempQueue = queue; // Create a temporary queue
+
+	while (!tempQueue.empty()) {
+		const std::vector<int>& current = tempQueue.front();
+
+		// Check if the current vector is different from the reference vector
+		if (current != reference) {
+			return false;
+		}
+
+		tempQueue.pop(); // Remove the processed vector from the temporary queue
+	}
+
+	return true; // All vectors in the queue are the same
 }
 
 void erodeImage(Mat *originalImage, Mat *newImage) {
