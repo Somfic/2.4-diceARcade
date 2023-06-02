@@ -4,8 +4,9 @@
 #include <vector>
 #include "Player.h"
 
-class Space {
+class Space : public GameObject{
 public:
+	GameObject railing;
 	void onLand(Player p);
 };
 

@@ -24,7 +24,7 @@ GLFWwindow* window;
 DiceDetection dd;
 std::shared_ptr<GameObject> model;
 std::shared_ptr<GameObject> model3;
-std::list<std::shared_ptr<GameObject>> objects;
+std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects;
 ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(0.0f);
 int speed = 20;
@@ -95,13 +95,13 @@ void init()
         model->rotation = glm::vec3(0, PI * i * 0.5, 0);
         model->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj"));
         model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects.push_back(model);
+        objects->push_back(model);
         model = std::make_shared<GameObject>();
         model->position = glm::vec3(0, i, 5);
         model->rotation = glm::vec3(0, PI * i * 0.5, 0);
         model->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj"));
         model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects.push_back(model);
+        objects->push_back(model);
     }
     for (int i = 0; i < 4; i++)
     {
@@ -110,19 +110,19 @@ void init()
         model->rotation = glm::vec3(0, PI * i * 0.5, 0);
         model->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_curved.obj"));
         model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects.push_back(model);
+        objects->push_back(model);
         model = std::make_shared<GameObject>();
         model->position = glm::vec3(4, i, 5);
         model->rotation = glm::vec3(0, PI * i * 0.5, 0);
         model->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj"));
         model->addComponent(std::make_shared<SpinComponent>(0.01));
-        objects.push_back(model);
+        objects->push_back(model);
     }
     
     model3 = std::make_shared<GameObject>();
     model3->position = glm::vec3(10, 1, 5);
     model3->addComponent(std::make_shared<ModelComponent>("models/car/honda_jazz.obj"));
-    objects.push_back(model3);
+    objects->push_back(model3);
     
     model2 = new ObjModel("models/steve/steve.obj");//add filepath here
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
@@ -153,7 +153,7 @@ void update()
     if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
         camPostion.y += speed * deltaTime;
     }
-    for (auto& object : objects) {
+    for (auto& object : *objects) {
         object->update(deltaTime);
     }
 }
@@ -177,7 +177,7 @@ void draw()
 
 
     glPointSize(10.0f);
-    for (auto& object : objects) {
+    for (auto& object : *objects) {
         object->draw();
     }
 }

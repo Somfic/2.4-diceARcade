@@ -38,7 +38,7 @@ class Game
 				spaces.push_back(WinSpace());
 			else if (i > 63)
 				spaces.push_back(ExcessSpace());
-			else if (i % 8 == 0)
+			else if (i % 9 == 0)
 				spaces.push_back(GooseSpace());
 			else
 				spaces.push_back(NormalSpace());

@@ -4,8 +4,8 @@
 #include "Game.h"
 #include <string>
 #include "Space.h"
-
-class Player
+#include "GameObject.h"
+class Player: public GameObject
 {
 private:
 	Game game;

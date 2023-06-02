@@ -6,14 +6,14 @@
 // class player has an id, a color and a current space
 class Player
 {
-	Game game;
+	Game &game;
 	int id;
 	std::string color;
-	Space currentSpace;
+	Space *currentSpace;
 	int lastRoll;
 	bool trapped;
 	// constructor with an id and a color as parameters
-	Player(int i, std::string c, Game g) {
+	Player(int i, std::string c,Game &g) {
 		// parameter variables
 		game = g;
 		id = i;
