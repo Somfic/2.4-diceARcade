@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "Game.h"
+#include "Space.cpp"
 using tigl::Vertex;
 
 #pragma comment(lib, "glfw3.lib")
@@ -16,6 +18,16 @@ void draw();
 
 int main(void)
 {
+    // make a new Game object and print the spaces
+    Game game = Game();
+    std::vector<Space> spaces = game.getSpaces();
+    // print all spaces
+    for (Space space : spaces)
+    {
+		std::cout << space << std::endl;
+	}
+
+
     if (!glfwInit())
         throw "Could not initialize glwf";
     window = glfwCreateWindow(1400, 800, "Hello World", NULL, NULL);

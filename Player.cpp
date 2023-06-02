@@ -20,7 +20,7 @@ class Player
 		color = c;
 		
 		// default variables
-		currentSpace = game.getSpaces[0];
+		currentSpace = game.getSpaces()[0];
 		lastRoll = 0;
 		trapped = false;
 	}
@@ -31,11 +31,13 @@ class Player
 			return;
 		}
 		// get the index of the current space
-		int index = game.getSpaces().find(currentSpace);
+		int index = std::find(game.getSpaces().begin(), game.getSpaces().end(), currentSpace) - game.getSpaces().begin();
+
 		// move the player to the space with the index of the current space + the amount of spaces
 		currentSpace = game.getSpaces()[index + spaces];
+
 		// call the onLand function of the space the player landed on
-		currentSpace.onLand(this);
+		currentSpace.onLand(*this);
 	}
 
 	void moveTo(int space) {
@@ -44,7 +46,7 @@ class Player
 		}
 
 		currentSpace = game.getSpaces()[space];
-		currentSpace.onLand(this);
+		currentSpace.onLand(*this);
 	}
 
 	// function that returns the current space
@@ -53,7 +55,7 @@ class Player
 	}
 
 	void roll(int roll) {
-		lastRoll(roll);
+		lastRoll = roll;
 		moveSpaces(roll);
 	}
 

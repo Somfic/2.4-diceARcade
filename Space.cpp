@@ -3,11 +3,12 @@
 // It has a function that is called when a player lands on it.
 
 #include <vector>
-#include "Game.cpp"
+#include "Player.h"
+#include "Space.h"
 
 class Space {
 public:
-	virtual void onLand(Player p) = 0;
+	void onLand(Player p);
 };
 
 // empty space with no function
@@ -42,14 +43,21 @@ public:
 	}
 };
 
+class InnSpace : public Space {
+public:
+	void onLand(Player p) {
+		// TODO: implement
+	}
+};;
+
 // prison/well space
 class WaitSpace : public Space {
 public:
-	public Player* trappedPlayer;
+	Player* trappedPlayer = nullptr;
 
 	void onLand(Player p) {
 		if (trappedPlayer != nullptr) {
-			trappedPlayer.untrap();
+			trappedPlayer->untrap();
 		}
 		trappedPlayer = &p;
 		p.trap();
@@ -75,4 +83,4 @@ public:
 	void onLand(Player p) {
 		p.moveTo(p.getCurrentSpace() - 63);
 	}
-};;
+};
