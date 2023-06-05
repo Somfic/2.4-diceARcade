@@ -8,6 +8,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "stb_image.h"
 //#include "imgui_impl_opengl3_loader.h"
 //#include "Game.h"
 #include "DiceDetection.h"
@@ -30,11 +31,14 @@ std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects = std::make_sh
 ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(0.0f);
 int speed = 20;
+bool started = false;
 
 void init();
 void update();
 void draw();
 void tempDiceCallback(const std::vector<int>& dice);
+void drawStartOverlay();
+void drawGuiImage(GLuint& texture_id, unsigned char* image_data, int& width, int& height, int& channels);
 
 std::vector<int> result = {};
 
@@ -85,29 +89,14 @@ int main(void)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        draw();
-
-        // Start ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // Create a simple GUI window
-        ImGui::Begin("GUI Window");
-
-        // Add GUI elements here
-        ImGui::Text("Hello, ImGui!");
-
-        if (ImGui::Button("Click Me!"))
-        {
-            std::cout << "Button clicked!" << std::endl;
+        if (started) {
+            draw();
+        }
+        else {
+            drawStartOverlay();
         }
 
-        ImGui::End();
-
-        // Render ImGui
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);
@@ -198,5 +187,65 @@ void tempDiceCallback(const std::vector<int>& dice) {
     for (int i = 0; i < dice.size(); i++) {
         std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
     }
+
+}
+
+void drawStartOverlay() {
+    // Start ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    //image data
+    GLuint texture_id;
+    int width, height, channels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* image_data = stbi_load("images/titleScreen.png", &width, &height, &channels, 0);
+    if (image_data == nullptr)
+    {
+        // Error loading the image
+        // Handle the error accordingly
+        std::cout << "Error loading image\n";
+    }
+
+    // Clear the screen
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    int screenWidth, screenHeight;
+    glfwGetWindowSize(window, &screenWidth, &screenHeight);
+    // Create a simple GUI window
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowSize(ImVec2(screenWidth, screenHeight));
+    ImGui::Begin("GUI Window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+    // Add GUI elements here
+    ImGui::Text("Select Players");
+
+    ImGui::Image((void*)(intptr_t)texture_id, ImVec2(width, height), ImVec2(0, 1), ImVec2(1, 0));
+
+    if (ImGui::Button("Start Game"))
+    {
+        std::cout << "Button clicked!" << std::endl;
+        started = true;
+    }
+
+    ImGui::End();
+
+    // Render ImGui
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    glDeleteTextures(1, &texture_id);
+    stbi_image_free(image_data);
+}
+
+void drawGuiImage(GLuint& texture_id, unsigned char* image_data, int& width, int& height, int& channels) {
 
 }
