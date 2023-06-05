@@ -8,6 +8,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+//#include "imgui_impl_opengl3_loader.h"
 //#include "Game.h"
 #include "DiceDetection.h"
 #include <thread>
@@ -48,8 +49,6 @@ int main(void)
  //   {
 	//	std::cout << space << std::endl;
 	//}
-    
-
 
     if (!glfwInit())
         throw "Could not initialize glwf";
@@ -59,22 +58,69 @@ int main(void)
         glfwTerminate();
         throw "Could not initialize glwf";
     }
+     
     glfwMakeContextCurrent(window);
+
 
     tigl::init();
 
     init();
 
-	while (!glfwWindowShouldClose(window))
-	{
-		update();
-		draw();
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
 
-	glfwTerminate();
+    // Initialize ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
 
+
+    while (!glfwWindowShouldClose(window))
+    {
+        // Update
+        update();
+
+        // Draw
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        draw();
+
+        // Start ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Create a simple GUI window
+        ImGui::Begin("GUI Window");
+
+        // Add GUI elements here
+        ImGui::Text("Hello, ImGui!");
+
+        if (ImGui::Button("Click Me!"))
+        {
+            std::cout << "Button clicked!" << std::endl;
+        }
+
+        ImGui::End();
+
+        // Render ImGui
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // Swap buffers and poll events
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    // Cleanup ImGui
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    // Terminate GLFW
+    glfwTerminate();
 
     return 0;
 }
