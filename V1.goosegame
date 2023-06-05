@@ -1,12 +1,54 @@
-#methadata
+#metadata
 
-t 0,0 0 str
-t 0,2 0 str
-t 0,4 0 str
-t 0,6 1 cor
-t 2,6 3 cor
-t 2,8 0 tsp
-t 2,10 0 str
-t 2,12 0 str
+#TODO add camera position and put view centre here
 
-e 1,2,2 0,90,0 models/steve/Steve.obj
+
+e 0,0,-2 0,-90,0 models/Tiles/start.obj
+t 2,-2 3 cor
+t 2,0 1 cor
+t 4,0 1 str
+t 6,0 1 str
+    #05 - repeat last
+t 8,0 1 str
+    #06 - bridge
+t 10,0 1 tsp
+e 10,0,-2 0,0,0 models/Tiles/bridge.obj
+t 12,0 1 str
+t 14,0 2 cor
+    #09 - repeat last
+t 14,-2 0 str
+t 14,-4 3 cor
+t 12,-4 1 str
+    #12 - bridge end
+t 10,-4 0 tsp
+t 10,-6 3 cor
+    #14 - repeat last
+t 8,-6 1 str
+t 6,-6 1 str
+t 4,-6 1 str
+t 2,-6 1 cor
+    #18 - repeat last
+t 2,-8 0 str
+    #19 - inn
+t 2,-10 2 tsp
+e 0,0,-10 0,0,0 models/Tiles/tile.obj
+e 0,0,-10 0,0,0 models/Tiles/inn.obj
+t 2,-12 0 str
+t 2,-14 0 str
+t 2,-16 0 cor
+    #23 - repeat last
+t 4,-16 1 str
+t 6,-16 1 str
+t 8,-16 1 str
+t 10,-16 1 str
+    #27 - repeat last
+t 12,-16 1 str
+t 14,-16 3 cor
+t 14,-14 0 str
+t 14,-12 0 str
+    #31 - well
+t 14,-10 0 tsp
+e 16,0,-10 0,0,0 models/Tiles/tile.obj
+e 16,0,-10 0,0,0 models/Tiles/well_simple.obj
+    #32 - repeat last
+t 14,-8 1 cor
