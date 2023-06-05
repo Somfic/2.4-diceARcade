@@ -44,7 +44,14 @@ void ObjectManager::initEnvironment(std::string fileName) {
 		std::vector<std::string> position = split(params[1], ",");
 		std::vector<std::string> rotation = split(params[2], ",");
 		std::string scale = params[3];
-		std::string type = params[4];
+		std::string type;
+		if (params.size() > 4) {
+			type = params[4];
+		}
+		else {
+			type = scale;
+		}
+		
 		if (params[0] == "t") {
 			int typeId;
 			if (type == "str")
@@ -58,7 +65,13 @@ void ObjectManager::initEnvironment(std::string fileName) {
 		if (params[0] == "e") {
 			glm::vec3 rotationVector = stringVectorToVec3(rotation);
 			rotationVector = glm::vec3(degToRad(rotationVector.x), degToRad(rotationVector.y), degToRad(rotationVector.z));
-			addEnvironmentObject(type, stringVectorToVec3(position), rotationVector, (float)atof(scale.c_str()));
+			if (params.size() > 4) {
+				addEnvironmentObject(type, stringVectorToVec3(position), rotationVector, (float)atof(scale.c_str()));
+			}
+			else {
+				addEnvironmentObject(type, stringVectorToVec3(position), rotationVector, 1.0f);
+			}
+
 		}
 	}
 	for (int i = 0; i < tileInfo.size(); i++)
