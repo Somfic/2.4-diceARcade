@@ -258,8 +258,8 @@ bool validResult(vector<int> result) {
 }
 
 bool checkAllSame(const std::queue<std::vector<int>>& queue) {
-	if (queue.empty()) {
-		return false; // If the queue is empty it means there are no dice detected
+	if (queue.empty() || queue.size() < maxQueueSize) {
+		return false; // If the queue is empty or not full it means there are no or too little times dice detected
 	}
 
 	const std::vector<int>& reference = queue.front();
