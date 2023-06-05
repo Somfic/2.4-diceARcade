@@ -87,6 +87,10 @@ void ObjectManager::addPlayer(int i) {
 }
 void ObjectManager::addTile(int tileNumber)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
 {
+	addTile(tileNumber, 1.0f);
+}
+void ObjectManager::addTile(int tileNumber, float scale)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
+{
 	//remove
 	std::shared_ptr<GameObject> space = std::make_shared <GameObject>();
 	//
