@@ -9,4 +9,4 @@ t 2,8 0 tsp
 t 2,10 0 str
 t 2,12 0 str
 
-e 1,2,2 0,0,0 models/steve/Steve.obj
+e 1,2,2 0,90,0 models/steve/Steve.obj
