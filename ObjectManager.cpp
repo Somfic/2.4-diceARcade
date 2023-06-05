@@ -20,6 +20,9 @@ ObjectManager::~ObjectManager() {
 glm::vec3 stringVectorToVec3(std::vector<std::string> strings) {
 	return glm::vec3(atoi(strings[0].c_str()), atoi(strings[1].c_str()), atoi(strings[2].c_str()));
 }
+float degToRad(float degree) {
+	return degree / 180.0f * 3.14159265359f;
+}
 
 void ObjectManager::initEnvironment(std::string fileName) {
 	std::cout << "Loading Environment from " << fileName << std::endl;
@@ -52,23 +55,15 @@ void ObjectManager::initEnvironment(std::string fileName) {
 			tileInfo.push_back(glm::vec4(atoi(position[0].c_str()), atoi(position[1].c_str()), atoi(rotation[0].c_str()), typeId));
 		}
 		if (params[0] == "e") {
-			addEnvironmentObject(type, stringVectorToVec3(position), stringVectorToVec3(rotation));
+			glm::vec3 rotationVector = stringVectorToVec3(rotation);
+			rotationVector = glm::vec3(degToRad(rotationVector.x), degToRad(rotationVector.y), degToRad(rotationVector.z));
+			addEnvironmentObject(type, stringVectorToVec3(position), rotationVector);
 		}
 	}
-
-
-	tileInfo.push_back(glm::vec4(0, 0, 0, 0));
-	tileInfo.push_back(glm::vec4(0, 2, 0, 2));
-	tileInfo.push_back(glm::vec4(0, 4, 0, 0));
-	tileInfo.push_back(glm::vec4(0, 6, 1, 1));
-	tileInfo.push_back(glm::vec4(2, 6, 3, 1));
-	tileInfo.push_back(glm::vec4(2, 8, 2, 0));
-	addTile(0 );// ,std::make_shared <Space>());
-	addTile(1 );// ,std::make_shared <Space>());
-	addTile(2 );// ,std::make_shared <Space>());
-	addTile(3 );// ,std::make_shared <Space>());
-	addTile(4);// ,std::make_shared <Space>());
-	addTile(5);// ,std::make_shared <Space>());
+	for (int i = 0; i < tileInfo.size(); i++)
+	{
+		addTile(i);// ,std::make_shared <Space>());
+	}
 }
 void ObjectManager::addPlayer(int i) {
 	/*std::shared_ptr<Player> player = std::make_shared<Player>(i,"groen", game);

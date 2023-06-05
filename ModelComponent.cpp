@@ -257,6 +257,10 @@ void ModelComponent::draw()
 {
 	for (auto group : groups) {
 		if (group->materialIndex >= 0) {
+			tigl::shader->setLightAmbient(0, glm::vec3(materials[group->materialIndex]->ambientColor.r, materials[group->materialIndex]->ambientColor.g, materials[group->materialIndex]->ambientColor.b));
+			tigl::shader->setLightDiffuse(0, glm::vec3(materials[group->materialIndex]->deffuseColor.r, materials[group->materialIndex]->deffuseColor.g, materials[group->materialIndex]->deffuseColor.b));
+			tigl::shader->setLightSpecular(0, glm::vec3(materials[group->materialIndex]->specularColor.r, materials[group->materialIndex]->specularColor.g, materials[group->materialIndex]->specularColor.b));
+			tigl::shader->setShinyness(5.0f);
 			if (materials[group->materialIndex]->texture != NULL) {
 				tigl::shader->enableTexture(true);
 				materials[group->materialIndex]->texture->bind();
