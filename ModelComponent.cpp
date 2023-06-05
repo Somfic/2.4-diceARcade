@@ -10,9 +10,20 @@
 using tigl::Vertex;
 
 #include "ExtraString.h"
-
-ModelComponent::ModelComponent(const std::string& fileName)
+ModelComponent::ModelComponent(const std::string& fileName) {
+	init(fileName, 1);
+}
+ModelComponent::ModelComponent(const std::string& fileName, const float scale)
 {
+	init(fileName, scale);
+}
+
+
+ModelComponent::~ModelComponent()
+{
+}
+
+void ModelComponent::init(const std::string& fileName, const float scale) {
 	std::cout << "Loading " << fileName << std::endl;
 	std::string dirName = fileName;
 	if (dirName.rfind("/") != std::string::npos)
@@ -48,7 +59,7 @@ ModelComponent::ModelComponent(const std::string& fileName)
 		params[0] = toLower(params[0]);
 
 		if (params[0] == "v")
-			vertices.push_back(glm::vec3((float)atof(params[1].c_str()), (float)atof(params[2].c_str()), (float)atof(params[3].c_str())));
+			vertices.push_back(glm::vec3((float)atof(params[1].c_str()) * scale, (float)atof(params[2].c_str()) * scale, (float)atof(params[3].c_str()) * scale));
 		else if (params[0] == "vn")
 			normals.push_back(glm::vec3((float)atof(params[1].c_str()), (float)atof(params[2].c_str()), (float)atof(params[3].c_str())));
 		else if (params[0] == "vt")
@@ -110,9 +121,6 @@ ModelComponent::ModelComponent(const std::string& fileName)
 }
 
 
-ModelComponent::~ModelComponent()
-{
-}
 
 void ModelComponent::initModel()
 {
@@ -257,6 +265,10 @@ void ModelComponent::draw()
 {
 	for (auto group : groups) {
 		if (group->materialIndex >= 0) {
+			tigl::shader->setLightAmbient(0, glm::vec3(materials[group->materialIndex]->ambientColor.r, materials[group->materialIndex]->ambientColor.g, materials[group->materialIndex]->ambientColor.b));
+			tigl::shader->setLightDiffuse(0, glm::vec3(materials[group->materialIndex]->deffuseColor.r, materials[group->materialIndex]->deffuseColor.g, materials[group->materialIndex]->deffuseColor.b));
+			tigl::shader->setLightSpecular(0, glm::vec3(materials[group->materialIndex]->specularColor.r, materials[group->materialIndex]->specularColor.g, materials[group->materialIndex]->specularColor.b));
+			tigl::shader->setShinyness(5.0f);
 			if (materials[group->materialIndex]->texture != NULL) {
 				tigl::shader->enableTexture(true);
 				materials[group->materialIndex]->texture->bind();
