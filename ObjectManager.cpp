@@ -43,7 +43,8 @@ void ObjectManager::initEnvironment(std::string fileName) {
 		params[0] = toLower(params[0]);
 		std::vector<std::string> position = split(params[1], ",");
 		std::vector<std::string> rotation = split(params[2], ",");
-		std::string type = params[3];
+		std::string scale = params[3];
+		std::string type = params[4];
 		if (params[0] == "t") {
 			int typeId;
 			if (type == "str")
@@ -57,7 +58,7 @@ void ObjectManager::initEnvironment(std::string fileName) {
 		if (params[0] == "e") {
 			glm::vec3 rotationVector = stringVectorToVec3(rotation);
 			rotationVector = glm::vec3(degToRad(rotationVector.x), degToRad(rotationVector.y), degToRad(rotationVector.z));
-			addEnvironmentObject(type, stringVectorToVec3(position), rotationVector);
+			addEnvironmentObject(type, stringVectorToVec3(position), rotationVector, (float)atof(scale.c_str()));
 		}
 	}
 	for (int i = 0; i < tileInfo.size(); i++)
@@ -100,9 +101,9 @@ void ObjectManager::addTile(int tileNumber)//void ObjectManager::addTile(int til
 	railing->rotation = glm::vec3(0, tileInfo[tileNumber].z * 3.14 / 2, 0);
 	objectList->push_back(railing);
 }
-void ObjectManager::addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation) {
+void ObjectManager::addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale) {
 	std::shared_ptr<GameObject> object = std::make_shared<GameObject>();
-	object->addComponent(std::make_shared<ModelComponent>(fileName));
+	object->addComponent(std::make_shared<ModelComponent>(fileName, scale));
 	object->position = position;
 	object->rotation = rotation;
 	objectList->push_back(object);

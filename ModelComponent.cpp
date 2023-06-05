@@ -10,9 +10,20 @@
 using tigl::Vertex;
 
 #include "ExtraString.h"
-
-ModelComponent::ModelComponent(const std::string& fileName)
+ModelComponent::ModelComponent(const std::string& fileName) {
+	init(fileName, 1);
+}
+ModelComponent::ModelComponent(const std::string& fileName, const float scale)
 {
+	init(fileName, scale);
+}
+
+
+ModelComponent::~ModelComponent()
+{
+}
+
+void ModelComponent::init(const std::string& fileName, const float scale) {
 	std::cout << "Loading " << fileName << std::endl;
 	std::string dirName = fileName;
 	if (dirName.rfind("/") != std::string::npos)
@@ -48,7 +59,7 @@ ModelComponent::ModelComponent(const std::string& fileName)
 		params[0] = toLower(params[0]);
 
 		if (params[0] == "v")
-			vertices.push_back(glm::vec3((float)atof(params[1].c_str()), (float)atof(params[2].c_str()), (float)atof(params[3].c_str())));
+			vertices.push_back(glm::vec3((float)atof(params[1].c_str()) * scale, (float)atof(params[2].c_str()) * scale, (float)atof(params[3].c_str()) * scale));
 		else if (params[0] == "vn")
 			normals.push_back(glm::vec3((float)atof(params[1].c_str()), (float)atof(params[2].c_str()), (float)atof(params[3].c_str())));
 		else if (params[0] == "vt")
@@ -110,9 +121,6 @@ ModelComponent::ModelComponent(const std::string& fileName)
 }
 
 
-ModelComponent::~ModelComponent()
-{
-}
 
 void ModelComponent::initModel()
 {
