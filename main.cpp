@@ -32,6 +32,7 @@ ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(0.0f);
 int speed = 20;
 bool started = false;
+int numPlayers = 0;
 
 void init();
 void update();
@@ -226,23 +227,22 @@ void drawStartOverlay() {
     ImGui::Begin("GUI Window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
     // Add GUI elements here
-    
-    int numPlayers = 0;
-    int selectedNumPlayers = 0;  // Separate variable to store the selected option
 
     // Create a bullet option menu for selecting the number of players
     ImGui::Text("Select the number of players:");
-    ImGui::RadioButton("2 players", &selectedNumPlayers, 2);
-    ImGui::RadioButton("3 players", &selectedNumPlayers, 3);
-    ImGui::RadioButton("4 players", &selectedNumPlayers, 4);
-    ImGui::RadioButton("5 players", &selectedNumPlayers, 5);
-    ImGui::RadioButton("6 players", &selectedNumPlayers, 6);
+    ImGui::RadioButton("2 players", &numPlayers, 2);
+    ImGui::RadioButton("3 players", &numPlayers, 3);
+    ImGui::RadioButton("4 players", &numPlayers, 4);
+    ImGui::RadioButton("5 players", &numPlayers, 5);
+    ImGui::RadioButton("6 players", &numPlayers, 6);
 
     if (ImGui::Button("Start Game"))
     {
-        numPlayers = selectedNumPlayers;  // Assign the selected value to numPlayers
+        if (numPlayers > 0) {
+            started = true;
+        }
         std::cout << "Starting game with " << numPlayers << " players!" << std::endl;
-        started = true;
+        
     }
     ImGui::End();
 
