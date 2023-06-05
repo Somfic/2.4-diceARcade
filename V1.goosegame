@@ -2,21 +2,26 @@
 
 #TODO add camera position and put view centre here
 
+#this fixes texture loading
+e 0,0,-1000 0,0,0 0 models/Tiles/bridge.obj
 
-e 0,0,-2 0,-90,0 models/Tiles/start.obj
+    #00 - start
+e 0,0,-2 0,-90,0 1 models/Tiles/start.obj
 t 2,-2 3 cor
 t 2,0 1 cor
 t 4,0 1 str
 t 6,0 1 str
     #05 - repeat last
 t 8,0 1 str
+e 8,0,0 0,18,0 0.5 models/Tiles/goose.obj
     #06 - bridge
 t 10,0 1 tsp
-e 10,0,-2 0,0,0 models/Tiles/bridge.obj
+e 10,0,-2 0,0,0 1 models/Tiles/bridge.obj
 t 12,0 1 str
 t 14,0 2 cor
     #09 - repeat last
 t 14,-2 0 str
+e 14,0,-2 0,223,0 0.5 models/Tiles/goose.obj
 t 14,-4 3 cor
 t 12,-4 1 str
     #12 - bridge end
@@ -24,31 +29,88 @@ t 10,-4 0 tsp
 t 10,-6 3 cor
     #14 - repeat last
 t 8,-6 1 str
+e 8,0,-6 0,343,0 0.5 models/Tiles/goose.obj
 t 6,-6 1 str
 t 4,-6 1 str
 t 2,-6 1 cor
     #18 - repeat last
 t 2,-8 0 str
+e 2,0,-8 0,152,0 0.5 models/Tiles/goose.obj
     #19 - inn
 t 2,-10 2 tsp
-e 0,0,-10 0,0,0 models/Tiles/tile.obj
-e 0,0,-10 0,0,0 models/Tiles/inn.obj
+e 0,0,-10 0,0,0 1 models/Tiles/tile.obj
+e 0,0,-10 0,0,0 1 models/Tiles/inn.obj
 t 2,-12 0 str
 t 2,-14 0 str
 t 2,-16 0 cor
     #23 - repeat last
 t 4,-16 1 str
+e 4,0,-16 0,350,0 0.5 models/Tiles/goose.obj
 t 6,-16 1 str
 t 8,-16 1 str
 t 10,-16 1 str
     #27 - repeat last
 t 12,-16 1 str
+e 12,0,-16 0,70,0 0.5 models/Tiles/goose.obj
 t 14,-16 3 cor
 t 14,-14 0 str
 t 14,-12 0 str
     #31 - well
 t 14,-10 0 tsp
-e 16,0,-10 0,0,0 models/Tiles/tile.obj
-e 16,0,-10 0,0,0 models/Tiles/well_simple.obj
+e 16,0,-10 0,0,0 1 models/Tiles/tile.obj
+e 16,0,-10 0,0,0 1 models/Tiles/well_simple.obj
     #32 - repeat last
 t 14,-8 1 cor
+e 14,0,-8 0,163,0 0.5 models/Tiles/goose.obj
+t 16,-8 1 str
+t 18,-8 1 str
+t 20,-8 3 cor
+    #36 - repeat last
+t 20,-6 0 str
+e 20,0,-6 0,201,0 0.5 models/Tiles/goose.obj
+    #37 - maze end
+t 20,-4 1 tsp
+t 18,-4 0 cor
+t 18,-2 0 str
+t 18,0 1 cor
+    #41 - repeat last
+t 20,0 1 str
+e 20,0,0 0,353,0 0.5 models/Tiles/goose.obj
+    #42 - maze start
+t 22,0 1 tsp
+e 22,0,-3 0,180,0 1 models/Tiles/maze.obj
+t 24,0 1 str
+t 26,0 2 cor
+    #45 - repeat last
+t 26,-2 0 str
+e 26,0,-2 0,55,0 0.5 models/Tiles/goose.obj
+t 26,-4 3 cor
+t 24,-4 1 cor
+t 24,-6 0 str
+t 24,-8 0 cor
+    #50 - repeat last
+t 26,-8 2 cor
+e 26,0,-8 0,111,0 0.5 models/Tiles/goose.obj
+t 26,-10 0 str
+    #52 - jail
+t 26,-12 2 tsp
+e 24,0,-12 0,0,0 1 models/Tiles/tile.obj
+e 24,0,-12 0,0,0 1 models/Tiles/jail.obj
+t 26,-14 0 str
+    #54 - repeat last
+t 26,-16 3 cor
+e 26,0,-16 0,104,0 0.5 models/Tiles/goose.obj
+t 24,-16 1 str
+t 22,-16 0 cor
+t 22,-14 0 str
+    #58 - death
+t 22,-12 2 cor
+e 22,0,-12 0,0,0 1 models/Tiles/dead.obj
+    #59 - repeat last
+t 20,-12 1 str
+e 20,0,-12 0,335,0 0.5 models/Tiles/goose.obj
+t 18,-12 1 cor
+t 18,-14 0 str
+t 18,-16 0 str
+    #63 - finish
+e 18,0,-18 0,0,0 1 models/Tiles/finish.obj
