@@ -226,16 +226,24 @@ void drawStartOverlay() {
     ImGui::Begin("GUI Window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
     // Add GUI elements here
-    ImGui::Text("Select Players");
+    
+    int numPlayers = 0;
+    int selectedNumPlayers = 0;  // Separate variable to store the selected option
 
-    ImGui::Image((void*)(intptr_t)texture_id, ImVec2(width, height), ImVec2(0, 1), ImVec2(1, 0));
+    // Create a bullet option menu for selecting the number of players
+    ImGui::Text("Select the number of players:");
+    ImGui::RadioButton("2 players", &selectedNumPlayers, 2);
+    ImGui::RadioButton("3 players", &selectedNumPlayers, 3);
+    ImGui::RadioButton("4 players", &selectedNumPlayers, 4);
+    ImGui::RadioButton("5 players", &selectedNumPlayers, 5);
+    ImGui::RadioButton("6 players", &selectedNumPlayers, 6);
 
     if (ImGui::Button("Start Game"))
     {
-        std::cout << "Button clicked!" << std::endl;
+        numPlayers = selectedNumPlayers;  // Assign the selected value to numPlayers
+        std::cout << "Starting game with " << numPlayers << " players!" << std::endl;
         started = true;
     }
-
     ImGui::End();
 
     // Render ImGui
