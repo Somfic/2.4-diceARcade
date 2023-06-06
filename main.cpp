@@ -39,7 +39,8 @@ void update();
 void draw();
 void tempDiceCallback(const std::vector<int>& dice);
 void drawStartOverlay();
-void drawGuiImage(GLuint& texture_id, unsigned char* image_data, int& width, int& height, int& channels);
+void drawGameOverlay();
+void drawGame();
 
 std::vector<int> result = {};
 
@@ -90,13 +91,7 @@ int main(void)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        if (started) {
-            draw();
-        }
-        else {
-            drawStartOverlay();
-        }
-
+        draw();
         
 
         // Swap buffers and poll events
@@ -130,7 +125,7 @@ void init()
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
     dd = DiceDetection::DiceDetection();
     static std::thread dice_thread([callback]() {
-        dd.startDetectionWrapper(callback);
+        //dd.startDetectionWrapper(callback);
         });
 }
 float rotation = 0;
@@ -162,25 +157,12 @@ void update()
 
 void draw()
 {
-    glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    int viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    glm::mat4 projection = glm::perspective(glm::radians(75.0f), viewport[2] / (float)viewport[3], 0.01f, 500.0f);
-
-    tigl::shader->setProjectionMatrix(projection);
-    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), glm::vec3(0, 1, 5), glm::vec3(0, 1, 0)));
-    tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 1, 0)));
-
-    tigl::shader->enableColor(true);
-
-    glEnable(GL_DEPTH_TEST);
-
-
-    glPointSize(10.0f);
-    for (auto& object : *objects) {
-        object->draw();
+    if (started) {
+        drawGame();
+        drawGameOverlay();
+    }
+    else {
+        drawStartOverlay();
     }
 }
 
@@ -242,7 +224,6 @@ void drawStartOverlay() {
             started = true;
         }
         std::cout << "Starting game with " << numPlayers << " players!" << std::endl;
-        
     }
     ImGui::End();
 
@@ -254,6 +235,52 @@ void drawStartOverlay() {
     stbi_image_free(image_data);
 }
 
-void drawGuiImage(GLuint& texture_id, unsigned char* image_data, int& width, int& height, int& channels) {
+void drawGameOverlay() {
+    int screenWidth, screenHeight;
+    glfwGetWindowSize(window, &screenWidth, &screenHeight);
 
+    // Start ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Create a simple GUI window
+    ImGui::SetNextWindowPos(ImVec2(0, screenHeight * 0.75));
+    ImGui::SetNextWindowSize(ImVec2(screenWidth, screenHeight * 0.25));
+    ImGui::Begin("Goosegame", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+    ImGui::Text("Players");
+    ImGui::SameLine();
+    ImGui::Button("Quit");
+
+    ImGui::End();
+
+    // Render ImGui
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void drawGame() {
+    glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glm::mat4 projection = glm::perspective(glm::radians(75.0f), viewport[2] / (float)viewport[3], 0.01f, 500.0f);
+
+    tigl::shader->setProjectionMatrix(projection);
+    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), glm::vec3(0, 1, 5), glm::vec3(0, 1, 0)));
+    tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 1, 0)));
+
+    tigl::shader->enableColor(true);
+
+    glEnable(GL_DEPTH_TEST);
+
+
+    glPointSize(10.0f);
+    for (auto& object : *objects) {
+        object->draw();
+    }
 }
