@@ -117,7 +117,7 @@ void init()
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
     dd = DiceDetection::DiceDetection();
     static std::thread dice_thread([callback]() {
-        //dd.startDetectionWrapper(callback);
+        dd.startDetectionWrapper(callback);
         });
 }
 float rotation = 0;

@@ -11,11 +11,20 @@
 using namespace cv;
 using namespace std;
 
+enum ResultCode {
+	Success,
+	DiceTooNearby,
+	TooManyDice,
+	TooLittleDice,
+	NotCalibrated,
+	InconsistentDiceCount
+};
+
 bool isRunning = false;
 bool isCalibrated = false;
 VideoCapture cap(1);
 float calibratedDistance = 0;
-bool validResult(vector<int>);
+ResultCode validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
 void dilateImage(Mat *originalImage, Mat *newImage);
 float calculateDistance(const KeyPoint& p1, const KeyPoint& p2);
@@ -99,8 +108,7 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 		}
 	}
 
-	int numDice = diceContours.size();
-	std::cout << "Number of dice: " << numDice << std::endl;
+	int numDice = 0;
 	// Count the number of dice
 	//int numDice = 0;
 	int dice1 = 0;
@@ -156,10 +164,8 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	}
 
 	vector<int> result = { dice1, (int)(keypoints.size() - dice1)};
-
-	if (validResult(result)) {
-		callback(result);
-	}
+	int resultCode = validResult(result);
+	callback({ dice1, (int)(keypoints.size() - dice1), resultCode});
 	
 	// Print the number of dice and the number of blobs
 	if (dice1 > 6 || keypoints.size() - dice1 > 6) {
@@ -242,8 +248,8 @@ float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
 	return sqrt(pow(p1.pt.x - p2.pt.x, 2) + pow(p1.pt.y - p2.pt.y, 2));
 }
 
-bool validResult(vector<int> result) {
-	if (isCalibrated == false) {
+ResultCode validResult(vector<int> result) {
+	/*if (isCalibrated == false) {
 		return false;
 	}
 	if (result.size() == totalDice) {
@@ -255,15 +261,31 @@ bool validResult(vector<int> result) {
 	}
 	else {
 		return false;
-	}
+	}*/
 
 	diceQueue.push(result); // Add the vector to the queue
 
 	if (diceQueue.size() > maxQueueSize) {
 		diceQueue.pop(); // Remove the oldest vector if the queue exceeds the maximum size
 	}
-
-	return checkAllSame(diceQueue);
+	if (isCalibrated == false) {
+		return NotCalibrated;
+	}
+	else if (!checkAllSame(diceQueue)) {
+		return InconsistentDiceCount;
+	}
+	else if (result.size() > totalDice) {
+		return TooManyDice;
+	} 
+	else if (result.size() < totalDice) {
+		return TooLittleDice;
+	}
+	for (int i = 0; i < result.size(); i++) {
+		if (result.at(i) < 1 || result.at(i) > 6) {
+			return DiceTooNearby;
+		}
+	}
+	return Success;
 }
 
 bool checkAllSame(const std::queue<std::vector<int>>& queue) {
