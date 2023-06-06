@@ -231,6 +231,25 @@ void drawGameOverlay() {
     int screenWidth, screenHeight;
     glfwGetWindowSize(window, &screenWidth, &screenHeight);
 
+    //image data
+    GLuint texture_id;
+    int width, height, channels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* image_data = stbi_load("images/titleScreen.png", &width, &height, &channels, 0);
+    if (image_data == nullptr)
+    {
+        // Error loading the image
+        // Handle the error accordingly
+        std::cout << "Error loading image\n";
+    }
+
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     // Start ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -245,7 +264,7 @@ void drawGameOverlay() {
 
     ImGui::SameLine();
 
-    ImGui::Columns(2, "myColumns", true);
+    ImGui::Columns(3, "myColumns", true);
 
     // First column
     ImGui::Text("Turn: ");
@@ -260,6 +279,9 @@ void drawGameOverlay() {
 
     ImGui::NextColumn();
 
+    ImGui::Image((void*)(intptr_t)texture_id, ImVec2(screenWidth * 0.33, screenHeight * 0.2), ImVec2(0, 1), ImVec2(1, 0));
+
+    ImGui::NextColumn();
     // Second column
     if (ImGui::Button("Quit")) {
         started = false;
@@ -272,6 +294,9 @@ void drawGameOverlay() {
     // Render ImGui
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    glDeleteTextures(1, &texture_id);
+    stbi_image_free(image_data);
 }
 
 void drawGame() {
