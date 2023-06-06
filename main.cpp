@@ -24,7 +24,8 @@ std::shared_ptr<GameObject> model;
 std::shared_ptr<GameObject> model3;
 std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
 ObjModel* model2;
-glm::vec3 camPostion = glm::vec3(0.0f);
+glm::vec3 camPostion = glm::vec3(3.0f);
+glm::vec3 camLookat = glm::vec3(0.0f);
 int speed = 20;
 
 void init();
@@ -110,16 +111,38 @@ void update()
 	lastFrameTime = frameTime;
 	rotation += 0.1f * deltaTime;
 
-	if (glfwGetKey(window, GLFW_KEY_UP)) {
-		camPostion.z += speed * deltaTime;
+	/*if (glfwGetKey(window, GLFW_KEY_UP)) {
+		camLookat.y -= speed / 3 * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_DOWN)) {
-		camPostion.z -= speed * deltaTime;
+		camLookat.y += speed / 3 * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT)) {
-		camPostion.y -= speed * deltaTime;
+		camLookat.z -= speed * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
+		camLookat.z += speed * deltaTime;
+	}*/
+	if (glfwGetKey(window, GLFW_KEY_W)) {
+		camPostion.z += speed * deltaTime;
+		camLookat.z += speed * deltaTime;
+	}
+	if (glfwGetKey(window, GLFW_KEY_S)) {
+		camPostion.z -= speed * deltaTime;
+		camLookat.z -= speed * deltaTime;
+	}
+	if (glfwGetKey(window, GLFW_KEY_D)) {
+		camPostion.x -= speed * deltaTime;
+		camLookat.x -= speed * deltaTime;
+	}
+	if (glfwGetKey(window, GLFW_KEY_A)) {
+		camPostion.x += speed * deltaTime;
+		camLookat.x += speed * deltaTime;
+	}
+	if (glfwGetKey(window, GLFW_KEY_E)) {
+		camPostion.y -= speed * deltaTime;
+	}
+	if (glfwGetKey(window, GLFW_KEY_Q)) {
 		camPostion.y += speed * deltaTime;
 	}
 	for (auto& object : *objects) {
@@ -137,7 +160,7 @@ void draw()
 	glm::mat4 projection = glm::perspective(glm::radians(75.0f), viewport[2] / (float)viewport[3], 0.01f, 500.0f);
 
 	tigl::shader->setProjectionMatrix(projection);
-	tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), glm::vec3(0, 1, 5), glm::vec3(0, 1, 0)));
+	tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), camLookat, glm::vec3(0, 1, 0)));
 	tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 1, 0)));
 
 	tigl::shader->enableColor(true);
