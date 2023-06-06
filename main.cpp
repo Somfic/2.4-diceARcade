@@ -14,6 +14,7 @@
 #include "DiceDetection.h"
 #include <thread>
 #include <iostream>
+#include <opencv2/highgui/highgui.hpp>
 
 #define PI 3.14
 
@@ -33,6 +34,10 @@ glm::vec3 camPostion = glm::vec3(0.0f);
 int speed = 20;
 bool started = false;
 int numPlayers = 0;
+cv::VideoCapture capture(0);
+static int frameWidth;
+static int frameHeight;
+GLuint cameraTextureId;
 
 void init();
 void update();
@@ -41,6 +46,8 @@ void tempDiceCallback(const std::vector<int>& dice);
 void drawStartOverlay();
 void drawGameOverlay();
 void drawGame();
+void drawCamera();
+void setupCamera();
 
 std::vector<int> result = {};
 
@@ -113,11 +120,15 @@ void init()
         }
             
     });
+
+
+
+
     ObjectManager::ObjectManager(objects);//game, 
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
     dd = DiceDetection::DiceDetection();
     static std::thread dice_thread([callback]() {
-        //dd.startDetectionWrapper(callback);
+        dd.startDetectionWrapper(callback);
         });
 }
 float rotation = 0;
@@ -260,13 +271,12 @@ void drawGameOverlay() {
     ImGui::SetNextWindowSize(ImVec2(screenWidth, screenHeight * 0.25));
     ImGui::Begin("Goosegame", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-    //TODO: Add the player with te current turn
-
     ImGui::SameLine();
 
     ImGui::Columns(3, "myColumns", true);
 
     // First column
+    //TODO: Add the player with the current turn
     ImGui::Text("Turn: ");
 
     for (int i = 0; i < numPlayers; i++) {
@@ -320,4 +330,51 @@ void drawGame() {
     for (auto& object : *objects) {
         object->draw();
     }
+
+    drawCamera();
+}
+
+void setupCamera() {
+    if (capture.isOpened()) {
+        frameWidth = static_cast<int>(capture.get(cv::CAP_PROP_FRAME_WIDTH));
+        frameHeight = static_cast<int>(capture.get(cv::CAP_PROP_FRAME_HEIGHT));
+
+        cameraTextureId;
+        glGenTextures(1, &cameraTextureId);
+        glBindTexture(GL_TEXTURE_2D, cameraTextureId);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frameWidth, frameHeight, 0, GL_BGR, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+    }
+    else {
+        // Handle error if the capture fails to open
+    }
+}
+
+void drawCamera() {
+    cv::Mat frame;
+    capture.read(frame);
+    if (frame.empty()) {
+        // Handle end of video or error in frame capture
+    }
+
+    glBindTexture(GL_TEXTURE_2D, cameraTextureId);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, frame.cols, frame.rows, GL_BGR, GL_UNSIGNED_BYTE, frame.ptr());
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // Bind the texture
+    glBindTexture(GL_TEXTURE_2D, cameraTextureId);
+
+    // Render a quad with the texture
+    // Adjust the vertex positions, texture coordinates, and shader program as needed
+    // Ensure you have a valid shader program and vertex array object (VAO) set up
+    // to render the quad
+
+    // Draw the quad with the texture
+    // ...
+
+    // Unbind the texture
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
