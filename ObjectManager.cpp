@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <string>
 
-ObjectManager::ObjectManager( std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, std::string fileName) //Game& game,
-{ 
+ObjectManager::ObjectManager(std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, std::string fileName) //Game& game,
+{
 	//this->game = game;
 	this->objectList = objectList;
 	initEnvironment(fileName);
@@ -43,16 +43,9 @@ void ObjectManager::initEnvironment(std::string fileName) {
 		params[0] = toLower(params[0]);
 		std::vector<std::string> position = split(params[1], ",");
 		std::vector<std::string> rotation = split(params[2], ",");
-		std::string scale = params[3];
-		std::string type;
-		if (params.size() > 4) {
-			type = params[4];
-		}
-		else {
-			type = scale;
-		}
-		
+
 		if (params[0] == "t") {
+			std::string type = params[3];
 			int typeId;
 			if (type == "str")
 				typeId = 0;
@@ -60,9 +53,52 @@ void ObjectManager::initEnvironment(std::string fileName) {
 				typeId = 1;
 			else if (type == "tsp")
 				typeId = 2;
+
+			if (params.size() > 4) {
+				std::string specialRule = params[4];
+
+				if (specialRule == "repeat")
+				{
+					//repeat move, no extra parameters
+				}
+				else if (specialRule == "jump")
+				{
+					//jump from one tile to another, extra parameters are target index followed by any number of points for the path to pass through
+					int targetPosition = atoi(params[5].c_str());
+					std::vector<glm::vec3> pathCoordinates;
+
+					for (size_t i = 6; i < params.size(); i++)
+					{
+						std::vector<std::string> coords = split(params[i], ",");
+						pathCoordinates.push_back(glm::vec3(atoi(coords[0].c_str()), atoi(coords[1].c_str()), atoi(coords[2].c_str())));
+					}
+				}
+				else if (specialRule == "wait")
+				{
+					//wait a turn, extra parameters are the bounding coordinates (3d)
+					std::vector<glm::vec3> boundCoordinates;
+
+					for (size_t i = 5; i < 7; i++)
+					{
+						std::vector<std::string> coords = split(params[i], ",");
+						boundCoordinates.push_back(glm::vec3(atoi(coords[0].c_str()), atoi(coords[1].c_str()), atoi(coords[2].c_str())));
+					}
+				}
+				else if (specialRule == "lock")
+				{
+					//stay until saved by another player, extra parameter is the location to stay fixed at
+					std::vector<std::string> coords = split(params[5], ",");
+					glm::vec3 lockCoordinate(atoi(coords[0].c_str()), atoi(coords[1].c_str()), atoi(coords[2].c_str()));
+				}
+
+			}
+
+			//TODO move this to include type and properties
 			tileInfo.push_back(glm::vec4(atoi(position[0].c_str()), atoi(position[1].c_str()), atoi(rotation[0].c_str()), typeId));
 		}
-		if (params[0] == "e") {
+		else if (params[0] == "e") {
+			std::string scale = params[3];
+			std::string type = params[4];
 			glm::vec3 rotationVector = stringVectorToVec3(rotation);
 			rotationVector = glm::vec3(degToRad(rotationVector.x), degToRad(rotationVector.y), degToRad(rotationVector.z));
 			if (params.size() > 4) {
@@ -71,7 +107,6 @@ void ObjectManager::initEnvironment(std::string fileName) {
 			else {
 				addEnvironmentObject(type, stringVectorToVec3(position), rotationVector, 1.0f);
 			}
-
 		}
 	}
 	for (int i = 0; i < tileInfo.size(); i++)
@@ -112,7 +147,7 @@ void ObjectManager::addTile(int tileNumber, float scale)//void ObjectManager::ad
 		railing2->position = glm::vec3(tileInfo[tileNumber].x, 0, tileInfo[tileNumber].y);
 		railing2->rotation = glm::vec3(0, (tileInfo[tileNumber].z + 2) * 3.14 / 2, 0);
 		objectList->push_back(railing2);
-		
+
 	}
 	railing->position = glm::vec3(tileInfo[tileNumber].x, 0, tileInfo[tileNumber].y);
 	railing->rotation = glm::vec3(0, tileInfo[tileNumber].z * 3.14 / 2, 0);
