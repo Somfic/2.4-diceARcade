@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\GameLogic">
+      <UniqueIdentifier>{49ef9a48-77b8-47d3-b85e-746156f81bdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modelloading">
+      <UniqueIdentifier>{b1778fec-e11e-4e3e-9b75-b18ea5aa9f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{7a7f72b1-d397-4578-a83a-3ea23aa79941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imGui">
+      <UniqueIdentifier>{20f15cec-d8f5-40fa-837c-181993eaebb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\imGui">
+      <UniqueIdentifier>{d90b0ea8-7ce8-488e-a7e6-d2c0a013cf62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tigl.cpp">
@@ -21,8 +36,56 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="obj-model.cpp">
+      <Filter>Modelloading</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Modelloading</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SpinComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveToComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
     <ClCompile Include="DiceDetection.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imGui\imgui_tables.cpp">
+      <Filter>Source Files\imGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imGui\imgui_widgets.cpp">
+      <Filter>Source Files\imGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imGui\imgui.cpp">
+      <Filter>Source Files\imGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imGui\imgui_demo.cpp">
+      <Filter>Source Files\imGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imGui\imgui_draw.cpp">
+      <Filter>Source Files\imGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imGui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\imGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imGui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\imGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +94,63 @@
     </ClInclude>
     <ClInclude Include="DiceDetection.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="obj-model.h">
+      <Filter>Modelloading</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Modelloading</Filter>
+    </ClInclude>
+    <ClInclude Include="SpinComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveToComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imgui_impl_glfw.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imgui_impl_opengl3.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imgui_impl_opengl3_loader.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imgui_internal.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imstb_rectpack.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imstb_textedit.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imstb_truetype.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imconfig.h">
+      <Filter>Header Files\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imGui\imgui.h">
+      <Filter>Header Files\imGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
