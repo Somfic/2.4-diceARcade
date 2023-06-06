@@ -5,25 +5,23 @@
 #include <string>
 #include "Space.h"
 
-class Player
-{
-private:
+class Player {
 	Game game;
 	int id;
 	std::string color;
-	Space currentSpace;
+	Space* currentSpace;
 	int lastRoll;
 	bool trapped;
 
-public:
 	Player(int i, std::string c, Game g);
 	void moveSpaces(int spaces);
 	void moveTo(int space);
 	Space getCurrentSpace();
+	int getCurrentSpaceIndex();
 	void roll(int roll);
 	int getRoll();
 	void trap();
 	void untrap();
-};
 
+};
 #endif // PLAYER_H
