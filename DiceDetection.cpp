@@ -12,9 +12,9 @@ using namespace cv;
 using namespace std;
 
 bool isRunning = false;
+bool isCalibrated = false;
 VideoCapture cap(1);
 float calibratedDistance = 0;
-
 bool validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
 void dilateImage(Mat *originalImage, Mat *newImage);
@@ -24,6 +24,7 @@ bool checkAllSame(const std::queue<std::vector<int>>& queue);
 queue<vector<int>> diceQueue;
 const int maxQueueSize = 5;
 const int totalDice = 2;
+const float distanceTreshold = 3;
 
 DiceDetection::DiceDetection() {
 
@@ -105,7 +106,6 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	int dice1 = 0;
 	int dice2 = 0;
 	float smallestDistance = 0;
-	float greatestDistance = 0;
 	if (keypoints.size() > 0)
 	{
 		numDice = 1;
@@ -128,18 +128,14 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 					smallestDistance = distance;
 					smallestDistanceIndex = j;
 				}
-				if (greatestDistance == 0 || greatestDistance < distance && distance != 0) {
-					greatestDistance = distance;
-				
-				}
-					
 			}
 		}
 		cout << "smallest distance " << smallestDistance << endl;
-		cout << "greatest distance " << smallestDistance << endl;
-		if (calibratedDistance != 0) {
+
+		if (isCalibrated == true) {
 			smallestDistance = calibratedDistance;
 		}
+		
 		KeyPoint referencePoint = keypoints[smallestDistanceIndex];
 		for (int i = 0; i < keypoints.size(); i++)
 		{
@@ -147,16 +143,16 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 			float distance = calculateDistance(currentPoint, referencePoint);
 			
 			cout << "distance: " << distance << endl ;
-			if (smallestDistance *3 < distance) {
-
+			if (smallestDistance * distanceTreshold < distance) {
 				numDice = 2;
 				dice1++;
 				continue;
 			}
 		}
 	}
-	if ((calibratedDistance == 0) && (numDice == 1) && (keypoints.size() == 6)) {
+	if ((isCalibrated == false) && (numDice == 1) && (keypoints.size() == 6)) {
 		calibratedDistance = smallestDistance;
+		isCalibrated = true;
 	}
 
 	vector<int> result = { dice1, (int)(keypoints.size() - dice1)};
@@ -237,6 +233,9 @@ float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
 }
 
 bool validResult(vector<int> result) {
+	if (isCalibrated == false) {
+		return false;
+	}
 	if (result.size() == totalDice) {
 		for (int i = 0; i < result.size(); i++) {
 			if (result.at(i) < 1 || result.at(i) > 6) {
