@@ -47,14 +47,6 @@ std::vector<int> result = {};
 
 int main(void)
 {
-    // make a new Game object and print the spaces
-    //Game game = Game();
- //   std::vector<Space> spaces = game.getSpaces();
- //   // print all spaces
- //   for (Space space : spaces)
- //   {
-	//	std::cout << space << std::endl;
-	//}
 
     if (!glfwInit())
         throw "Could not initialize glwf";
@@ -244,16 +236,36 @@ void drawGameOverlay() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    glClear(GL_COLOR_BUFFER_BIT);
-
     // Create a simple GUI window
     ImGui::SetNextWindowPos(ImVec2(0, screenHeight * 0.75));
     ImGui::SetNextWindowSize(ImVec2(screenWidth, screenHeight * 0.25));
     ImGui::Begin("Goosegame", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-    ImGui::Text("Players");
+    //TODO: Add the player with te current turn
+
     ImGui::SameLine();
-    ImGui::Button("Quit");
+
+    ImGui::Columns(2, "myColumns", true);
+
+    // First column
+    ImGui::Text("Turn: ");
+
+    for (int i = 0; i < numPlayers; i++) {
+        std::string playerString = "Player ";
+        playerString += std::to_string(i);
+        playerString += " space x";
+        ImGui::Text(playerString.c_str());
+    }
+
+
+    ImGui::NextColumn();
+
+    // Second column
+    if (ImGui::Button("Quit")) {
+        started = false;
+    }
+
+    ImGui::Columns(1); // Reset to single column layout
 
     ImGui::End();
 
