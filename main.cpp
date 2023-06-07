@@ -44,6 +44,10 @@ GLuint cameraTextureId;
 void init();
 void update();
 void draw();
+void drawCamera();
+void drawGame();
+void drawGameOverlay();
+void drawStartOverlay();
 void tempDiceCallback(const std::vector<int>& dice);
 void diceCallBack(int width, int height, unsigned char* imgData, const std::vector<int>& dice);
 
@@ -189,13 +193,6 @@ void draw()
     else {
         drawStartOverlay();
     }
-}
-
-void tempDiceCallback(const std::vector<int>& dice) {
-    for (int i = 0; i < dice.size(); i++) {
-        std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
-    }
-
 }
 
 void drawStartOverlay() {
@@ -365,8 +362,11 @@ void tempDiceCallback(const std::vector<int>& dice) {
 		diceValue = dice.at(0) + dice.at(1);
 	}
 }
+
 void diceCallBack(int width, int height, unsigned char* imgData, const std::vector<int>& dice) {
-	diceValue = dice.at(0) + dice.at(1);
+    diceValue = dice.at(0) + dice.at(1);
+}
+
 void setupCamera() {
     if (capture.isOpened()) {
         frameWidth = static_cast<int>(capture.get(cv::CAP_PROP_FRAME_WIDTH));
