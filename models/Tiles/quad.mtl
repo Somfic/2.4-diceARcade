@@ -1,4 +1,4 @@
-# Blender 3.1.0 MTL File: 'None'
+# Blender 3.1.0 MTL File: 'quad.blend'
 # www.blender.org
 
 newmtl Material.001
@@ -10,3 +10,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
+map_Kd  Empty.jpg

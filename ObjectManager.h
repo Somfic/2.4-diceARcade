@@ -23,5 +23,5 @@ public:
 	void addPlayer(int i);
 	void addTile(int tileNumber, std::shared_ptr<Space>space, float scale);
 	void addTile(int tileNumber, std::shared_ptr<Space>space);
-	void addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale);
+	std::shared_ptr<GameObject> addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale);
 };
