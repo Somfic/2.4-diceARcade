@@ -2,6 +2,8 @@
 //#include "Game.h"
 #include "Components.h"
 #include <memory>
+#include "Game.h"
+
 class EnvirormentObject {
 public:
 	glm::vec3 postion;
@@ -19,7 +21,7 @@ public:
 	~ObjectManager();
 	void initEnvironment(std::string fileName);
 	void addPlayer(int i);
-	void addTile(int tileNumber, float scale);
-	void addTile(int tileNumber);// ,std::shared_ptr <Space> space);
+	void addTile(int tileNumber, std::shared_ptr<Space>space, float scale);
+	void addTile(int tileNumber, std::shared_ptr<Space>space);
 	void addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale);
 };

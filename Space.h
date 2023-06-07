@@ -1,13 +1,10 @@
-#ifndef SPACE_H
-#define SPACE_H
-
-#include <vector>
+#pragma once
+#include "GameObject.h"
 #include "Player.h"
-
 class Space : public GameObject{
 public:
-	GameObject railing;
-	void onLand(Player p);
+	int space;
+	Space();
+	~Space();
+	virtual void onLand(Player& p);
 };
-
-#endif // SPACE_H

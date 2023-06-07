@@ -7,6 +7,8 @@
 
 GameObject::GameObject()
 {
+	this->position = glm::vec3(0);
+	this->rotation = glm::vec3(0);
 }
 
 GameObject::~GameObject()

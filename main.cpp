@@ -27,11 +27,13 @@ ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(3.0f);
 glm::vec3 camLookat = glm::vec3(0.0f);
 int speed = 20;
+int diceValue = 0;
 
 void init();
 void update();
 void draw();
 void tempDiceCallback(const std::vector<int>& dice);
+void diceCallBack(int width, int height, unsigned char* imgData, const std::vector<int>& dice);
 
 std::vector<int> result = {};
 
@@ -52,7 +54,7 @@ int main(void)
 		throw "Could not initialize glwf";
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    window = glfwCreateWindow(mode->width, mode->height, "Hello World", monitor, NULL);
+    window = glfwCreateWindow(mode->width, mode->height, "The Goose Game", monitor, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -175,8 +177,15 @@ void draw()
 }
 
 void tempDiceCallback(const std::vector<int>& dice) {
-	for (int i = 0; i < dice.size(); i++) {
+	/*for (int i = 0; i < dice.size(); i++) {
 		std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
+	}*/
+	if (dice.size() == 2) {
+		std::cout << "wow" << std::endl;
+		diceValue = dice.at(0) + dice.at(1);
 	}
+}
+void diceCallBack(int width, int height, unsigned char* imgData, const std::vector<int>& dice) {
+	diceValue = dice.at(0) + dice.at(1);
 
 }

@@ -95,7 +95,7 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	}
 
 	int numDice = diceContours.size();
-	std::cout << "Number of dice: " << numDice << std::endl;
+	//std::cout << "Number of dice: " << numDice << std::endl;
 	// Count the number of dice
 	//int numDice = 0;
 	int dice1 = 0;
@@ -205,8 +205,7 @@ void DiceDetection::startDetectionWrapper(void (*callback)(const std::vector<int
 
 		//NEEDED TO SHOW IMAGES ON SEPARATE THREAD, REMOVE ON FINAL BUILD
 		//cv::waitKey(0);
-	}
-	
+	}	
 }
 
 void DiceDetection::stop() {
@@ -220,7 +219,7 @@ float calculateDistance(const KeyPoint& p1, const KeyPoint& p2) {
 }
 
 bool validResult(vector<int> result) {
-	return true;
+	return result[0] > 0 && result[0] <= 6 && result[1] > 0 && result[1] <= 6;
 }
 
 void erodeImage(Mat *originalImage, Mat *newImage) {

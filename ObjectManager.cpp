@@ -76,7 +76,7 @@ void ObjectManager::initEnvironment(std::string fileName) {
 	}
 	for (int i = 0; i < tileInfo.size(); i++)
 	{
-		addTile(i);// ,std::make_shared <Space>());
+		addTile(i, std::make_shared <Space>());// ,);
 	}
 }
 void ObjectManager::addPlayer(int i) {
@@ -85,30 +85,27 @@ void ObjectManager::addPlayer(int i) {
 	player->addComponent(std::make_shared<MoveToComponent>());
 	objectList->push_back(player);*/
 }
-void ObjectManager::addTile(int tileNumber)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
+void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
 {
-	addTile(tileNumber, 1.0f);
+	addTile(tileNumber, space, 1.0f);
 }
-void ObjectManager::addTile(int tileNumber, float scale)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
+void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space, float scale)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
 {
-	//remove
-	std::shared_ptr<GameObject> space = std::make_shared <GameObject>();
-	//
-	space->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj"));
+	space->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj",scale));
 	space->position = glm::vec3(tileInfo[tileNumber].x, 0, tileInfo[tileNumber].y);
 	space->rotation = glm::vec3(0, 0, 0);
 	objectList->push_back(space);
 	std::shared_ptr<GameObject> railing = std::make_shared<GameObject>();
 	if (tileInfo[tileNumber].w == 1) {
-		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_curved.obj"));
+		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_curved.obj", scale));
 	}
 	else if (tileInfo[tileNumber].w == 2) {
-		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj"));
+		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj", scale));
 	}
 	else {
-		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj"));
+		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj", scale));
 		std::shared_ptr<GameObject> railing2 = std::make_shared<GameObject>();
-		railing2->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj"));
+		railing2->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj", scale));
 		railing2->position = glm::vec3(tileInfo[tileNumber].x, 0, tileInfo[tileNumber].y);
 		railing2->rotation = glm::vec3(0, (tileInfo[tileNumber].z + 2) * 3.14 / 2, 0);
 		objectList->push_back(railing2);

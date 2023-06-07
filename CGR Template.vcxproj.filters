@@ -22,6 +22,9 @@
     <Filter Include="Components">
       <UniqueIdentifier>{7a7f72b1-d397-4578-a83a-3ea23aa79941}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GameLogic\Spaces">
+      <UniqueIdentifier>{22437eed-cc0e-4b36-b81c-869ad7ced4f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tigl.cpp">
@@ -59,6 +62,18 @@
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Space.cpp">
+      <Filter>Source Files\GameLogic\Spaces</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalSpace.cpp">
+      <Filter>Source Files\GameLogic\Spaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\GameLogic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +115,18 @@
     </ClInclude>
     <ClInclude Include="ExtraString.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source Files\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Space.h">
+      <Filter>Source Files\GameLogic\Spaces</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalSpace.h">
+      <Filter>Source Files\GameLogic\Spaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files\GameLogic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
