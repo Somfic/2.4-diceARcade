@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "Game.h"
+#include <string>
 
 
 // class player has an id, a color and a current space
@@ -54,19 +56,19 @@ void Player::roll(int roll) {
 	moveSpaces(roll);
 }
 
-int getRoll() {
+int Player::getRoll() {
 	return lastRoll;
 }
 
-void trap() {
+void Player::trap() {
 	trapped = true;
 }
 
-void untrap() {
+void Player::untrap() {
 	trapped = false;
 }
 
-int getCurrentSpaceIndex() {
+int Player::getCurrentSpaceIndex() {
 	// iterate through game.getSpaces() and return the index of the current space
 	for (int i = 0; i < game->getSpaces().size(); i++) {
 		if (game->getSpaces()[i] == currentSpace) {

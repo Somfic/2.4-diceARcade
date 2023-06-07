@@ -5,7 +5,8 @@
 #include "GameObject.h"
 #include "ObjectManager.h"
 #include <glm/gtc/matrix_transform.hpp>
-//#include "Game.h"
+#include "Game.h"
+#include <stdio.h>
 #include "DiceDetection.h"
 #include <thread>
 #include <iostream>

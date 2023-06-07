@@ -1,4 +1,8 @@
 #include "Game.h"
+#include <vector>
+#include <string>
+#include "Player.h"
+#include "Space.h"
 
 // list of spaces in the game
 std::vector<Space> spaces;
@@ -11,7 +15,7 @@ Game::Game() {
 }
 
 // builder for the spaces
-void createSpaces()
+void Game::createSpaces()
 {
 	// create a new space with a lambda function as parameter and add it to the list of spaces
 	for (int i = 0; i < 76; i++)
@@ -42,7 +46,7 @@ void createSpaces()
 	}
 }
 
-std::vector<Space*> getSpaces()
+std::vector<Space*> Game::getSpaces()
 {
 	std::vector<Space*> spacePointers;
 	for (int i = 0; i < spaces.size(); i++)
