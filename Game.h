@@ -2,14 +2,16 @@
 #define GAME_H
 
 #include <vector>
-#include <string>
 #include "Player.h"
-#include "Space.h" // Assuming there is a separate header file for the Space class
+#include "Space.h"
+
+class Player;
+class Space;
 
 class Game
 {
 private:
-    std::vector<Space*> spaces; // Changed to store pointers to Space objects
+    std::vector<Space> spaces;
     std::vector<Player> players;
 
 public:

@@ -4,9 +4,11 @@
 #include <vector>
 #include "Player.h"
 
+class Player;
+
 class Space {
 public:
-	void onLand(Player p);
+	void onLand(Player* p);
 };
 
 #endif // SPACE_H

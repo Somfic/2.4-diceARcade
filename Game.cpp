@@ -1,7 +1,7 @@
 #include "Game.h"
 #include <vector>
 #include <string>
-#include "Player.cpp"
+#include "Player.h"
 #include "Space.cpp"
 
 // list of spaces in the game
@@ -38,13 +38,20 @@ void createSpaces()
 			spaces.push_back(ExcessSpace());
 		else if (i % 8 == 0)
 			spaces.push_back(GooseSpace());
+		else if ((i & 8 - 4) == 0)
+			spaces.push_back(GooseSpace());
 		else
 			spaces.push_back(NormalSpace());
 
 	}
 }
 
-std::vector<Space> getSpaces()
+std::vector<Space*> getSpaces()
 {
-	return spaces;
+	std::vector<Space*> spacePointers;
+	for (int i = 0; i < spaces.size(); i++)
+	{
+		spacePointers.push_back(&spaces[i]);
+	}
+	return spacePointers;
 }
