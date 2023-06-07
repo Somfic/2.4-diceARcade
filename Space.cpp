@@ -6,94 +6,90 @@
 #include "Player.h"
 #include "Space.h"
 
-// empty space with no function
-class NormalSpace : public Space {
-public:
-	NormalSpace() {}
+void Space::onLand(Player* p) {
 
-	void onLand(Player p) {
+}
+
+// empty space with no function
+
+NormalSpace::NormalSpace() {}
+
+	void NormalSpace::onLand(Player* p) {
 		// do nothing
 	}
-};
+
 
 // class GooseSpace inherits from Space
 // it has a function that is called when a player lands on it that moves the player with the same distance again
-class GooseSpace : public Space {
-public:
-	GooseSpace() {}
+
+GooseSpace::GooseSpace() {}
 	
-	void onLand(Player p) {
+	void GooseSpace::onLand(Player* p) {
 		// move the player again
-		p.moveSpaces(p.getRoll());
+		p->moveSpaces(p->getRoll());
 	}
-};
 
-class BridgeSpace : public Space {
-public:
-	BridgeSpace() {}
 
-	void onLand(Player p) {
-		p.moveTo(12);
+
+BridgeSpace::BridgeSpace() {}
+
+	void BridgeSpace::onLand(Player* p) {
+		p->moveTo(12);
 	}
-};
 
-class MazeSpace : public Space {
-public:
-	MazeSpace() {}
 
-	void onLand(Player p) {
-		p.moveTo(37);
+
+MazeSpace::MazeSpace() {}
+
+	void MazeSpace::onLand(Player* p) {
+		p->moveTo(37);
 	}
-};
 
-class InnSpace : public Space {
-public:
-	InnSpace() {}
 
-	void onLand(Player p) {
+
+InnSpace::InnSpace() {}
+
+	void InnSpace::onLand(Player* p) {
 		// TODO: implement
 	}
-};;
+
 
 // prison/well space
-class WaitSpace : public Space {
-public:
-	Player* trappedPlayer = nullptr;
 
-	WaitSpace() {}
+	
 
-	void onLand(Player p) {
+WaitSpace::WaitSpace() {
+		Player* trappedPlayer = nullptr;
+	}
+
+	void WaitSpace::onLand(Player* p) {
 		if (trappedPlayer != nullptr) {
 			trappedPlayer->untrap();
 		}
-		trappedPlayer = &p;
-		p.trap();
+		trappedPlayer = p;
+		p->trap();
 	}
-};
 
-class DeathSpace : public Space {
-public:
-	DeathSpace() {}
 
-	void onLand(Player p) {
-		p.moveTo(0);
+
+DeathSpace::DeathSpace() {}
+
+	void DeathSpace::onLand(Player* p) {
+		p->moveTo(0);
 	}
-};
 
-class WinSpace : public Space {
-public:
-	WinSpace() {}
 
-	void onLand(Player p) {
+
+WinSpace::WinSpace() {}
+
+	void WinSpace::onLand(Player* p) {
 		//TODO: win the game
 	}
-};
 
-class ExcessSpace : public Space {
-public:
-	ExcessSpace() {}
 
-	void onLand(Player p) {
-		p.moveTo(p.getCurrentSpaceIndex() - 63);
+
+ExcessSpace::ExcessSpace() {}
+
+	void ExcessSpace::onLand(Player* p) {
+		p->moveTo(p->getCurrentSpaceIndex() - 63);
 	}
-};

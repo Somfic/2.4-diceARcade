@@ -3,7 +3,6 @@
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "Game.h"
-#include "Space.cpp"
 #include <stdio.h>
 #include <iostream>
 using tigl::Vertex;
