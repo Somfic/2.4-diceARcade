@@ -1,5 +1,5 @@
 #include "Space.h"
-Space::Space() {
+Space::Space() {}
 
 // empty space with no function
 class NormalSpace : public Space {

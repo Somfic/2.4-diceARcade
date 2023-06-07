@@ -4,10 +4,10 @@
 
 class Player;
 
-class Space {
+class Space : public GameObject {
 public:
 	int space;
 	Space();
 	~Space();
-	virtual void onLand(Player& p);
+	virtual void onLand(Player* p);
 };

@@ -5,6 +5,6 @@ NormalSpace::NormalSpace(int space) {
 NormalSpace::~NormalSpace() {
 
 }
-void NormalSpace::onLand(Player& p) {
+void NormalSpace::onLand(Player* p) {
 	
 }

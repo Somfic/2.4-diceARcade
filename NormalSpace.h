@@ -6,6 +6,6 @@ class NormalSpace :
 public:
     NormalSpace(int number);
     ~NormalSpace();
-    void onLand(Player& p) override;
+    void onLand(Player* p) override;
 };
 

@@ -5,10 +5,6 @@
 #include "GameObject.h"
 #include "ObjectManager.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include "Game.h"
-#include "Space.cpp"
-#include <stdio.h>
-#include <iostream>
 //#include "Game.h"
 #include "DiceDetection.h"
 #include <thread>
@@ -44,9 +40,14 @@ std::vector<int> result = {};
 
 int main(void)
 {
-    // make a new Game object and print the spaces
-    Game game = Game();
-   
+	// make a new Game object and print the spaces
+	//Game game = Game();
+ //   std::vector<Space> spaces = game.getSpaces();
+ //   // print all spaces
+ //   for (Space space : spaces)
+ //   {
+	//	std::cout << space << std::endl;
+	//}
 
 
 	if (!glfwInit())
@@ -180,7 +181,6 @@ void tempDiceCallback(const std::vector<int>& dice) {
 		std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
 	}*/
 	if (dice.size() == 2) {
-		std::cout << "wow" << std::endl;
 		diceValue = dice.at(0) + dice.at(1);
 	}
 }
