@@ -47,8 +47,8 @@ void Player::moveTo(int space) {
 }
 
 // function that returns the current space
-Space getCurrentSpace() {
-	return *currentSpace;
+Space* Player::getCurrentSpace() {
+	return currentSpace;
 }
 
 void Player::roll(int roll) {

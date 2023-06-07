@@ -5,7 +5,7 @@
 #include "Space.h"
 
 // list of spaces in the game
-std::vector<Space> spaces;
+std::vector<Space*> spaces;
 // list of players in the game
 std::vector<Player> players;
 
@@ -21,37 +21,65 @@ void Game::createSpaces()
 	for (int i = 0; i < 76; i++)
 	{
 		if (i == 6)
-			spaces.push_back(BridgeSpace());
+		{
+			BridgeSpace* bridge = new BridgeSpace();
+			spaces.push_back(bridge);
+		}
 		else if (i == 19)
-			spaces.push_back(WaitSpace());
+		{
+			WaitSpace* wait = new WaitSpace();
+			spaces.push_back(wait);
+		}
 		else if (i == 31)
-			spaces.push_back(InnSpace());
+		{
+			InnSpace* inn = new InnSpace();
+			spaces.push_back(inn);
+		}
 		else if (i == 42)
-			spaces.push_back(MazeSpace());
+		{
+			MazeSpace* maze = new MazeSpace();
+			spaces.push_back(maze);
+		}
 		else if (i == 52)
-			spaces.push_back(WaitSpace());
+		{
+			WaitSpace* wait = new WaitSpace();
+			spaces.push_back(wait);
+		}
 		else if (i == 58)
-			spaces.push_back(DeathSpace());
+		{
+			DeathSpace* death = new DeathSpace();
+			spaces.push_back(death);
+		}
 		else if (i == 63)
-			spaces.push_back(WinSpace());
+		{
+			WinSpace* win = new WinSpace();
+			spaces.push_back(win);
+		}
 		else if (i > 63)
-			spaces.push_back(ExcessSpace());
+		{
+			ExcessSpace* excess = new ExcessSpace();
+			spaces.push_back(excess);
+		}
 		else if (i % 8 == 0)
-			spaces.push_back(GooseSpace());
-		else if ((i & 8 - 4) == 0)
-			spaces.push_back(GooseSpace());
+		{
+			GooseSpace* goose = new GooseSpace();
+			spaces.push_back(goose);
+		}
+		else if ((i % 8 - 4) == 0)
+		{
+			GooseSpace* goose = new GooseSpace();
+			spaces.push_back(goose);
+		}
 		else
-			spaces.push_back(NormalSpace());
-
+		{
+			NormalSpace* normal = new NormalSpace();
+			spaces.push_back(normal);
+		}
+			
 	}
 }
 
 std::vector<Space*> Game::getSpaces()
 {
-	std::vector<Space*> spacePointers;
-	for (int i = 0; i < spaces.size(); i++)
-	{
-		spacePointers.push_back(&spaces[i]);
-	}
-	return spacePointers;
+	return spaces;
 }

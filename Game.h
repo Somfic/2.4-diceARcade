@@ -11,7 +11,7 @@ class Space;
 class Game
 {
 private:
-    std::vector<Space> spaces;
+    std::vector<Space*> spaces;
     std::vector<Player> players;
 
 public:
