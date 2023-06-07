@@ -30,9 +30,6 @@
     <ClCompile Include="tigl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="obj-model.cpp">
       <Filter>Modelloading</Filter>
     </ClCompile>
@@ -69,11 +66,11 @@
     <ClCompile Include="Space.cpp">
       <Filter>Source Files\GameLogic\Spaces</Filter>
     </ClCompile>
-    <ClCompile Include="NormalSpace.cpp">
-      <Filter>Source Files\GameLogic\Spaces</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +117,6 @@
       <Filter>Source Files\GameLogic</Filter>
     </ClInclude>
     <ClInclude Include="Space.h">
-      <Filter>Source Files\GameLogic\Spaces</Filter>
-    </ClInclude>
-    <ClInclude Include="NormalSpace.h">
       <Filter>Source Files\GameLogic\Spaces</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">

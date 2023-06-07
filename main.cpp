@@ -37,12 +37,12 @@ void tempDiceCallback(const std::vector<int>& dice);
 void diceCallBack(int width, int height, unsigned char* imgData, const std::vector<int>& dice);
 
 std::vector<int> result = {};
-
+Game game;
 
 int main(void)
 {
 	// make a new Game object and print the spaces
-	//Game game = Game();
+	game = Game();
  //   std::vector<Space> spaces = game.getSpaces();
  //   // print all spaces
  //   for (Space space : spaces)
@@ -55,7 +55,7 @@ int main(void)
 		throw "Could not initialize glwf";
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    window = glfwCreateWindow(mode->width, mode->height, "The Goose Game", monitor, NULL);
+    window = glfwCreateWindow(mode->width, mode->height, "The Goose Game", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -97,7 +97,7 @@ void init()
 
 	tigl::shader->setLightDirectional(0, false);
 	tigl::shader->setLightPosition(0, glm::vec3(0, 1000, 0));
-	ObjectManager::ObjectManager(objects, "V1.goosegame");//game, 
+	ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, 
 	void (*callback)(const std::vector<int>&) = tempDiceCallback;
 	dd = DiceDetection::DiceDetection();
 	static std::thread dice_thread([callback]() {

@@ -96,7 +96,8 @@ void ObjectManager::initEnvironment(std::string fileName) {
 				}
 			}
 			space->position = glm::vec3(atof(position[0].c_str()),0, atof(position[1].c_str()));
-			space->rotation = glm::vec3(0, atoi(rotation[0].c_str()) * 3.14,0);
+			std::cout << (atof(rotation[0].c_str()) * 3.14f) << std::endl;
+			space->rotation = glm::vec3(0, (atof(rotation[0].c_str()) * 3.14f / 2),0);
 			space->typeId = typeId;
 			game->spaces->push_back(space);
 			//TODO move this to include type and properties
