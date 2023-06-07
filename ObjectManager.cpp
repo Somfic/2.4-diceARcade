@@ -5,9 +5,9 @@
 #include <algorithm>
 #include <string>
 
-ObjectManager::ObjectManager(std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, std::string fileName) //Game& game,
+ObjectManager::ObjectManager(std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, std::string fileName, Game* game) //Game& game,
 {
-	//this->game = game;
+	this->game = game;
 	this->objectList = objectList;
 	initEnvironment(fileName);
 }
@@ -46,6 +46,7 @@ void ObjectManager::initEnvironment(std::string fileName) {
 
 		if (params[0] == "t") {
 			std::string type = params[3];
+			std::shared_ptr<Space> space;
 			int typeId;
 			if (type == "str")
 				typeId = 0;
@@ -54,15 +55,18 @@ void ObjectManager::initEnvironment(std::string fileName) {
 			else if (type == "tsp")
 				typeId = 2;
 
+			space = std::make_shared<NormalSpace>();
 			if (params.size() > 4) {
 				std::string specialRule = params[4];
 
 				if (specialRule == "repeat")
 				{
+					space = std::make_shared<GooseSpace>();
 					//repeat move, no extra parameters
 				}
 				else if (specialRule == "jump")
 				{
+					space = std::make_shared < BridgeSpace>();
 					//jump from one tile to another, extra parameters are target index followed by any number of points for the path to pass through
 					int targetPosition = atoi(params[5].c_str());
 					std::vector<glm::vec3> pathCoordinates;
@@ -90,11 +94,13 @@ void ObjectManager::initEnvironment(std::string fileName) {
 					std::vector<std::string> coords = split(params[5], ",");
 					glm::vec3 lockCoordinate(atoi(coords[0].c_str()), atoi(coords[1].c_str()), atoi(coords[2].c_str()));
 				}
-
 			}
-
+			space->position = glm::vec3(atof(position[0].c_str()),0, atof(position[1].c_str()));
+			space->rotation = glm::vec3(0, atoi(rotation[0].c_str()) * 3.14,0);
+			space->typeId = typeId;
+			game->spaces->push_back(space);
 			//TODO move this to include type and properties
-			tileInfo.push_back(glm::vec4(atoi(position[0].c_str()), atoi(position[1].c_str()), atoi(rotation[0].c_str()), typeId));
+			
 		}
 		else if (params[0] == "e") {
 			std::string scale = params[3];
@@ -109,9 +115,9 @@ void ObjectManager::initEnvironment(std::string fileName) {
 			}
 		}
 	}
-	for (int i = 0; i < tileInfo.size(); i++)
+	for (int i = 0; i < game->spaces->size(); i++)
 	{
-		addTile(i, std::make_shared <Space>());// ,);
+		addTile(i, game->spaces->at(i));// ,);
 	}
 }
 void ObjectManager::addPlayer(int i) {
@@ -127,27 +133,25 @@ void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space)//void O
 void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space, float scale)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
 {
 	space->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj",scale));
-	space->position = glm::vec3(tileInfo[tileNumber].x, 0, tileInfo[tileNumber].y);
-	space->rotation = glm::vec3(0, 0, 0);
 	objectList->push_back(space);
 	std::shared_ptr<GameObject> railing = std::make_shared<GameObject>();
-	if (tileInfo[tileNumber].w == 1) {
+	railing->position = space->position;
+	railing->rotation = space->rotation;
+	if (space->typeId == 1) {
 		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_curved.obj", scale));
 	}
-	else if (tileInfo[tileNumber].w == 2) {
+	else if (space->typeId == 2) {
 		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj", scale));
 	}
 	else {
 		railing->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj", scale));
 		std::shared_ptr<GameObject> railing2 = std::make_shared<GameObject>();
 		railing2->addComponent(std::make_shared<ModelComponent>("models/Tiles/rail_straight.obj", scale));
-		railing2->position = glm::vec3(tileInfo[tileNumber].x, 0, tileInfo[tileNumber].y);
-		railing2->rotation = glm::vec3(0, (tileInfo[tileNumber].z + 2) * 3.14 / 2, 0);
+		railing2->position = space->position;
+		railing2->rotation = glm::vec3(0, space->rotation.y + 3.14, 0);
 		objectList->push_back(railing2);
 
 	}
-	railing->position = glm::vec3(tileInfo[tileNumber].x, 0, tileInfo[tileNumber].y);
-	railing->rotation = glm::vec3(0, tileInfo[tileNumber].z * 3.14 / 2, 0);
 	objectList->push_back(railing);
 }
 void ObjectManager::addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale) {

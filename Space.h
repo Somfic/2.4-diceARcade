@@ -6,6 +6,7 @@ class Player;
 
 class Space : public GameObject {
 public:
+	int typeId;
 	virtual void onLand(Player* p);
 };
 
@@ -78,4 +79,4 @@ public:
 	void onLand(Player* p);
 };
 
-#endif // SPACE_H
+// SPACE_H

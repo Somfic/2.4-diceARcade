@@ -162,7 +162,6 @@
     <ClCompile Include="DiceDetection.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NormalSpace.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="MoveToComponent.cpp" />
@@ -182,7 +181,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="ModelComponent.h" />
     <ClInclude Include="MoveToComponent.h" />
-    <ClInclude Include="NormalSpace.h" />
     <ClInclude Include="obj-model.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectManager.h" />

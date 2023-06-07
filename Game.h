@@ -9,11 +9,12 @@ class Space;
 class Game
 {
 private:
-    std::vector<Space> spaces;
+    
     std::vector<Player> players;
 
 public:
     Game();
+    std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;
     void createSpaces();
     std::vector<Space*> getSpaces();
 };
