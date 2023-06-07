@@ -21,7 +21,7 @@ public:
 	Player(int i, std::string c, Game* g);
 	void moveSpaces(int spaces);
 	void moveTo(int space);
-	Space getCurrentSpace();
+	Space* getCurrentSpace();
 	int getCurrentSpaceIndex();
 	void roll(int roll);
 	int getRoll();

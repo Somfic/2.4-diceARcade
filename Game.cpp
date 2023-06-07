@@ -5,7 +5,7 @@
 #include "Space.h"
 
 // list of spaces in the game
-std::vector<Space> spaces;
+std::vector<Space*> spaces;
 // list of players in the game
 std::vector<Player> players;
 
@@ -21,38 +21,66 @@ void Game::createSpaces()
 	// create a new space with a lambda function as parameter and add it to the list of spaces
 	for (int i = 0; i < 76; i++)
 	{
-		//if (i == 6)
-		//	spaces->push_back(BridgeSpace());
-		//else if (i == 19)
-		//	spaces->push_back(WaitSpace());
-		//else if (i == 31)
-		//	spaces->push_back(InnSpace());
-		//else if (i == 42)
-		//	spaces->push_back(MazeSpace());
-		//else if (i == 52)
-		//	spaces->push_back(WaitSpace());
-		//else if (i == 58)
-		//	spaces.push_back(DeathSpace());
-		//else if (i == 63)
-		//	spaces.push_back(WinSpace());
-		//else if (i > 63)
-		//	spaces.push_back(ExcessSpace());
-		//else if (i % 8 == 0)
-		//	spaces.push_back(GooseSpace());
-		//else if ((i & 8 - 4) == 0)
-		//	spaces.push_back(GooseSpace());
-		//else
-		//	spaces.push_back(NormalSpace());
-
+		if (i == 6)
+		{
+			BridgeSpace* bridge = new BridgeSpace();
+			spaces.push_back(bridge);
+		}
+		else if (i == 19)
+		{
+			WaitSpace* wait = new WaitSpace();
+			spaces.push_back(wait);
+		}
+		else if (i == 31)
+		{
+			InnSpace* inn = new InnSpace();
+			spaces.push_back(inn);
+		}
+		else if (i == 42)
+		{
+			MazeSpace* maze = new MazeSpace();
+			spaces.push_back(maze);
+		}
+		else if (i == 52)
+		{
+			WaitSpace* wait = new WaitSpace();
+			spaces.push_back(wait);
+		}
+		else if (i == 58)
+		{
+			DeathSpace* death = new DeathSpace();
+			spaces.push_back(death);
+		}
+		else if (i == 63)
+		{
+			WinSpace* win = new WinSpace();
+			spaces.push_back(win);
+		}
+		else if (i > 63)
+		{
+			ExcessSpace* excess = new ExcessSpace();
+			spaces.push_back(excess);
+		}
+		else if (i % 8 == 0)
+		{
+			GooseSpace* goose = new GooseSpace();
+			spaces.push_back(goose);
+		}
+		else if ((i % 8 - 4) == 0)
+		{
+			GooseSpace* goose = new GooseSpace();
+			spaces.push_back(goose);
+		}
+		else
+		{
+			NormalSpace* normal = new NormalSpace();
+			spaces.push_back(normal);
+		}
+			
 	}
 }
 
 std::vector<Space*> Game::getSpaces()
 {
-	std::vector<Space*> spacePointers;
-	for (int i = 0; i < spaces->size(); i++)
-	{
-		//spacePointers.push_back(&spaces->at(i));
-	}
-	return spacePointers;
+	return spaces;
 }
