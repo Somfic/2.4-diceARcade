@@ -7,7 +7,6 @@
 #include "Player.h"
 #include "Space.h"
 Space::Space() {
-
 }
 void Space::onLand(Player* p) {
 	std::cout << "On space\n";

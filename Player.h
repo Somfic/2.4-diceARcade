@@ -8,20 +8,20 @@
 class Game;
 class Space;
 
-class Player {
+class Player : public GameObject{
 private:
 	Game* game;
 	int id;
 	std::string color;
-	Space* currentSpace;
+	std::shared_ptr<Space> currentSpace;
 	int lastRoll;
 	bool trapped;
 
 public:
-	Player(int i, std::string c, Game* g);
+	Player(int i, std::string c, Game* game);
 	void moveSpaces(int spaces);
 	void moveTo(int space);
-	Space* getCurrentSpace();
+	std::shared_ptr <Space> getCurrentSpace();
 	int getCurrentSpaceIndex();
 	void roll(int roll);
 	int getRoll();

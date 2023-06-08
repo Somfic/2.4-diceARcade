@@ -10,12 +10,13 @@ class Game
 {
 private:
     
-    std::vector<Player> players;
+   
 
 public:
+    std::vector< std::shared_ptr<Player>> players;
     Game();
     std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;
     void createSpaces();
-    std::vector<Space*> getSpaces();
+    std::vector<std::shared_ptr<Space>> getSpaces();
 };
 

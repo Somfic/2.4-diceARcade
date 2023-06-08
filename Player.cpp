@@ -7,7 +7,7 @@
 Game* game;
 int id;
 std::string color;
-Space* currentSpace;
+std::shared_ptr<Space> currentSpace;
 int lastRoll;
 bool trapped;
 // constructor with an id and a color as parameters
@@ -17,7 +17,7 @@ Player::Player(int i, std::string c, Game* g) {
 	this->color = c;
 	this->game = g;
 
-	this->currentSpace = game->getSpaces()[0];
+	this->currentSpace = game->getSpaces().at(i);
 	this->lastRoll = 0;
 	this->trapped = false;
 }
@@ -31,7 +31,9 @@ void Player::moveSpaces(int spaces) {
 	int index = getCurrentSpaceIndex();
 
 	// move the player to the space with the index of the current space + the amount of spaces
-	currentSpace = game->getSpaces()[index + spaces];
+	if (index < 40) {
+		currentSpace = game->getSpaces()[index + spaces];
+	}
 
 	// call the onLand function of the space the player landed on
 	currentSpace->onLand(this);
@@ -47,7 +49,7 @@ void Player::moveTo(int space) {
 }
 
 // function that returns the current space
-Space* Player::getCurrentSpace() {
+std::shared_ptr <Space> Player::getCurrentSpace() {
 	return currentSpace;
 }
 

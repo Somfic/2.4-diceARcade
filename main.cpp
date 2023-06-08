@@ -43,19 +43,8 @@ int main(void)
 {
     // make a new Game object and print the spaces
     Game game = Game();
-    Player player1 = Player(0, "Green", &game);
-
-    std::cout << "PLayer 1 is at: " << player1.getCurrentSpaceIndex() << std::endl;
-    for (int i = 0; i < 63; i++) {
-        int roll = rand() % 11 + 2;
-        std::cout << "Rolled: " << roll << std::endl;
-        // roll random number between 2 and 12
-        player1.roll(roll);
-        std::cout << "PLayer 1 is at: " << player1.getCurrentSpaceIndex() << std::endl;
-    }
 
 
-    std::cout << "PLayer 1 is at: " << player1.getCurrentSpaceIndex() << std::endl;
 
 	if (!glfwInit())
 		throw "Could not initialize glwf";
@@ -72,6 +61,10 @@ int main(void)
 	tigl::init();
 
 	init();
+	
+
+
+
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -103,8 +96,13 @@ void init()
 
 	tigl::shader->setLightDirectional(0, false);
 	tigl::shader->setLightPosition(0, glm::vec3(0, 1000, 0));
-	ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, 
+	ObjectManager objectManager = ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, 
 	void (*callback)(const std::vector<int>&) = tempDiceCallback;
+
+	std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
+	objectManager.addPlayer(player1);
+
+
 	dd = DiceDetection::DiceDetection();
 	static std::thread dice_thread([callback]() {
 		dd.startDetectionWrapper(callback);
@@ -157,6 +155,10 @@ void update()
 	for (auto& object : *objects) {
 		object->update(deltaTime);
 	}
+
+	int roll = rand() % 11 + 2;
+	game.players[0]->roll(roll);
+	//std::cout << "PLayer 1 is at: " << game.players[0]->getCurrentSpaceIndex() << std::endl;
 }
 
 void draw()
