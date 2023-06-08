@@ -98,7 +98,7 @@ void init() {
         }
             
     });
-    ObjectManager::ObjectManager(objects);//game, 
+
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
     dd = DiceDetection::DiceDetection();
     static std::thread dice_thread([callback]() {

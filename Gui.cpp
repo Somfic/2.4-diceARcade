@@ -14,6 +14,7 @@
 #include "obj-model.h"
 #include "stb_image.h"
 #include <map>
+#include "ObjectManager.h"
 #include "tigl.h"
 
 Gui::Gui(GLFWwindow* window)
@@ -26,6 +27,10 @@ Gui::Gui(GLFWwindow* window)
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+    this->window = window;
+    this->dices = std::vector<int>();
+    objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
+    ObjectManager::ObjectManager(objects);//game, 
 }
 
 Gui::~Gui()
