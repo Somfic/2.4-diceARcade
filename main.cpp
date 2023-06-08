@@ -44,6 +44,7 @@ GLuint cameraTextureId;
 void init();
 void update();
 void draw();
+void setupCamera();
 void drawCamera();
 void drawGame();
 void drawGameOverlay();
@@ -246,6 +247,7 @@ void drawStartOverlay() {
             started = true;
         }
         std::cout << "Starting game with " << numPlayers << " players!" << std::endl;
+        setupCamera();
     }
     ImGui::End();
 
@@ -372,10 +374,16 @@ void setupCamera() {
         frameWidth = static_cast<int>(capture.get(cv::CAP_PROP_FRAME_WIDTH));
         frameHeight = static_cast<int>(capture.get(cv::CAP_PROP_FRAME_HEIGHT));
 
+        
+        //test
+        cv::Mat frame;
+        capture.read(frame);
+
         cameraTextureId;
         glGenTextures(1, &cameraTextureId);
         glBindTexture(GL_TEXTURE_2D, cameraTextureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frameWidth, frameHeight, 0, GL_BGR, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, 0, 0, frame.cols, frame.rows, GL_BGR, GL_UNSIGNED_BYTE, frame.ptr());
+        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frameWidth, frameHeight, 0, GL_BGR, GL_UNSIGNED_BYTE, nullptr);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -383,6 +391,7 @@ void setupCamera() {
     }
     else {
         // Handle error if the capture fails to open
+        std::cout << "oops!" << std::endl;
     }
 }
 
@@ -393,21 +402,55 @@ void drawCamera() {
         // Handle end of video or error in frame capture
     }
 
+    glDeleteTextures(1, &cameraTextureId);
+
+    cv::flip(frame, frame, 0);
+    glGenTextures(1, &cameraTextureId);
     glBindTexture(GL_TEXTURE_2D, cameraTextureId);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, frame.cols, frame.rows, GL_BGR, GL_UNSIGNED_BYTE, frame.ptr());
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Set texture clamping method
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+
+    glTexImage2D(GL_TEXTURE_2D,     // Type of texture
+        0,                 // Pyramid level (for mip-mapping) - 0 is the top level
+        GL_RGB,            // Internal colour format to convert to
+        frame.cols,          // Image width  i.e. 640 for Kinect in standard mode
+        frame.rows,          // Image height i.e. 480 for Kinect in standard mode
+        0,                 // Border width in pixels (can either be 1 or 0)
+        GL_BGR, // Input image format (i.e. GL_RGB, GL_RGBA, GL_BGR etc.)
+        GL_UNSIGNED_BYTE,  // Image data type
+        frame.ptr());        // The actual image data itself
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+
+
+
+
+    //glBindTexture(GL_TEXTURE_2D, cameraTextureId);
+    //glTexImage2D(GL_TEXTURE_2D, 0, 0, 0, frame.cols, frame.rows, GL_BGR, GL_UNSIGNED_BYTE, frame.ptr());
     glBindTexture(GL_TEXTURE_2D, 0);
 
     // Bind the texture
     glBindTexture(GL_TEXTURE_2D, cameraTextureId);
 
     // Render a quad with the texture
-    // Adjust the vertex positions, texture coordinates, and shader program as needed
-    // Ensure you have a valid shader program and vertex array object (VAO) set up
-    // to render the quad
+    tigl::shader->enableTexture(true);
+    //tigl::shader->enableColorMult(true);
+    tigl::shader->setColorMult(glm::vec4(1, 1, 0, 1));
+    tigl::begin(GL_QUADS);
+    tigl::addVertex(tigl::Vertex::PT(glm::vec3(0, 1, 0), glm::vec2(0, 0)));
+    tigl::addVertex(tigl::Vertex::PT(glm::vec3(1, 1, 0), glm::vec2(1, 0)));
+    tigl::addVertex(tigl::Vertex::PT(glm::vec3(1, 1, 1), glm::vec2(1, 1)));
+    tigl::addVertex(tigl::Vertex::PT(glm::vec3(0, 1, 1), glm::vec2(0, 1)));
+    tigl::end();
+    //tigl::shader->enableColorMult(false);
+    tigl::shader->enableTexture(false);
 
-    // Draw the quad with the texture
-    // ...
-
-    // Unbind the texture
     glBindTexture(GL_TEXTURE_2D, 0);
 }
