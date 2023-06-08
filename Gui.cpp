@@ -14,29 +14,11 @@
 #include "obj-model.h"
 #include "stb_image.h"
 #include <map>
+#include "tigl.cpp"
 
 class Gui
 {
 public:
-    enum ResultCode {
-        Success = 0,
-        DiceTooNearby = 1,
-        TooManyDice = 2,
-        TooLittleDice = 3,
-        NotCalibrated = 4,
-        InconsistentDiceCount = 5
-    };
-    ResultCode diceStatus = NotCalibrated;
-
-    std::map<ResultCode, const char*> resultCodeToString = {
-        {Success, "Success"},
-        {DiceTooNearby, "DiceTooNearby"},
-        {TooManyDice, "TooManyDice"},
-        {TooLittleDice, "TooLittleDice"},
-        {NotCalibrated, "NotCalibrated"},
-        {InconsistentDiceCount, "InconsistentDiceCount"}
-    };
-
     GLFWwindow* window;
     DiceDetection dd;
     std::shared_ptr<GameObject> model;
@@ -47,7 +29,6 @@ public:
     int speed = 20;
     bool started = false;
     int numPlayers = 0;
-    int a = 5;
 
     Gui(GLFWwindow* window)
     {
