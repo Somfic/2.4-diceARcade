@@ -101,7 +101,10 @@ void init()
 
 	std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
 	objectManager.addPlayer(player1);
-
+	std::shared_ptr<Player> player2 = std::make_shared<Player>(1, "Blue", &game);
+	objectManager.addPlayer(player2);
+	std::shared_ptr<Player> player3 = std::make_shared<Player>(2, "Red", &game);
+	objectManager.addPlayer(player3);
 
 	dd = DiceDetection::DiceDetection();
 	static std::thread dice_thread([callback]() {
@@ -155,11 +158,17 @@ void update()
 	for (auto& object : *objects) {
 		object->update(deltaTime);
 	}
+	if (diceValue > 1 && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+		game.nextPlayer();
+		game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished = false;
+		std::cout << "there was a roll with value:" << diceValue << std::endl;
+		game.currentPlayer->roll(diceValue);
+		std::cout << "PLayer "<<game.currentPlayer->getId() << " is at : " << game.currentPlayer->getCurrentSpaceIndex() << std::endl;
+	}
 
-	int roll = rand() % 11 + 2;
-	game.players[0]->roll(roll);
-	//std::cout << "PLayer 1 is at: " << game.players[0]->getCurrentSpaceIndex() << std::endl;
+	diceValue = 0;
 }
+	
 
 void draw()
 {

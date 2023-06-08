@@ -13,10 +13,11 @@ private:
    
 
 public:
+    std::shared_ptr<Player> currentPlayer;
     std::vector< std::shared_ptr<Player>> players;
-    std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;
     Game();
-    void createSpaces();
+    void nextPlayer();
+    std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;
     std::vector<std::shared_ptr<Space>> getSpaces();
 };
 

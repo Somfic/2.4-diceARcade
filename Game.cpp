@@ -3,6 +3,7 @@
 #include <string>
 #include "Player.h"
 #include "Space.h"
+#include <iostream>
 
 // list of spaces in the game
 std::vector<Space*> spaces;
@@ -15,69 +16,15 @@ Game::Game() {
 	//createSpaces();
 }
 
-// builder for the spaces
-void Game::createSpaces()
-{
-	// create a new space with a lambda function as parameter and add it to the list of spaces
-	/*for (int i = 0; i < 76; i++)
-	{
-		if (i == 6)
-		{
-			BridgeSpace* bridge = new BridgeSpace();
-			spaces->push_back(bridge);
+void Game::nextPlayer() {
+	int currentPlayerIndex = 0;
+	for (int i = 0; i < players.size(); i++) {
+		if (players[i] == currentPlayer) {
+			currentPlayerIndex = i;
 		}
-		else if (i == 19)
-		{
-			WaitSpace* wait = new WaitSpace();
-			spaces->push_back(wait);
-		}
-		else if (i == 31)
-		{
-			InnSpace* inn = new InnSpace();
-			spaces->push_back(inn);
-		}
-		else if (i == 42)
-		{
-			MazeSpace* maze = new MazeSpace();
-			spaces->push_back(maze);
-		}
-		else if (i == 52)
-		{
-			WaitSpace* wait = new WaitSpace();
-			spaces->push_back(wait);
-		}
-		else if (i == 58)
-		{
-			DeathSpace* death = new DeathSpace();
-			spaces->push_back(death);
-		}
-		else if (i == 63)
-		{
-			WinSpace* win = new WinSpace();
-			spaces->push_back(win);
-		}
-		else if (i > 63)
-		{
-			ExcessSpace* excess = new ExcessSpace();
-			spaces->push_back(excess);
-		}
-		else if (i % 8 == 0)
-		{
-			GooseSpace* goose = new GooseSpace();
-			spaces->push_back(goose);
-		}
-		else if ((i % 8 - 4) == 0)
-		{
-			GooseSpace* goose = new GooseSpace();
-			spaces->push_back(goose);
-		}
-		else
-		{
-			NormalSpace* normal = new NormalSpace();
-			spaces->push_back(normal);
-		}
-			
-	}*/
+	}
+	std::cout << currentPlayerIndex << "..." << ((currentPlayerIndex + 1) % (players.size())) << std::endl;
+	currentPlayer = players[((currentPlayerIndex + 1) % players.size())];
 }
 
 std::vector<std::shared_ptr<Space>> Game::getSpaces()

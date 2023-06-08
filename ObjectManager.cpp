@@ -32,6 +32,11 @@ void ObjectManager::initEnvironment(std::string fileName) {
 		std::cout << "Could not open file " << fileName << std::endl;
 		return;
 	}
+	std::shared_ptr<Space> newSpace = std::make_shared<NormalSpace>();
+	newSpace->position = glm::vec3(0, 0, -2);
+	newSpace->rotation = glm::vec3(0, 1.57, 0);
+	newSpace->addComponent(std::make_shared<EmptyDrawComponent>());
+	game->spaces->push_back(newSpace);
 	while (!pFile.eof())
 	{
 		std::string line;
@@ -66,9 +71,18 @@ void ObjectManager::initEnvironment(std::string fileName) {
 				}
 				else if (specialRule == "jump")
 				{
-					space = std::make_shared < BridgeSpace>();
+					
 					//jump from one tile to another, extra parameters are target index followed by any number of points for the path to pass through
 					int targetPosition = atoi(params[5].c_str());
+					if (targetPosition == 12) {
+						space = std::make_shared <BridgeSpace>();
+					}
+					else if (targetPosition == 37) {
+						space = std::make_shared <MazeSpace>();
+					}
+					else if (targetPosition == 1) {
+						space = std::make_shared <DeathSpace>();
+					}
 					std::vector<glm::vec3> pathCoordinates;
 
 					for (size_t i = 6; i < params.size(); i++)
@@ -79,6 +93,7 @@ void ObjectManager::initEnvironment(std::string fileName) {
 				}
 				else if (specialRule == "wait")
 				{
+					space = std::make_shared<InnSpace>();
 					//wait a turn, extra parameters are the bounding coordinates (3d)
 					std::vector<glm::vec3> boundCoordinates;
 
@@ -90,13 +105,13 @@ void ObjectManager::initEnvironment(std::string fileName) {
 				}
 				else if (specialRule == "lock")
 				{
+					space = std::make_shared<WaitSpace>();
 					//stay until saved by another player, extra parameter is the location to stay fixed at
 					std::vector<std::string> coords = split(params[5], ",");
 					glm::vec3 lockCoordinate(atoi(coords[0].c_str()), atoi(coords[1].c_str()), atoi(coords[2].c_str()));
 				}
 			}
 			space->position = glm::vec3(atof(position[0].c_str()),0, atof(position[1].c_str()));
-			std::cout << (atof(rotation[0].c_str()) * 3.14f) << std::endl;
 			space->rotation = glm::vec3(0, (atof(rotation[0].c_str()) * 3.14f / 2),0);
 			space->typeId = typeId;
 			game->spaces->push_back(space);
@@ -118,22 +133,45 @@ void ObjectManager::initEnvironment(std::string fileName) {
 	}
 	for (int i = 0; i < game->spaces->size(); i++)
 	{
-		addTile(i, game->spaces->at(i));// ,);
+		addTile(i, game->spaces->at(i));
+	}
+	newSpace = std::make_shared<WinSpace>();
+	newSpace->position = glm::vec3(18, 0, -18);
+	newSpace->addComponent(std::make_shared<EmptyDrawComponent>());
+	game->spaces->push_back(newSpace);
+	for (int i = 0; i < 12; i++) {
+		std::shared_ptr<Space> newSpace = std::make_shared<ExcessSpace>();
+		newSpace->addComponent(std::make_shared<EmptyDrawComponent>());
+		newSpace->position = glm::vec3(18, 0, -18);
+		game->spaces->push_back(newSpace);
 	}
 }
 void ObjectManager::addPlayer(std::shared_ptr<Player> player) {
 	game->players.push_back(player);
-	player->position = glm::vec3(0);
-	player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1));
-	player->addComponent(std::make_shared<MoveToComponent>(1.0f, player->position));
+	game->currentPlayer = player;
+	player->position = glm::vec3(0,0,-2);
+	if (player->color == "Red") {
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1, glm::vec4(1,0,0,1)));
+	} else if(player->color == "Blue") {
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1, glm::vec4(0, 0, 1, 1)));
+	}
+	else if (player->color == "Green") {
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1, glm::vec4(0, 1, 0, 1)));
+	}
+	else {
+		std::cout << "color selected doesn't exist" << std::endl;
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1));
+	}
+
+		player->addComponent(std::make_shared<MoveToComponent>(1.0f, player->position));
 	player->addComponent(std::make_shared<PlayerMovmentComponent>(player,game));
 	objectList->push_back(player);
 }
-void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
+void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space)
 {
 	addTile(tileNumber, space, 1.0f);
 }
-void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space, float scale)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)
+void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space, float scale)
 {
 	space->addComponent(std::make_shared<ModelComponent>("models/Tiles/tile.obj",scale));
 	objectList->push_back(space);

@@ -10,6 +10,7 @@ private:
     int currentStandingSpace;
     Game* game;
 public:
+    bool isFinished = true;
     PlayerMovmentComponent(std::shared_ptr<Player> players, Game* game);
     ~PlayerMovmentComponent();
     void update(float elapsedTime) override;

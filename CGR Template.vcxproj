@@ -161,6 +161,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DrawComponent.cpp" />
     <ClCompile Include="DiceDetection.cpp" />
+    <ClCompile Include="EmptyDrawComponent.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="DrawComponent.h" />
+    <ClInclude Include="EmptyDrawComponent.h" />
     <ClInclude Include="ExtraString.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ModelComponent.h" />

@@ -63,6 +63,7 @@ private:
 public:
 	ModelComponent(const std::string& fileName);
 	ModelComponent(const std::string& fileName, float scale);
+	ModelComponent(const std::string& fileName, const float scale, glm::vec4 color);
 	~ModelComponent();
 
 	virtual void draw() override;

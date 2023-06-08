@@ -12,13 +12,14 @@ class Player : public GameObject{
 private:
 	Game* game;
 	int id;
-	std::string color;
+	
 	std::shared_ptr<Space> currentSpace;
 	int lastRoll;
 	bool trapped;
 	bool reverse;
 
 public:
+	std::string color;
 	Player(int i, std::string c, Game* game);
 	void moveSpaces(int spaces);
 	void moveTo(int space);

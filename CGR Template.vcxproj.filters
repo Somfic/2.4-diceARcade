@@ -75,6 +75,9 @@
     <ClCompile Include="PlayerMovmentComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="EmptyDrawComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tigl.h">
@@ -126,6 +129,9 @@
       <Filter>Source Files\GameLogic</Filter>
     </ClInclude>
     <ClInclude Include="PlayerMovmentComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EmptyDrawComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

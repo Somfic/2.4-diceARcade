@@ -18,7 +18,7 @@ Player::Player(int i, std::string c, Game* g) {
 	this->color = c;
 	this->game = g;
 
-	this->currentSpace = game->getSpaces().at(i);
+	this->currentSpace = game->getSpaces().at(0);
 	this->lastRoll = 0;
 	this->trapped = false;
 }
@@ -43,8 +43,7 @@ void Player::moveSpaces(int spaces) {
 	}
 	else {
 		currentSpace = game->getSpaces()[index + spaces];
-	}
-
+    }
 	// call the onLand function of the space the player landed on
 	currentSpace->onLand(this);
 }
