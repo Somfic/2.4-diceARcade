@@ -26,7 +26,13 @@ Player::Player(int i, std::string c, Game* g) {
 // function that moves the player a certain amount of spaces
 void Player::moveSpaces(int spaces) {
 	if (trapped) {
-		return;
+		// if currently on an inn space
+		if (getCurrentSpaceIndex() == 19) {
+			currentSpace->onLand(this);
+		} else
+		{
+			return;
+		}
 	}
 	// get the index of the current space
 	int index = getCurrentSpaceIndex();
@@ -92,4 +98,9 @@ int Player::getId() {
 void Player::reverseDirection()
 {
 	reverse = true;
+}
+
+bool Player::isTrapped()
+{
+	return trapped;
 }

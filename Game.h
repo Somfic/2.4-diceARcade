@@ -14,8 +14,8 @@ private:
 
 public:
     std::vector< std::shared_ptr<Player>> players;
-    Game();
     std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;
+    Game();
     void createSpaces();
     std::vector<std::shared_ptr<Space>> getSpaces();
 };

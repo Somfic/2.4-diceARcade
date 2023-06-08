@@ -57,7 +57,12 @@ InnSpace::InnSpace() {}
 
 void InnSpace::onLand(Player* p) {
 	// TODO: implement
-	std::cout << "On inn space\n";
+	if (p->isTrapped()) {
+		p->untrap();
+	}
+	else {
+		p->trap();
+	}
 }
 
 

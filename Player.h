@@ -30,6 +30,7 @@ public:
 	void untrap();
 	int getId();
 	void reverseDirection();
+	bool isTrapped();
 	//void win();
 	//void wait(int turns);
 
