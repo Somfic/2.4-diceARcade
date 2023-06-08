@@ -16,6 +16,7 @@ private:
 	std::shared_ptr<Space> currentSpace;
 	int lastRoll;
 	bool trapped;
+	bool reverse;
 
 public:
 	Player(int i, std::string c, Game* game);
@@ -27,6 +28,10 @@ public:
 	int getRoll();
 	void trap();
 	void untrap();
+	int getId();
+	void reverseDirection();
+	//void win();
+	//void wait(int turns);
 
 };
 #endif // PLAYER_H

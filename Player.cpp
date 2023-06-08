@@ -10,6 +10,7 @@ std::string color;
 std::shared_ptr<Space> currentSpace;
 int lastRoll;
 bool trapped;
+bool reverse;
 // constructor with an id and a color as parameters
 Player::Player(int i, std::string c, Game* g) {
 	// parameter variables
@@ -30,8 +31,11 @@ void Player::moveSpaces(int spaces) {
 	// get the index of the current space
 	int index = getCurrentSpaceIndex();
 
-	// move the player to the space with the index of the current space + the amount of spaces
-	if (index < 40) {
+	// move the player to the space with the index of the current space + the amount of spaces or - the amount of spaces if reverse is true
+	if (reverse) {
+		currentSpace = game->getSpaces()[index - spaces];
+	}
+	else {
 		currentSpace = game->getSpaces()[index + spaces];
 	}
 
@@ -55,6 +59,7 @@ std::shared_ptr <Space> Player::getCurrentSpace() {
 
 void Player::roll(int roll) {
 	lastRoll = roll;
+	reverse = false;
 	moveSpaces(roll);
 }
 
@@ -78,4 +83,13 @@ int Player::getCurrentSpaceIndex() {
 		}
 	}
 	return -1;
+}
+
+int Player::getId() {
+	return this->id;
+}
+
+void Player::reverseDirection()
+{
+	reverse = true;
 }
