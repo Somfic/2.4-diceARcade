@@ -8,7 +8,7 @@
 #include "Space.h"
 
 void Space::onLand(Player* p) {
-	std::cout << "On space\n";
+	std::cout << "Player " << p->getId() << " is on space\n";
 }
 
 // empty space with no function
@@ -17,7 +17,7 @@ NormalSpace::NormalSpace() {}
 
 void NormalSpace::onLand(Player* p) {
 	// do nothing
-	std::cout << "On normal space\n";
+	std::cout << "Player " << p->getId() << " is on normal space\n";
 }
 
 
@@ -27,7 +27,7 @@ void NormalSpace::onLand(Player* p) {
 GooseSpace::GooseSpace() {}
 
 void GooseSpace::onLand(Player* p) {
-	std::cout << "On goose space\n";
+	std::cout << "Player " << p->getId() << " is on goose space\n";
 	// move the player again
 	p->moveSpaces(p->getRoll());
 }
@@ -37,7 +37,7 @@ void GooseSpace::onLand(Player* p) {
 BridgeSpace::BridgeSpace() {}
 
 void BridgeSpace::onLand(Player* p) {
-	std::cout << "On bridge space\n";
+	std::cout << "Player " << p->getId() << " is on bridge space\n";
 	p->moveTo(12);
 }
 
@@ -46,7 +46,7 @@ void BridgeSpace::onLand(Player* p) {
 MazeSpace::MazeSpace() {}
 
 void MazeSpace::onLand(Player* p) {
-	std::cout << "On maze space\n";
+	std::cout << "Player " << p->getId() << " is on maze space\n";
 	p->moveTo(37);
 }
 
@@ -56,7 +56,7 @@ InnSpace::InnSpace() {}
 
 void InnSpace::onLand(Player* p) {
 	// TODO: implement
-	std::cout << "On inn space\n";
+	std::cout << "Player " << p->getId() << " is on inn space\n";
 }
 
 
@@ -69,7 +69,7 @@ WaitSpace::WaitSpace() {
 }
 
 void WaitSpace::onLand(Player* p) {
-	std::cout << "On wait space\n";
+	std::cout << "Player " << p->getId() << " is on wait space\n";
 	if (trappedPlayer != nullptr) {
 		trappedPlayer->untrap();
 	}
@@ -82,7 +82,7 @@ void WaitSpace::onLand(Player* p) {
 DeathSpace::DeathSpace() {}
 
 void DeathSpace::onLand(Player* p) {
-	std::cout << "On death space\n";
+	std::cout << "Player " << p->getId() << " is on death space\n";
 	p->moveTo(0);
 }
 
@@ -91,8 +91,9 @@ void DeathSpace::onLand(Player* p) {
 WinSpace::WinSpace() {}
 
 void WinSpace::onLand(Player* p) {
-	std::cout << "On win space\n";
+	std::cout << "Player " << p->getId() << " is on win space\n";
 	//TODO: win the game
+	
 }
 
 
@@ -100,6 +101,6 @@ void WinSpace::onLand(Player* p) {
 ExcessSpace::ExcessSpace() {}
 
 void ExcessSpace::onLand(Player* p) {
-	std::cout << "On excess space\n";
+	std::cout << "Player " << p->getId() << " is on excess space\n";
 	p->moveTo(63 - (p->getCurrentSpaceIndex() - 63));
 }

@@ -21,19 +21,37 @@ int main(void)
 {
     // make a new Game object and print the spaces
     Game game = Game();
-    Player player1 = Player(0, "Green", &game);
+    Player player1 = Player(1, "Green", &game);
+    Player player2 = Player(2, "Red", &game);
+    Player player3 = Player(3, "Blue", &game);
+    Player player4 = Player(4, "Yellow", &game);
 
     std::cout << "PLayer 1 is at: " << player1.getCurrentSpaceIndex() << std::endl;
     for (int i = 0; i < 63; i++) {
         int roll = rand() % 11 + 2;
-        std::cout << "Rolled: " << roll << std::endl;
+        std::cout << "Player 1 Rolled: " << roll << std::endl;
         // roll random number between 2 and 12
         player1.roll(roll);
         std::cout << "PLayer 1 is at: " << player1.getCurrentSpaceIndex() << std::endl;
+
+        roll = rand() % 11 + 2;
+        std::cout << "Player 2 Rolled: " << roll << std::endl;
+        // roll random number between 2 and 12
+        player2.roll(roll);
+        std::cout << "PLayer 2 is at: " << player2.getCurrentSpaceIndex() << std::endl;
+
+        roll = rand() % 11 + 2;
+        std::cout << "Player 3 Rolled: " << roll << std::endl;
+        // roll random number between 2 and 12
+        player3.roll(roll);
+        std::cout << "PLayer 3 is at: " << player3.getCurrentSpaceIndex() << std::endl;
+
+        roll = rand() % 11 + 2;
+        std::cout << "Player 4 Rolled: " << roll << std::endl;
+        // roll random number between 2 and 12
+        player4.roll(roll);
+        std::cout << "PLayer 4 is at: " << player4.getCurrentSpaceIndex() << std::endl;
     }
-
-
-    std::cout << "PLayer 1 is at: " << player1.getCurrentSpaceIndex() << std::endl;
 
     if (!glfwInit())
         throw "Could not initialize glwf";

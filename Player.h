@@ -27,6 +27,9 @@ public:
 	int getRoll();
 	void trap();
 	void untrap();
+	int getId();
+	//void win();
+	//void wait(int turns);
 
 };
 #endif // PLAYER_H

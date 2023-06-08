@@ -77,3 +77,7 @@ int Player::getCurrentSpaceIndex() {
 	}
 	return -1;
 }
+
+int Player::getId() {
+	return this->id;
+}
