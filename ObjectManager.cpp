@@ -124,9 +124,9 @@ void ObjectManager::initEnvironment(std::string fileName) {
 void ObjectManager::addPlayer(std::shared_ptr<Player> player) {
 	game->players.push_back(player);
 	player->position = glm::vec3(0);
-	player->addComponent(std::make_shared<ModelComponent>("models/steve/steve.obj", 0.3));
+	player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1));
 	player->addComponent(std::make_shared<MoveToComponent>(1.0f, player->position));
-	player->addComponent(std::make_shared<PlayerMovmentComponent>(player));
+	player->addComponent(std::make_shared<PlayerMovmentComponent>(player,game));
 	objectList->push_back(player);
 }
 void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space)//void ObjectManager::addTile(int tileNumber, std::shared_ptr <Space> space)

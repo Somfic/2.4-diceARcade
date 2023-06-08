@@ -72,6 +72,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerMovmentComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tigl.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Source Files\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovmentComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

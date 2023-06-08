@@ -7,9 +7,10 @@ class PlayerMovmentComponent :
 {
 private:
     std::shared_ptr<Player> player;
-    std::shared_ptr <Space> currentStandingSpace;
+    int currentStandingSpace;
+    Game* game;
 public:
-    PlayerMovmentComponent(std::shared_ptr<Player> players);
+    PlayerMovmentComponent(std::shared_ptr<Player> players, Game* game);
     ~PlayerMovmentComponent();
     void update(float elapsedTime) override;
 };
