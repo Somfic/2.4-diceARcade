@@ -21,7 +21,7 @@ void MoveToComponent::update(float elapsedTime) {
     glm::vec3 movement = direction * movementDistance;
     object->position += movement;
 
-	float angle = atan2(object->position.z - targetPoint.z, object->position.x - targetPoint.x);
+	float angle = atan2(object->position.x - targetPoint.x, object->position.z - targetPoint.z);
 
-	object->rotation.y = 0.05f * (1.57 - angle) + 0.95f * object->rotation.y;
+	object->rotation.y = 0.05f * ( angle) + 0.95f * object->rotation.y;
 }
