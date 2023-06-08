@@ -12,12 +12,12 @@ using namespace cv;
 using namespace std;
 
 enum ResultCode {
-	Success,
-	DiceTooNearby,
-	TooManyDice,
-	TooLittleDice,
-	NotCalibrated,
-	InconsistentDiceCount
+	Success = 0,
+	DiceTooNearby = 1,
+	TooManyDice = 2,
+	TooLittleDice = 3,
+	NotCalibrated = 4,
+	InconsistentDiceCount = 5
 };
 
 bool isRunning = false;
@@ -208,13 +208,13 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	for (const auto& rect : diceContours) {
 		cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 0), 2);
 	}
-	/*imshow("Die Image", imageWithKeypoints);
-	imshow("binary Image", binaryImageWithKeypoints);
-	imshow("inverted image", invertedImage);
-	imshow("eroded Image", erodedImageWithKeypoints);
-	imshow("dilated Image", dilatedImageWithKeypoints);
-	imshow("canny Image", cannyImage);
-	imshow("Resulting image", resultImage);*/
+	imshow("Die Image", imageWithKeypoints);
+	//imshow("binary Image", binaryImageWithKeypoints);
+	//imshow("inverted image", invertedImage);
+	//imshow("eroded Image", erodedImageWithKeypoints);
+	//imshow("dilated Image", dilatedImageWithKeypoints);
+	//imshow("canny Image", cannyImage);
+	//imshow("Resulting image", resultImage);
 
 }
 
@@ -233,7 +233,7 @@ void DiceDetection::startDetectionWrapper(void (*callback)(const std::vector<int
 		this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		//NEEDED TO SHOW IMAGES ON SEPARATE THREAD, REMOVE ON FINAL BUILD
-		//cv::waitKey(0);
+		cv::waitKey(0);
 	}
 	
 }

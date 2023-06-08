@@ -13,6 +13,8 @@
 //#include "Game.h"
 #include "DiceDetection.h"
 #include <thread>
+#include <map>
+#include <string>
 #include <iostream>
 
 #define PI 3.14
@@ -34,6 +36,26 @@ int speed = 20;
 bool started = false;
 int numPlayers = 0;
 
+
+enum ResultCode {
+    Success = 0,
+    DiceTooNearby = 1,
+    TooManyDice = 2,
+    TooLittleDice = 3,
+    NotCalibrated = 4,
+    InconsistentDiceCount = 5
+};
+ResultCode diceStatus = NotCalibrated;
+
+std::map<ResultCode, const char*> resultCodeToString = {
+    {Success, "Success"},
+    {DiceTooNearby, "DiceTooNearby"},
+    {TooManyDice, "TooManyDice"},
+    {TooLittleDice, "TooLittleDice"},
+    {NotCalibrated, "NotCalibrated"},
+    {InconsistentDiceCount, "InconsistentDiceCount"}
+};
+
 void init();
 void update();
 void draw();
@@ -43,6 +65,7 @@ void drawGameOverlay();
 void drawGame();
 
 std::vector<int> result = {};
+
 
 
 int main(void)
@@ -159,10 +182,10 @@ void draw()
 }
 
 void tempDiceCallback(const std::vector<int>& dice) {
-    for (int i = 0; i < dice.size(); i++) {
+    for (int i = 0; i < dice.size()-1; i++) {
         std::cout << "CALLBACK: value of dice " << i << ": " << dice.at(i) << std::endl;
     }
-
+    diceStatus = (ResultCode)dice[dice.size() - 1];
 }
 
 void drawStartOverlay() {
@@ -264,7 +287,7 @@ void drawGameOverlay() {
 
     ImGui::SameLine();
 
-    ImGui::Columns(3, "myColumns", true);
+    ImGui::Columns(4, "myColumns", true);
 
     // First column
     ImGui::Text("Turn: ");
@@ -276,13 +299,19 @@ void drawGameOverlay() {
         ImGui::Text(playerString.c_str());
     }
 
-
+    //Second column
     ImGui::NextColumn();
+
 
     ImGui::Image((void*)(intptr_t)texture_id, ImVec2(screenWidth * 0.33, screenHeight * 0.2), ImVec2(0, 1), ImVec2(1, 0));
 
+    //Third column
     ImGui::NextColumn();
-    // Second column
+    ImGui::Text(resultCodeToString[diceStatus]);
+
+    //Fourth column
+    ImGui::NextColumn();
+
     if (ImGui::Button("Quit")) {
         started = false;
     }
