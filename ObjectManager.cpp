@@ -151,16 +151,16 @@ void ObjectManager::addPlayer(std::shared_ptr<Player> player) {
 	game->currentPlayer = player;
 	player->position = glm::vec3(0,0,-2);
 	if (player->color == "Red") {
-		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1, glm::vec4(1,0,0,1)));
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.6, glm::vec4(1,0,0,1)));
 	} else if(player->color == "Blue") {
-		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1, glm::vec4(0, 0, 1, 1)));
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.7, glm::vec4(0, 0, 1, 1)));
 	}
 	else if (player->color == "Green") {
-		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1, glm::vec4(0, 1, 0, 1)));
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.4, glm::vec4(0, 1, 0, 1)));
 	}
 	else {
 		std::cout << "color selected doesn't exist" << std::endl;
-		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 1));
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.5));
 	}
 
 		player->addComponent(std::make_shared<MoveToComponent>(1.0f, player->position));

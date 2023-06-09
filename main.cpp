@@ -133,7 +133,7 @@ void update()
 	if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
 		camLookat.z += speed * deltaTime;
 	}*/
-	if (glfwGetKey(window, GLFW_KEY_W)) {
+	/*if (glfwGetKey(window, GLFW_KEY_W)) {
 		camPostion.z += speed * deltaTime;
 		camLookat.z += speed * deltaTime;
 	}
@@ -154,10 +154,11 @@ void update()
 	}
 	if (glfwGetKey(window, GLFW_KEY_Q)) {
 		camPostion.y += speed * deltaTime;
-	}
+	}*/
 	for (auto& object : *objects) {
 		object->update(deltaTime);
 	}
+
 	if (diceValue > 1 && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
 		game.nextPlayer();
 		game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished = false;
@@ -165,6 +166,19 @@ void update()
 		game.currentPlayer->roll(diceValue);
 		std::cout << "PLayer "<<game.currentPlayer->getId() << " is at : " << game.currentPlayer->getCurrentSpaceIndex() << std::endl;
 	}
+	else if (game.currentPlayer->isTrapped() && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+		game.nextPlayer();
+	}
+	else if (game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+		camLookat = game.getNextPlayer()->position;
+		camPostion = glm::vec3(game.getNextPlayer()->position.x, game.getNextPlayer()->position.y + 10, game.getNextPlayer()->position.z + 5);
+	}
+	else {
+		camLookat = game.currentPlayer->position;
+		camPostion = glm::vec3(game.currentPlayer->position.x + 3, game.currentPlayer->position.y + 10, game.currentPlayer->position.z + 3);
+	}
+
+
 
 	diceValue = 0;
 }

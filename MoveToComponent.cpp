@@ -23,5 +23,5 @@ void MoveToComponent::update(float elapsedTime) {
 
 	float angle = atan2(object->position.x - targetPoint.x, object->position.z - targetPoint.z);
 
-	object->rotation.y = 0.05f * ( angle) + 0.95f * object->rotation.y;
+    object->rotation.y = (angle);// *0.05f + 0.95f * object->rotation.y;
 }

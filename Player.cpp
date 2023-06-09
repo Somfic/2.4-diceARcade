@@ -29,10 +29,8 @@ void Player::moveSpaces(int spaces) {
 		// if currently on an inn space
 		if (getCurrentSpaceIndex() == 19) {
 			currentSpace->onLand(this);
-		} else
-		{
-			return;
 		}
+		return;
 	}
 	// get the index of the current space
 	int index = getCurrentSpaceIndex();
@@ -43,7 +41,7 @@ void Player::moveSpaces(int spaces) {
 	}
 	else {
 		currentSpace = game->getSpaces()[index + spaces];
-    }
+	}
 	// call the onLand function of the space the player landed on
 	currentSpace->onLand(this);
 }
@@ -65,7 +63,7 @@ std::shared_ptr <Space> Player::getCurrentSpace() {
 void Player::roll(int roll) {
 	lastRoll = roll;
 	reverse = false;
-	if (roll == 9 && getCurrentSpaceIndex() == 0){
+	if (roll == 9 && getCurrentSpaceIndex() == 0) {
 		moveTo(26);
 		return;
 	}

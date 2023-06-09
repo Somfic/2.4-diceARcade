@@ -23,8 +23,16 @@ void Game::nextPlayer() {
 			currentPlayerIndex = i;
 		}
 	}
-	std::cout << currentPlayerIndex << "..." << ((currentPlayerIndex + 1) % (players.size())) << std::endl;
 	currentPlayer = players[((currentPlayerIndex + 1) % players.size())];
+}
+std::shared_ptr<Player> Game::getNextPlayer() {
+	int currentPlayerIndex = 0;
+	for (int i = 0; i < players.size(); i++) {
+		if (players[i] == currentPlayer) {
+			currentPlayerIndex = i;
+		}
+	}
+	return players[((currentPlayerIndex + 1) % players.size())];
 }
 
 std::vector<std::shared_ptr<Space>> Game::getSpaces()
