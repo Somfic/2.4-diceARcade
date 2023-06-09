@@ -29,6 +29,8 @@ Gui::Gui(GLFWwindow* window)
     this->window = window;
     this->dices = std::vector<int>();
     this->diceStatus = NotCalibrated;
+    this->camPosition = glm::vec3(0.0f);
+    this->speed = 1;
     resultCodeToString = {
         {Success, "Success"},
         {DiceTooNearby, "Dice too nearby"},
@@ -89,20 +91,21 @@ void Gui::update()
     rotation += 0.1f * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_UP)) {
-        camPostion.z += speed * deltaTime;
+        camPosition.z += speed * deltaTime;
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN)) {
-        camPostion.z -= speed * deltaTime;
+        camPosition.z -= speed * deltaTime;
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT)) {
-        camPostion.y -= speed * deltaTime;
+        camPosition.y -= speed * deltaTime;
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        camPostion.y += speed * deltaTime;
+        camPosition.y += speed * deltaTime;
     }
     for (auto& object : *objects) {
         object->update(deltaTime);
     }
+
 }
 
 void Gui::drawGame() {
@@ -114,7 +117,7 @@ void Gui::drawGame() {
     glm::mat4 projection = glm::perspective(glm::radians(75.0f), viewport[2] / (float)viewport[3], 0.01f, 500.0f);
 
     tigl::shader->setProjectionMatrix(projection);
-    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), glm::vec3(0, 1, 5), glm::vec3(0, 1, 0)));
+    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPosition.x, camPosition.y, camPosition.z), glm::vec3(0, 1, 5), glm::vec3(0, 1, 0)));
     tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 1, 0)));
 
     tigl::shader->enableColor(true);

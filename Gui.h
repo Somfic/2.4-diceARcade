@@ -44,7 +44,7 @@ private:
     std::shared_ptr<GameObject> model3;
     std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects;
     ObjModel* model2;
-    glm::vec3 camPostion;
+    glm::vec3 camPosition;
     int speed;
     bool started;
     int numPlayers;
@@ -55,7 +55,6 @@ private:
 
     float rotation;
     double lastFrameTime;
-
     // Other private member variables and functions
 
 };
