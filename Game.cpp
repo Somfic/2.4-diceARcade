@@ -39,3 +39,13 @@ std::vector<std::shared_ptr<Space>> Game::getSpaces()
 {
 	return *spaces;
 }
+
+void Game::win(Player* p) {
+	// implement GUI
+	std::cout << "Player " << p->getId() << " has WON!\n";
+
+	// each player moves to 0
+	for (int i = 0; i < players.size(); i++) {
+		players[i]->moveTo(0);
+	}
+}

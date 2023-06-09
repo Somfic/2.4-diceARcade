@@ -32,7 +32,7 @@ public:
 	int getId();
 	void reverseDirection();
 	bool isTrapped();
-	//void win();
+	void win();
 	//void wait(int turns);
 
 };

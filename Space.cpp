@@ -98,7 +98,7 @@ WinSpace::WinSpace() {}
 
 void WinSpace::onLand(Player* p) {
 	std::cout << "On win space\n";
-	//TODO: win the game
+	p->win();
 }
 
 
