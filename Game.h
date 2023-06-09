@@ -2,8 +2,22 @@
 #include <vector>
 #include "Player.h"
 #include "Space.h"
+
+class Player;
+class Space;
+
 class Game
 {
-	std::vector<Player>p;
+private:
+    
+   
+
+public:
+    std::shared_ptr<Player> currentPlayer;
+    std::vector< std::shared_ptr<Player>> players;
+    Game();
+    void nextPlayer();
+    std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;
+    std::vector<std::shared_ptr<Space>> getSpaces();
 };
 

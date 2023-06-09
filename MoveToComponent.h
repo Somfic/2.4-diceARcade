@@ -5,7 +5,7 @@ public:
 	float speed = 0;
 	glm::vec3 targetPoint;
 
-	MoveToComponent();
+	MoveToComponent(float speed, glm::vec3 targetPoint);
 	~MoveToComponent();
 
 	void update(float elapsedTime) override;

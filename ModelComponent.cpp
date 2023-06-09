@@ -17,6 +17,11 @@ ModelComponent::ModelComponent(const std::string& fileName, const float scale)
 {
 	init(fileName, scale);
 }
+ModelComponent::ModelComponent(const std::string& fileName, const float scale, glm::vec4 color)
+{
+	init(fileName, scale);
+	materials[0]->ambientColor = color;
+}
 
 
 ModelComponent::~ModelComponent()

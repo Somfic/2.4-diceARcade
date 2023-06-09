@@ -5,12 +5,12 @@
 #include "GameObject.h"
 #include "ObjectManager.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "Game.h"
+#include <stdio.h>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "stb_image.h"
-//#include "imgui_impl_opengl3_loader.h"
-//#include "Game.h"
 #include "DiceDetection.h"
 #include <thread>
 #include <iostream>
@@ -50,17 +50,20 @@ void tempDiceCallback(const std::vector<int>& dice);
 void diceCallBack(int width, int height, unsigned char* imgData, const std::vector<int>& dice);
 
 std::vector<int> result = {};
-
+Game game;
 
 int main(void)
 {
+    // make a new Game object and print the spaces
+    Game game = Game();
+
 
 
 	if (!glfwInit())
 		throw "Could not initialize glwf";
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    window = glfwCreateWindow(mode->width, mode->height, "The Goose Game", monitor, NULL);
+    window = glfwCreateWindow(mode->width, mode->height, "The Goose Game", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -71,6 +74,7 @@ int main(void)
 	tigl::init();
 
 	init();
+	
 
 
     // Initialize ImGui
@@ -126,8 +130,16 @@ void init()
 
 	tigl::shader->setLightDirectional(0, false);
 	tigl::shader->setLightPosition(0, glm::vec3(0, 1000, 0));
-	ObjectManager::ObjectManager(objects, "V1.goosegame");//game, 
+	ObjectManager objectManager = ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, 
 	void (*callback)(const std::vector<int>&) = tempDiceCallback;
+
+	std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
+	objectManager.addPlayer(player1);
+	std::shared_ptr<Player> player2 = std::make_shared<Player>(1, "Blue", &game);
+	objectManager.addPlayer(player2);
+	std::shared_ptr<Player> player3 = std::make_shared<Player>(2, "Red", &game);
+	objectManager.addPlayer(player3);
+
 	dd = DiceDetection::DiceDetection();
 	static std::thread dice_thread([callback]() {
 		dd.startDetectionWrapper(callback);
@@ -180,7 +192,17 @@ void update()
 	for (auto& object : *objects) {
 		object->update(deltaTime);
 	}
+	if (diceValue > 1 && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+		game.nextPlayer();
+		game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished = false;
+		std::cout << "there was a roll with value:" << diceValue << std::endl;
+		game.currentPlayer->roll(diceValue);
+		std::cout << "PLayer "<<game.currentPlayer->getId() << " is at : " << game.currentPlayer->getCurrentSpaceIndex() << std::endl;
+	}
+
+	diceValue = 0;
 }
+	
 
 void draw()
 {
@@ -356,7 +378,6 @@ void tempDiceCallback(const std::vector<int>& dice) {
 		std::cout << "value of dice " << i << ": " << dice.at(i) << std::endl;
 	}*/
 	if (dice.size() == 2) {
-		std::cout << "wow" << std::endl;
 		diceValue = dice.at(0) + dice.at(1);
 	}
 }

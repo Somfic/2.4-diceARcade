@@ -4,3 +4,5 @@
 #include "MoveToComponent.h"
 #include "DrawComponent.h"
 #include "Component.h"
+#include "PlayerMovmentComponent.h"
+#include "EmptyDrawComponent.h"

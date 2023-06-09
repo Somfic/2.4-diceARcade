@@ -21,7 +21,7 @@ void GameObject::addComponent(std::shared_ptr<Component> component)
 	components.push_back(component);
 
 	if (drawComponent == nullptr)
-		drawComponent = dynamic_pointer_cast<DrawComponent>(component);
+		drawComponent = std::dynamic_pointer_cast<DrawComponent>(component);
 
 }
 
