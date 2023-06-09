@@ -16,6 +16,7 @@ private:
 	std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList;
 	std::vector<EnvirormentObject> envirormentObjects;
 public:
+	std::vector<std::vector<glm::vec3>> cameraScreens;
 	ObjectManager( std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, std::string fileName, Game* game);
 	~ObjectManager();
 	void initEnvironment(std::string fileName);

@@ -130,10 +130,17 @@ void ObjectManager::initEnvironment(std::string fileName) {
 				addEnvironmentObject(type, stringVectorToVec3(position), rotationVector, 1.0f);
 			}
 		}
-		else if (params[0] == "q") {
-			//TODO clean
+		else if (params[0] == "c") {
+			//TODO make this work
 			glm::vec3 rotationVector(0, 0, 0);
-			std::shared_ptr<GameObject> camera = addEnvironmentObject("cam", stringVectorToVec3(position), rotationVector, 1.0f);
+
+			std::vector<glm::vec3> coordinates;
+			for (size_t i = 1; i < params.size(); i++)
+			{
+				std::vector<std::string> coords = split(params[i], ",");
+				coordinates.push_back(glm::vec3(atof(coords[0].c_str()), atof(coords[1].c_str()), atof(coords[2].c_str())));
+			}
+			cameraScreens.push_back(coordinates);
 		}
 	}
 	for (int i = 0; i < game->spaces->size(); i++)

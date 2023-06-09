@@ -26,10 +26,7 @@ using tigl::Vertex;
 
 GLFWwindow* window;
 DiceDetection dd;
-std::shared_ptr<GameObject> model;
-std::shared_ptr<GameObject> model3;
 std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
-ObjModel* model2;
 glm::vec3 camPostion = glm::vec3(3.0f);
 glm::vec3 camLookat = glm::vec3(0.0f);
 int speed = 20;
@@ -38,6 +35,7 @@ bool started = false;
 int numPlayers = 0;
 cv::VideoCapture capture(0);
 GLuint cameraTextureId = 0;
+std::vector<std::vector<glm::vec3>> cameraCoordinates;
 
 void init();
 void update();
@@ -130,7 +128,9 @@ void init()
 
 	tigl::shader->setLightDirectional(0, false);
 	tigl::shader->setLightPosition(0, glm::vec3(0, 1000, 0));
-	ObjectManager objectManager = ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, 
+    ObjectManager objectManager(objects, "V1.goosegame", &game);
+    cameraCoordinates = objectManager.cameraScreens;
+
 	void (*callback)(const std::vector<int>&) = tempDiceCallback;
 
 	std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
@@ -432,14 +432,21 @@ void drawCamera() {
 
     // Render a quad with the texture
     tigl::shader->enableTexture(true);
-    tigl::shader->setColorMult(glm::vec4(1, 1, 0, 1));
+    tigl::shader->enableLighting(false);
     tigl::begin(GL_QUADS);
-    tigl::addVertex(tigl::Vertex::PT(glm::vec3(0, 1, 0), glm::vec2(0, 0)));
-    tigl::addVertex(tigl::Vertex::PT(glm::vec3(1, 1, 0), glm::vec2(1, 0)));
-    tigl::addVertex(tigl::Vertex::PT(glm::vec3(1, 1, 1), glm::vec2(1, 1)));
-    tigl::addVertex(tigl::Vertex::PT(glm::vec3(0, 1, 1), glm::vec2(0, 1)));
+
+    glm::vec4 white(1, 1, 1, 0.5);
+    for (std::vector<glm::vec3> quad : cameraCoordinates)
+    {
+        tigl::addVertex(tigl::Vertex::PTC(quad[0], glm::vec2(0, 0), white));
+        tigl::addVertex(tigl::Vertex::PTC(quad[1], glm::vec2(1, 0), white));
+        tigl::addVertex(tigl::Vertex::PTC(quad[2], glm::vec2(1, 1), white));
+        tigl::addVertex(tigl::Vertex::PTC(quad[3], glm::vec2(0, 1), white));
+    }
+    
     tigl::end();
     tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
 
     // Unbind the texture
     glBindTexture(GL_TEXTURE_2D, 0);
