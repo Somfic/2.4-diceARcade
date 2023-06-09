@@ -16,11 +16,12 @@ private:
 	std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList;
 	std::vector<EnvirormentObject> envirormentObjects;
 public:
+	std::vector<std::vector<glm::vec3>> cameraScreens;
 	ObjectManager( std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, std::string fileName, Game* game);
 	~ObjectManager();
 	void initEnvironment(std::string fileName);
 	void addPlayer(std::shared_ptr<Player> player);
 	void addTile(int tileNumber, std::shared_ptr<Space>space, float scale);
 	void addTile(int tileNumber, std::shared_ptr<Space>space);
-	void addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale);
+	std::shared_ptr<GameObject> addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale);
 };

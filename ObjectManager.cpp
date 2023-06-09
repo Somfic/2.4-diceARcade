@@ -130,6 +130,18 @@ void ObjectManager::initEnvironment(std::string fileName) {
 				addEnvironmentObject(type, stringVectorToVec3(position), rotationVector, 1.0f);
 			}
 		}
+		else if (params[0] == "c") {
+			//TODO make this work
+			glm::vec3 rotationVector(0, 0, 0);
+
+			std::vector<glm::vec3> coordinates;
+			for (size_t i = 1; i < params.size(); i++)
+			{
+				std::vector<std::string> coords = split(params[i], ",");
+				coordinates.push_back(glm::vec3(atof(coords[0].c_str()), atof(coords[1].c_str()), atof(coords[2].c_str())));
+			}
+			cameraScreens.push_back(coordinates);
+		}
 	}
 	for (int i = 0; i < game->spaces->size(); i++)
 	{
@@ -195,10 +207,11 @@ void ObjectManager::addTile(int tileNumber, std::shared_ptr<Space>space, float s
 	}
 	objectList->push_back(railing);
 }
-void ObjectManager::addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale) {
+std::shared_ptr<GameObject> ObjectManager::addEnvironmentObject(const std::string& fileName, glm::vec3 position, glm::vec3 rotation, float scale) {
 	std::shared_ptr<GameObject> object = std::make_shared<GameObject>();
 	object->addComponent(std::make_shared<ModelComponent>(fileName, scale));
 	object->position = position;
 	object->rotation = rotation;
 	objectList->push_back(object);
+	return object;
 }
