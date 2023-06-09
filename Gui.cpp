@@ -28,6 +28,16 @@ Gui::Gui(GLFWwindow* window)
     ImGui_ImplOpenGL3_Init("#version 330");
     this->window = window;
     this->dices = std::vector<int>();
+    this->diceStatus = NotCalibrated;
+    resultCodeToString = {
+        {Success, "Success"},
+        {DiceTooNearby, "Dice too nearby"},
+        {TooManyDice, "Too many dice"},
+        {TooLittleDice, "Too few dice"},
+        {NotCalibrated, "Not callibrated"},
+        {InconsistentDiceCount, "Inconsistent dice count"}
+    };
+
     objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
     ObjectManager::ObjectManager(objects);//game, 
 }
@@ -226,8 +236,6 @@ void Gui::drawGameOverlay() {
     // First column
     ImGui::Text("Turn: ");
 
-    std::cout << "creating players\n";
-
     for (int i = 0; i < numPlayers; i++) {
         std::string playerString = "Player ";
         playerString += std::to_string(i);
@@ -241,7 +249,7 @@ void Gui::drawGameOverlay() {
     ImGui::Image((void*)(intptr_t)texture_id, ImVec2(screenWidth * 0.33, screenHeight * 0.2), ImVec2(0, 1), ImVec2(1, 0));
     //Third column
     ImGui::NextColumn();
-    //ImGui::Text(resultCodeToString[diceStatus]);
+    ImGui::Text(resultCodeToString[diceStatus]);
 
     //Fourth column
     ImGui::NextColumn();
