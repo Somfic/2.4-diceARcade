@@ -65,6 +65,10 @@ std::shared_ptr <Space> Player::getCurrentSpace() {
 void Player::roll(int roll) {
 	lastRoll = roll;
 	reverse = false;
+	if (roll == 9 && getCurrentSpaceIndex() == 0){
+		moveTo(26);
+		return;
+	}
 	moveSpaces(roll);
 }
 
