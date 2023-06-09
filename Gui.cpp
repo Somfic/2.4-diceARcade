@@ -18,7 +18,6 @@
 #include "tigl.h"
 
 Gui::Gui(GLFWwindow* window)
-
 {
     // Initialize ImGui
     IMGUI_CHECKVERSION();
@@ -43,7 +42,7 @@ Gui::~Gui()
 
 void Gui::updateDice(const std::vector<int>& dice) {
     if (!dice.empty()) {
-        this->dices.assign(dice.begin(), dice.end() - 1);
+        this->dices.assign(dice.begin(), (dice.end() - 1));
         this->diceStatus = (ResultCode)dice.back();
     }
 }
@@ -185,6 +184,8 @@ void Gui::drawGameOverlay() {
     int screenWidth, screenHeight;
     glfwGetWindowSize(window, &screenWidth, &screenHeight);
 
+    std::cout << "texture loading\n";
+
     //image data
     GLuint texture_id;
     int width, height, channels;
@@ -197,6 +198,8 @@ void Gui::drawGameOverlay() {
         std::cout << "Error loading image\n";
     }
 
+    std::cout << "shader loading\n";
+
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data);
@@ -204,10 +207,14 @@ void Gui::drawGameOverlay() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    std::cout << "starting frame\n";
+
     // Start ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    std::cout << "creating window\n";
 
     // Create a simple GUI window
     ImGui::SetNextWindowPos(ImVec2(0, screenHeight * 0.75));
@@ -218,10 +225,14 @@ void Gui::drawGameOverlay() {
 
     ImGui::SameLine();
 
+    std::cout << "creating culumns\n";
+
     ImGui::Columns(4, "myColumns", true);
 
     // First column
     ImGui::Text("Turn: ");
+
+    std::cout << "creating players\n";
 
     for (int i = 0; i < numPlayers; i++) {
         std::string playerString = "Player ";
@@ -233,16 +244,18 @@ void Gui::drawGameOverlay() {
     //Second column
     ImGui::NextColumn();
 
-
+    std::cout << "adding image\n";
     ImGui::Image((void*)(intptr_t)texture_id, ImVec2(screenWidth * 0.33, screenHeight * 0.2), ImVec2(0, 1), ImVec2(1, 0));
 
+    std::cout << "adding testcode\n";
     //Third column
     ImGui::NextColumn();
-    ImGui::Text(resultCodeToString[diceStatus]);
+    //ImGui::Text(resultCodeToString[diceStatus]);
 
     //Fourth column
     ImGui::NextColumn();
 
+    std::cout << "adding quit\n";
     if (ImGui::Button("Quit")) {
         started = false;
     }
@@ -251,6 +264,7 @@ void Gui::drawGameOverlay() {
 
     ImGui::End();
 
+    std::cout << "rendering gui\n";
     // Render ImGui
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

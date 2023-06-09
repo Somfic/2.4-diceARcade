@@ -57,8 +57,10 @@ int main(void) {
 
     tigl::init();
 
-    init();
     gui = new Gui(window);
+
+    init();
+    
 
     while (!glfwWindowShouldClose(window))
     {

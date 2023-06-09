@@ -22,7 +22,7 @@ enum ResultCode {
 
 bool isRunning = false;
 bool isCalibrated = false;
-VideoCapture cap(1);
+VideoCapture cap(0);
 float calibratedDistance = 0;
 ResultCode validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
@@ -208,7 +208,7 @@ void DiceDetection::startDetection(void (*callback)(const std::vector<int>&))
 	for (const auto& rect : diceContours) {
 		cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 0), 2);
 	}
-	imshow("Die Image", imageWithKeypoints);
+	//imshow("Die Image", imageWithKeypoints);
 	//imshow("binary Image", binaryImageWithKeypoints);
 	//imshow("inverted image", invertedImage);
 	//imshow("eroded Image", erodedImageWithKeypoints);
@@ -233,7 +233,7 @@ void DiceDetection::startDetectionWrapper(void (*callback)(const std::vector<int
 		this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		//NEEDED TO SHOW IMAGES ON SEPARATE THREAD, REMOVE ON FINAL BUILD
-		cv::waitKey(0);
+		//cv::waitKey(0);
 	}
 	
 }
