@@ -372,6 +372,9 @@ void drawCamera() {
         // If the camera is available
         glDeleteTextures(1, &cameraTextureId);
 
+        //thanks to:
+        //https://stackoverflow.com/questions/16809833/opencv-image-loading-for-opengl-texture
+
         cv::flip(frame, frame, 0);
         glGenTextures(1, &cameraTextureId);
         glBindTexture(GL_TEXTURE_2D, cameraTextureId);
