@@ -160,9 +160,6 @@ void Gui::update()
             game.currentPlayer->roll(dices[0] + dices[1]);
             std::cout << "PLayer " << game.currentPlayer->getId() << " is at : " << game.currentPlayer->getCurrentSpaceIndex() << std::endl;
         }
-        else if (game.currentPlayer->isTrapped() && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
-            game.nextPlayer();
-        }
         else if (game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
             camLookat = game.getNextPlayer()->position;
             camPostion = glm::vec3(game.getNextPlayer()->position.x, game.getNextPlayer()->position.y + 10, game.getNextPlayer()->position.z + 5);
