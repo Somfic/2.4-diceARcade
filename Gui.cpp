@@ -46,12 +46,12 @@ Gui::Gui(GLFWwindow* window)
     this->cameraCoordinates;
     resultCodeToString = {
         {Success,successString.c_str()},
-        {DiceTooNearby, "Trying to read dices...\ndice may be to nearby"},
+        {DiceTooNearby, "Trying to read dice...\ndice may be to nearby"},
         {TooManyDice, "Too many dice"},
         {TooLittleDice, "Place one more dice"},
         {NotCalibrated, "Not calibrate, show a 6-eyed dice to calibrate"},
-        {InconsistentDiceCount, "Trying to read dices..."},
-        {NoDice, "There are no dices"}
+        {InconsistentDiceCount, "Trying to read dice..."},
+        {NoDice, "There are no dice"}
     };
 
 }
