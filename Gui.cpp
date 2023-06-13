@@ -44,6 +44,7 @@ Gui::Gui(GLFWwindow* window)
     successString += std::to_string(0);
     this->cameraTextureId = 0;
     this->cameraCoordinates;
+    std::string win = "";
     resultCodeToString = {
         {Success,successString.c_str()},
         {DiceTooNearby, "Trying to read dice...\ndice may be to nearby"},
@@ -103,6 +104,10 @@ void Gui::updateDice(const std::vector<int>& dice) {
         this->dices.assign(dice.begin(), (dice.end() - 1));
         this->diceStatus = (ResultCode)dice.back();
     }
+}
+
+void Gui::win(std::string color) {
+    
 }
 
 void Gui::newFrame()

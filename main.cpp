@@ -41,7 +41,7 @@ Gui* gui;
 void init();
 void update();
 void tempDiceCallback(const std::vector<int>& dice);
-
+void winCallBack(const std::string& color);
 std::vector<int> result = {};
     
 
@@ -131,6 +131,7 @@ void init()
 	static std::thread dice_thread([callback]() {
 		dd.startDetectionWrapper(callback);
 		});
+    gui->game.setWinCallback(winCallBack);
 }
 float rotation = 0;
 
@@ -140,8 +141,22 @@ void update()
 }
 
 void tempDiceCallback(const std::vector<int>& dice) {
-    for (int i = 0; i < dice.size() - 1; i++) {
+    std::vector<int> modifiedDice = dice;  // Create a copy of the original vector
+
+    // Modify the elements of the vector
+    modifiedDice.clear();
+    modifiedDice.push_back(63);
+    modifiedDice.push_back(0);
+    modifiedDice.push_back(0);
+
+    for (int i = 0; i < dice.size(); i++) {
         std::cout << "CALLBACK: value of dice " << i << ": " << dice.at(i) << std::endl;
     }
-    gui->updateDice(dice);  // Call the updateDice method of the Gui object
+
+    gui->updateDice(dice);  // Call the updateDice method of the Gui object with the modified vector
+}
+
+void winCallBack(const std::string& color) {
+    std::cout << "CALLBACK: " << color << " won!" << std::endl;
+    gui->win(color);  // Call the win method of the Gui object
 }

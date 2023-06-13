@@ -37,6 +37,7 @@ public:
     ~Gui();
 
     void updateDice(const std::vector<int>& dice);
+    void win(std::string color);
     void newFrame();
     void render();
     void draw();
@@ -46,7 +47,8 @@ public:
     void drawGameOverlay();
     void drawLoadingScreen();
     void initGame(int totalPlayers);
-    void drawCamera();
+    void drawCamera(); 
+    Game game;
 
 private:
     std::thread initThread;
@@ -57,6 +59,7 @@ private:
     ObjModel* model2;
     glm::vec3 camPostion;
     glm::vec3 camLookat;
+   
     int speed;
     bool loading;
     bool started;
@@ -64,7 +67,6 @@ private:
     int numPlayers;
     std::vector<int> dices;
     ResultCode diceStatus;
-    Game game;
     ObjectManager objectManager;
     std::string successString;
     GLuint cameraTextureId;
@@ -74,8 +76,6 @@ private:
 
     float rotation;
     double lastFrameTime;
-    // Other private member variables and functions
-
 };
 
 #endif // GUI_H
