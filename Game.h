@@ -16,6 +16,7 @@ public:
     std::shared_ptr<Player> currentPlayer;
     std::vector< std::shared_ptr<Player>> players;
     Game();
+    void restart();
     void nextPlayer();
     std::shared_ptr<Player> getNextPlayer();
     std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;

@@ -309,6 +309,11 @@ void Gui::drawGameOverlay() {
 
     if (ImGui::Button("Quit")) {
         started = false;
+        for (std::shared_ptr<GameObject> player : game.players) {
+            objects->remove(player);
+        }
+        game.restart();
+        
     }
 
     ImGui::Columns(1); // Reset to single column layout

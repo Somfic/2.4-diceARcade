@@ -25,6 +25,11 @@ void Game::nextPlayer() {
 	}
 	currentPlayer = players[((currentPlayerIndex + 1) % players.size())];
 }
+
+void Game::restart() {
+	players.clear();
+}
+
 std::shared_ptr<Player> Game::getNextPlayer() {
 	int currentPlayerIndex = 0;
 	for (int i = 0; i < players.size(); i++) {
