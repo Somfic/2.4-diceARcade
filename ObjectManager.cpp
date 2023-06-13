@@ -160,6 +160,15 @@ void ObjectManager::addPlayer(std::shared_ptr<Player> player) {
 	else if (player->color == "Green") {
 		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.4, glm::vec4(0, 1, 0, 1)));
 	}
+	else if (player->color == "Yellow") {
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.8, glm::vec4(1, 1, 0, 1)));
+	}
+	else if (player->color == "Purple") {
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.9, glm::vec4(1, 0, 1, 1)));
+	}
+	else if (player->color == "Orange") {
+		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.3, glm::vec4(1, 0.5, 0, 1)));
+	}
 	else {
 		std::cout << "color selected doesn't exist" << std::endl;
 		player->addComponent(std::make_shared<ModelComponent>("models/Tiles/goose.obj", 0.5));
