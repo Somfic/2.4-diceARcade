@@ -29,7 +29,6 @@ void MoveToComponent::update(float elapsedTime) {
     float distance = glm::length(direction);
     float movementDistance = speed * elapsedTime + 0.1;
     direction = normalize(direction);
-    std::cout << direction.x << "," << direction.y << "," << direction.z << std::endl;
     if (movementDistance >= distance) {
         object->position = targetPoint;
         return;
