@@ -47,10 +47,6 @@ void Player::moveSpaces(int spaces) {
 }
 
 void Player::moveTo(int space) {
-	if (trapped) {
-		return;
-	}
-
 	currentSpace = game->getSpaces()[space];
 	currentSpace->onLand(this);
 }
@@ -104,4 +100,8 @@ void Player::reverseDirection()
 bool Player::isTrapped()
 {
 	return trapped;
+}
+
+void Player::win() {
+	this->game->win(this);
 }
