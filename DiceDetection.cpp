@@ -17,12 +17,13 @@ enum ResultCode {
 	TooManyDice = 2,
 	TooLittleDice = 3,
 	NotCalibrated = 4,
-	InconsistentDiceCount = 5
+	InconsistentDiceCount = 5,
+	NoDice = 6
 };
 
 bool isRunning = false;
 bool isCalibrated = false;
-VideoCapture cap(1);
+VideoCapture cap(0);
 float calibratedDistance = 0;
 ResultCode validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
@@ -261,7 +262,11 @@ ResultCode validResult(vector<int> result) {
 	else {
 		return false;
 	}*/
-
+	result.erase(std::remove_if(result.begin(), result.end(), [](int num) {
+		return num == 0;
+		}), result.end());
+	
+	cout << "size: " << result.size() << endl;
 	diceQueue.push(result); // Add the vector to the queue
 
 	if (diceQueue.size() > maxQueueSize) {
@@ -270,8 +275,8 @@ ResultCode validResult(vector<int> result) {
 	if (isCalibrated == false) {
 		return NotCalibrated;
 	}
-	else if (!checkAllSame(diceQueue)) {
-		return InconsistentDiceCount;
+	else if (result.empty()) {
+		return NoDice;
 	}
 	else if (result.size() > totalDice) {
 		return TooManyDice;
@@ -279,8 +284,11 @@ ResultCode validResult(vector<int> result) {
 	else if (result.size() < totalDice) {
 		return TooLittleDice;
 	}
+	else if (!checkAllSame(diceQueue)) {
+		return InconsistentDiceCount;
+	}
 	for (int i = 0; i < result.size(); i++) {
-		if (result.at(i) < 1 || result.at(i) > 6) {
+		if (result.at(i) > 6) {
 			return DiceTooNearby;
 		}
 	}

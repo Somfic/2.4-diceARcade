@@ -25,7 +25,8 @@ public:
         TooManyDice = 2,
         TooLittleDice = 3,
         NotCalibrated = 4,
-        InconsistentDiceCount = 5
+        InconsistentDiceCount = 5,
+        NoDice = 6
     };
 
     Gui(GLFWwindow* window);
@@ -56,6 +57,7 @@ private:
     ResultCode diceStatus;
     Game game;
     ObjectManager objectManager;
+    std::string successString;
 
     std::map<ResultCode, const char*> resultCodeToString;
 

@@ -36,13 +36,19 @@ Gui::Gui(GLFWwindow* window)
     this->game = Game();
     this->objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
     this->objectManager = ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, ;
+    std::string successString= "You threw";
+    successString += std::to_string(0);
+    successString += " and ";
+    successString += std::to_string(0);
+  
     resultCodeToString = {
-        {Success, "Success"},
-        {DiceTooNearby, "Dice too nearby"},
+        {Success,successString.c_str()},
+        {DiceTooNearby, "Trying to read dices...\ndice may be to nearby"},
         {TooManyDice, "Too many dice"},
-        {TooLittleDice, "Too few dice"},
-        {NotCalibrated, "Not callibrated"},
-        {InconsistentDiceCount, "Inconsistent dice count"}
+        {TooLittleDice, "Place one more dice"},
+        {NotCalibrated, "Not calibrate, show a 6-eyed dice to calibrate"},
+        {InconsistentDiceCount, "Trying to read dices..."},
+        {NoDice, "There are no dices"}
     };
 
 }
@@ -105,11 +111,19 @@ void Gui::update()
         for (auto& object : *objects) {
             object->update(deltaTime);
         }
-
+        
         if (diceStatus == Success && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+           
             game.nextPlayer();
             game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished = false;
             std::cout << "there was a roll with value:" << dices[0] << " " << dices[1] << std::endl;
+            successString = "You threw ";
+            successString += std::to_string(dices[0]);
+            successString += " and ";
+            successString += std::to_string(dices[1]);
+            resultCodeToString[Success] = successString.c_str();
+            
+            std::cout << "string = " << successString << std::endl;
             game.currentPlayer->roll(dices[0] + dices[1]);
             std::cout << "PLayer " << game.currentPlayer->getId() << " is at : " << game.currentPlayer->getCurrentSpaceIndex() << std::endl;
         }
@@ -256,7 +270,8 @@ void Gui::drawGameOverlay() {
     ImGui::Columns(4, "myColumns", true);
 
     // First column
-    ImGui::Text("Turn: ");
+    std::string turnString = "Turn: " + game.currentPlayer->color;
+    ImGui::Text(turnString.c_str());
 
     for (int i = 0; i < numPlayers; i++) {
         std::string playerString = "Player ";
