@@ -22,7 +22,7 @@ enum ResultCode {
 
 bool isRunning = false;
 bool isCalibrated = false;
-VideoCapture cap(0);
+VideoCapture cap(1);
 float calibratedDistance = 0;
 ResultCode validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);

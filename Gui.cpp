@@ -17,7 +17,7 @@
 #include "ObjectManager.h"
 #include "tigl.h"
 
-cv::VideoCapture capture(0);
+cv::VideoCapture capture(1);
 
 Gui::Gui(GLFWwindow* window)
 {
@@ -288,11 +288,10 @@ void Gui::drawGameOverlay() {
     ImGui::Text("Turn: ");
 
     for (int i = 0; i < numPlayers; i++) {
-        std::string playerString = "Player ";
-        playerString += std::to_string(i);
-        playerString += " space ";
+        std::string playerString = game.players[i]->color;
+        playerString += " is on space ";
         playerString += std::to_string(game.players[i]->getCurrentSpaceIndex());
-        playerString += " ";
+        playerString += ", ";
         game.players[i]->getCurrentSpace()->addName(playerString);
         ImGui::Text(playerString.c_str());
     }
