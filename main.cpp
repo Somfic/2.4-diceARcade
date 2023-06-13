@@ -14,7 +14,7 @@
 #include "DiceDetection.h"
 #include <thread>
 #include <iostream>
-#include <opencv2/highgui/highgui.hpp>
+#include "opencv2/highgui/highgui.hpp"
 
 #define PI 3.14
 
@@ -447,18 +447,19 @@ void drawCamera() {
     // Render a quad with the texture
     tigl::shader->enableTexture(true);
     tigl::shader->enableLighting(false);
-    tigl::begin(GL_QUADS);
 
-    glm::vec4 white(1, 1, 1, 0.5);
+    std::vector<Vertex> verts;
+    glm::mat4 modelMatrix(1.0f);
+    tigl::shader->setModelMatrix(modelMatrix);
+
     for (std::vector<glm::vec3> quad : cameraCoordinates)
     {
-        tigl::addVertex(tigl::Vertex::PTC(quad[0], glm::vec2(0, 0), white));
-        tigl::addVertex(tigl::Vertex::PTC(quad[1], glm::vec2(1, 0), white));
-        tigl::addVertex(tigl::Vertex::PTC(quad[2], glm::vec2(1, 1), white));
-        tigl::addVertex(tigl::Vertex::PTC(quad[3], glm::vec2(0, 1), white));
+        verts.push_back(tigl::Vertex::PT(quad[0], glm::vec2(0, 0)));
+        verts.push_back(tigl::Vertex::PT(quad[1], glm::vec2(1, 0)));
+        verts.push_back(tigl::Vertex::PT(quad[2], glm::vec2(1, 1)));
+        verts.push_back(tigl::Vertex::PT(quad[3], glm::vec2(0, 1)));
     }
-    
-    tigl::end();
+    tigl::drawVertices(GL_QUADS,verts);
     tigl::shader->enableTexture(false);
     tigl::shader->enableLighting(true);
 
