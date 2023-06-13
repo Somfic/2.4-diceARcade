@@ -132,6 +132,5 @@ void tempDiceCallback(const std::vector<int>& dice) {
     for (int i = 0; i < dice.size() - 1; i++) {
         std::cout << "CALLBACK: value of dice " << i << ": " << dice.at(i) << std::endl;
     }
-
     gui->updateDice(dice);  // Call the updateDice method of the Gui object
 }
