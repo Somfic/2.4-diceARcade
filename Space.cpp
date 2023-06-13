@@ -12,6 +12,10 @@ void Space::onLand(Player* p) {
 	std::cout << "On space\n";
 }
 
+void Space::addName(std::string& dest) {
+	dest += "Space";
+}
+
 // empty space with no function
 
 NormalSpace::NormalSpace() {}
@@ -19,6 +23,10 @@ NormalSpace::NormalSpace() {}
 void NormalSpace::onLand(Player* p) {
 	// do nothing
 	std::cout << "On normal space\n";
+}
+
+void NormalSpace::addName(std::string& dest) {
+	dest += "Normal Space";
 }
 
 
@@ -33,7 +41,9 @@ void GooseSpace::onLand(Player* p) {
 	p->moveSpaces(p->getRoll());
 }
 
-
+void GooseSpace::addName(std::string& dest) {
+	dest += "Goose Space";
+}
 
 BridgeSpace::BridgeSpace() {}
 
@@ -42,7 +52,9 @@ void BridgeSpace::onLand(Player* p) {
 	p->moveTo(12);
 }
 
-
+void BridgeSpace::addName(std::string& dest) {
+	dest += "Bridge Space";
+}
 
 MazeSpace::MazeSpace() {}
 
@@ -51,7 +63,9 @@ void MazeSpace::onLand(Player* p) {
 	p->moveTo(37);
 }
 
-
+void MazeSpace::addName(std::string& dest) {
+	dest += "Maze Space";
+}
 
 InnSpace::InnSpace() {}
 
@@ -65,7 +79,9 @@ void InnSpace::onLand(Player* p) {
 	}
 }
 
-
+void InnSpace::addName(std::string& dest) {
+	dest += "Inn Space";
+}
 // prison/well space
 
 
@@ -83,7 +99,9 @@ void WaitSpace::onLand(Player* p) {
 	p->trap();
 }
 
-
+void WaitSpace::addName(std::string& dest) {
+	dest += "Wait Space";
+}
 
 DeathSpace::DeathSpace() {}
 
@@ -92,7 +110,9 @@ void DeathSpace::onLand(Player* p) {
 	p->moveTo(0);
 }
 
-
+void DeathSpace::addName(std::string& dest) {
+	dest += "Death Space";
+}
 
 WinSpace::WinSpace() {}
 
@@ -101,11 +121,17 @@ void WinSpace::onLand(Player* p) {
 	p->win();
 }
 
-
+void WinSpace::addName(std::string& dest) {
+	dest += "Win Space";
+}
 
 ExcessSpace::ExcessSpace() {}
 
 void ExcessSpace::onLand(Player* p) {
 	std::cout << "On excess space\n";
 	p->moveTo(63 - (p->getCurrentSpaceIndex() - 63));
+}
+
+void ExcessSpace::addName(std::string& dest) {
+	dest += "Excess Space";
 }

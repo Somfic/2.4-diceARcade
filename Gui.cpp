@@ -16,7 +16,8 @@
 #include <map>
 #include "ObjectManager.h"
 #include "tigl.h"
-#include "ObjectManager.h"
+
+cv::VideoCapture capture(1);
 
 Gui::Gui(GLFWwindow* window)
 {
@@ -41,6 +42,8 @@ Gui::Gui(GLFWwindow* window)
     successString += " and ";
     successString += std::to_string(0);
   
+    this->cameraTextureId = 0;
+    this->cameraCoordinates;
     resultCodeToString = {
         {Success,successString.c_str()},
         {DiceTooNearby, "Trying to read dices...\ndice may be to nearby"},
@@ -60,13 +63,36 @@ Gui::~Gui()
     ImGui::DestroyContext();
 }
 
-void Gui::initGame() {
+void Gui::initGame(int totalPlayers) {
+    cameraCoordinates = objectManager.cameraScreens;
+
     std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
     objectManager.addPlayer(player1);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
     std::shared_ptr<Player> player2 = std::make_shared<Player>(1, "Blue", &game);
     objectManager.addPlayer(player2);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
     std::shared_ptr<Player> player3 = std::make_shared<Player>(2, "Red", &game);
     objectManager.addPlayer(player3);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
+    std::shared_ptr<Player> player4 = std::make_shared<Player>(3, "Yellow", &game);
+    objectManager.addPlayer(player4);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
+    std::shared_ptr<Player> player5 = std::make_shared<Player>(4, "Purple", &game);
+    objectManager.addPlayer(player5);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
+    std::shared_ptr<Player> player6 = std::make_shared<Player>(5, "Orange", &game);
+    objectManager.addPlayer(player6);
 }
 
 void Gui::updateDice(const std::vector<int>& dice) {
@@ -162,6 +188,8 @@ void Gui::drawGame() {
     for (auto& object : *objects) {
         object->draw();
     }
+
+    drawCamera();
 }
 
 void Gui::drawStartOverlay() {
@@ -213,6 +241,7 @@ void Gui::drawStartOverlay() {
     {
         if (numPlayers > 0) {
             started = true;
+            initGame(numPlayers);
         }
         std::cout << "Starting game with " << numPlayers << " players!" << std::endl;
     }
@@ -274,9 +303,11 @@ void Gui::drawGameOverlay() {
     ImGui::Text(turnString.c_str());
 
     for (int i = 0; i < numPlayers; i++) {
-        std::string playerString = "Player ";
-        playerString += std::to_string(i);
-        playerString += " space x";
+        std::string playerString = game.players[i]->color;
+        playerString += " is on space ";
+        playerString += std::to_string(game.players[i]->getCurrentSpaceIndex());
+        playerString += ", ";
+        game.players[i]->getCurrentSpace()->addName(playerString);
         ImGui::Text(playerString.c_str());
     }
 
@@ -293,6 +324,11 @@ void Gui::drawGameOverlay() {
 
     if (ImGui::Button("Quit")) {
         started = false;
+        for (std::shared_ptr<GameObject> player : game.players) {
+            objects->remove(player);
+        }
+        game.restart();
+        
     }
 
     ImGui::Columns(1); // Reset to single column layout
@@ -305,4 +341,71 @@ void Gui::drawGameOverlay() {
 
     glDeleteTextures(1, &texture_id);
     stbi_image_free(image_data);
+}
+
+void Gui::drawCamera() {
+    cv::Mat frame;
+    capture.read(frame);
+    if (!frame.empty()) {
+        // If the camera is available
+        glDeleteTextures(1, &cameraTextureId);
+
+        //thanks to:
+        //https://stackoverflow.com/questions/16809833/opencv-image-loading-for-opengl-texture
+
+        cv::flip(frame, frame, 0);
+        glGenTextures(1, &cameraTextureId);
+        glBindTexture(GL_TEXTURE_2D, cameraTextureId);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        // Set texture clamping method
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+
+        glTexImage2D(GL_TEXTURE_2D,     // Type of texture
+            0,                 // Pyramid level (for mip-mapping) - 0 is the top level
+            GL_RGB,            // Internal colour format to convert to
+            frame.cols,          // Image width  i.e. 640 for Kinect in standard mode
+            frame.rows,          // Image height i.e. 480 for Kinect in standard mode
+            0,                 // Border width in pixels (can either be 1 or 0)
+            GL_BGR, // Input image format (i.e. GL_RGB, GL_RGBA, GL_BGR etc.)
+            GL_UNSIGNED_BYTE,  // Image data type
+            frame.ptr());        // The actual image data itself
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    if (cameraTextureId == 0)
+    {
+        return;
+    }
+
+    // Unbind and rebind the texture
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, cameraTextureId);
+
+    // Render a quad with the texture
+    tigl::shader->enableTexture(true);
+    tigl::shader->enableLighting(false);
+
+    std::vector<Vertex> verts;
+    glm::mat4 modelMatrix(1.0f);
+    tigl::shader->setModelMatrix(modelMatrix);
+
+    for (std::vector<glm::vec3> quad : cameraCoordinates)
+    {
+        verts.push_back(tigl::Vertex::PT(quad[0], glm::vec2(0, 0)));
+        verts.push_back(tigl::Vertex::PT(quad[1], glm::vec2(1, 0)));
+        verts.push_back(tigl::Vertex::PT(quad[2], glm::vec2(1, 1)));
+        verts.push_back(tigl::Vertex::PT(quad[3], glm::vec2(0, 1)));
+    }
+    tigl::drawVertices(GL_QUADS, verts);
+    tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
+
+    // Unbind the texture
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -209,6 +209,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerMovmentComponent.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="SpinComponent.h" />
     <ClInclude Include="texture.h" />

@@ -7,9 +7,9 @@ class Texture
 {
 	GLuint id;
 public:
-	int witdh;
+	int width;
 	int height;
 	Texture(const std::string& fileName);
-	void reTexture(unsigned char* imgData);
+	void reTexture(unsigned char* imgData, int width, int height);
 	void bind();
 };
