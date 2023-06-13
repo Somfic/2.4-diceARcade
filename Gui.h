@@ -14,6 +14,8 @@
 #include <memory>
 #include "GameObject.h"
 #include "obj-model.h"
+#include "game.h"
+#include "ObjectManager.h"
 
 class Gui {
 public:
@@ -37,6 +39,7 @@ public:
     void drawGame();
     void drawStartOverlay();
     void drawGameOverlay();
+    void initGame();
 
 private:
     GLFWwindow* window;
@@ -44,12 +47,15 @@ private:
     std::shared_ptr<GameObject> model3;
     std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects;
     ObjModel* model2;
-    glm::vec3 camPosition;
+    glm::vec3 camPostion;
+    glm::vec3 camLookat;
     int speed;
     bool started;
     int numPlayers;
     std::vector<int> dices;
     ResultCode diceStatus;
+    Game game;
+    ObjectManager objectManager;
 
     std::map<ResultCode, const char*> resultCodeToString;
 

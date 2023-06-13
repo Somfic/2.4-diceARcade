@@ -4,26 +4,36 @@
 #include "Game.h"
 #include <string>
 #include "Space.h"
-#include "GameObject.h"
-class Player: public GameObject
-{
+
+class Game;
+class Space;
+
+class Player : public GameObject{
 private:
-	Game game;
+	Game* game;
 	int id;
-	std::string color;
-	Space currentSpace;
+	
+	std::shared_ptr<Space> currentSpace;
 	int lastRoll;
 	bool trapped;
+	bool reverse;
 
 public:
-	Player(int i, std::string c, Game g);
+	std::string color;
+	Player(int i, std::string c, Game* game);
 	void moveSpaces(int spaces);
 	void moveTo(int space);
-	Space getCurrentSpace();
+	std::shared_ptr <Space> getCurrentSpace();
+	int getCurrentSpaceIndex();
 	void roll(int roll);
 	int getRoll();
 	void trap();
 	void untrap();
-};
+	int getId();
+	void reverseDirection();
+	bool isTrapped();
+	void win();
+	//void wait(int turns);
 
+};
 #endif // PLAYER_H

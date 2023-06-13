@@ -65,11 +65,12 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\Users\Momin\source\repos\ConsoleApplication2\ConsoleApplication2\PropertySheet1.props" />
+    <Import Project="opencv.props" />
     <Import Project="imgui.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="opencv.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -161,6 +162,9 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DrawComponent.cpp" />
     <ClCompile Include="DiceDetection.cpp" />
+    <ClCompile Include="EmptyDrawComponent.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GooseTile.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="imGui\imgui.cpp" />
     <ClCompile Include="imGui\imgui_demo.cpp" />
@@ -175,6 +179,9 @@
     <ClCompile Include="MoveToComponent.cpp" />
     <ClCompile Include="obj-model.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerMovmentComponent.cpp" />
+    <ClCompile Include="Space.cpp" />
     <ClCompile Include="SpinComponent.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="tigl.cpp" />
@@ -183,6 +190,9 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="DrawComponent.h" />
+    <ClInclude Include="EmptyDrawComponent.h" />
+    <ClInclude Include="ExtraString.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="imGui\imconfig.h" />
     <ClInclude Include="imGui\imgui.h" />
@@ -198,10 +208,16 @@
     <ClInclude Include="obj-model.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerMovmentComponent.h" />
+    <ClInclude Include="Space.h" />
     <ClInclude Include="SpinComponent.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="DiceDetection.h" />
     <ClInclude Include="tigl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="V1.goosegame" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

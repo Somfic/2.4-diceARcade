@@ -16,6 +16,7 @@
 #include <map>
 #include "ObjectManager.h"
 #include "tigl.h"
+#include "ObjectManager.h"
 
 Gui::Gui(GLFWwindow* window)
 {
@@ -29,8 +30,12 @@ Gui::Gui(GLFWwindow* window)
     this->window = window;
     this->dices = std::vector<int>();
     this->diceStatus = NotCalibrated;
-    this->camPosition = glm::vec3(0.0f);
+    this->camPostion = glm::vec3(0.0f);
+    this->camLookat = glm::vec3(0.0f);
     this->speed = 1;
+    this->game = Game();
+    this->objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
+    this->objectManager = ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, ;
     resultCodeToString = {
         {Success, "Success"},
         {DiceTooNearby, "Dice too nearby"},
@@ -40,8 +45,6 @@ Gui::Gui(GLFWwindow* window)
         {InconsistentDiceCount, "Inconsistent dice count"}
     };
 
-    objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
-    ObjectManager::ObjectManager(objects);//game, 
 }
 
 Gui::~Gui()
@@ -51,6 +54,14 @@ Gui::~Gui()
     ImGui::DestroyContext();
 }
 
+void Gui::initGame() {
+    std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
+    objectManager.addPlayer(player1);
+    std::shared_ptr<Player> player2 = std::make_shared<Player>(1, "Blue", &game);
+    objectManager.addPlayer(player2);
+    std::shared_ptr<Player> player3 = std::make_shared<Player>(2, "Red", &game);
+    objectManager.addPlayer(player3);
+}
 
 void Gui::updateDice(const std::vector<int>& dice) {
     if (!dice.empty()) {
@@ -85,27 +96,35 @@ void Gui::draw()
 
 void Gui::update()
 {
-    double frameTime = glfwGetTime();
-    float deltaTime = lastFrameTime - frameTime;
-    lastFrameTime = frameTime;
-    rotation += 0.1f * deltaTime;
+    if (started) {
+        double frameTime = glfwGetTime();
+        float deltaTime = lastFrameTime - frameTime;
+        lastFrameTime = frameTime;
+        rotation += 0.1f * deltaTime;
 
-    if (glfwGetKey(window, GLFW_KEY_UP)) {
-        camPosition.z += speed * deltaTime;
-    }
-    if (glfwGetKey(window, GLFW_KEY_DOWN)) {
-        camPosition.z -= speed * deltaTime;
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT)) {
-        camPosition.y -= speed * deltaTime;
-    }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        camPosition.y += speed * deltaTime;
-    }
-    for (auto& object : *objects) {
-        object->update(deltaTime);
-    }
+        for (auto& object : *objects) {
+            object->update(deltaTime);
+        }
 
+        if (diceStatus == Success && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+            game.nextPlayer();
+            game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished = false;
+            std::cout << "there was a roll with value:" << dices[0] << " " << dices[1] << std::endl;
+            game.currentPlayer->roll(dices[0] + dices[1]);
+            std::cout << "PLayer " << game.currentPlayer->getId() << " is at : " << game.currentPlayer->getCurrentSpaceIndex() << std::endl;
+        }
+        else if (game.currentPlayer->isTrapped() && game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+            game.nextPlayer();
+        }
+        else if (game.currentPlayer->getComponent<PlayerMovmentComponent>()->isFinished) {
+            camLookat = game.getNextPlayer()->position;
+            camPostion = glm::vec3(game.getNextPlayer()->position.x, game.getNextPlayer()->position.y + 10, game.getNextPlayer()->position.z + 5);
+        }
+        else {
+            camLookat = game.currentPlayer->position;
+            camPostion = glm::vec3(game.currentPlayer->position.x + 3, game.currentPlayer->position.y + 10, game.currentPlayer->position.z + 3);
+        }
+    }
 }
 
 void Gui::drawGame() {
@@ -117,7 +136,7 @@ void Gui::drawGame() {
     glm::mat4 projection = glm::perspective(glm::radians(75.0f), viewport[2] / (float)viewport[3], 0.01f, 500.0f);
 
     tigl::shader->setProjectionMatrix(projection);
-    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPosition.x, camPosition.y, camPosition.z), glm::vec3(0, 1, 5), glm::vec3(0, 1, 0)));
+    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(camPostion.x, camPostion.y, camPostion.z), camLookat, glm::vec3(0, 1, 0)));
     tigl::shader->setModelMatrix(glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0, 1, 0)));
 
     tigl::shader->enableColor(true);

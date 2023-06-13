@@ -3,85 +3,109 @@
 // It has a function that is called when a player lands on it.
 
 #include <vector>
+#include <iostream>
 #include "Player.h"
 #include "Space.h"
-#include "gameObject.h"
-
-class Space{
-public:
-	void onLand(Player p);
-};
+Space::Space() {
+}
+void Space::onLand(Player* p) {
+	std::cout << "On space\n";
+}
 
 // empty space with no function
-class NormalSpace : public Space {
-public:
-	void onLand(Player p) {
-		// do nothing
-	}
-};
+
+NormalSpace::NormalSpace() {}
+
+void NormalSpace::onLand(Player* p) {
+	// do nothing
+	std::cout << "On normal space\n";
+}
+
 
 // class GooseSpace inherits from Space
 // it has a function that is called when a player lands on it that moves the player with the same distance again
-class GooseSpace : public Space {
-public:
-	void onLand(Player p) {
-		// move the player again
-		p.moveSpaces(p.getRoll());
-	}
-};
 
-class BridgeSpace : public Space {
-public:
-	void onLand(Player p) {
-		p.moveTo(12);
-	}
-};
+GooseSpace::GooseSpace() {}
 
-class MazeSpace : public Space {
-public:
-	void onLand(Player p) {
-		p.moveTo(37);
-	}
-};
+void GooseSpace::onLand(Player* p) {
+	std::cout << "On goose space\n";
+	// move the player again
+	p->moveSpaces(p->getRoll());
+}
 
-class InnSpace : public Space {
-public:
-	void onLand(Player p) {
-		// TODO: implement
+
+
+BridgeSpace::BridgeSpace() {}
+
+void BridgeSpace::onLand(Player* p) {
+	std::cout << "On bridge space\n";
+	p->moveTo(12);
+}
+
+
+
+MazeSpace::MazeSpace() {}
+
+void MazeSpace::onLand(Player* p) {
+	std::cout << "On maze space\n";
+	p->moveTo(37);
+}
+
+
+
+InnSpace::InnSpace() {}
+
+void InnSpace::onLand(Player* p) {
+	std::cout << "On inn space\n";
+	if (p->isTrapped()) {
+		p->untrap();
 	}
-};;
+	else {
+		p->trap();
+	}
+}
+
 
 // prison/well space
-class WaitSpace : public Space {
-public:
+
+
+
+WaitSpace::WaitSpace() {
 	Player* trappedPlayer = nullptr;
+}
 
-	void onLand(Player p) {
-		if (trappedPlayer != nullptr) {
-			trappedPlayer->untrap();
-		}
-		trappedPlayer = &p;
-		p.trap();
+void WaitSpace::onLand(Player* p) {
+	std::cout << "On wait space\n";
+	if (trappedPlayer != nullptr) {
+		trappedPlayer->untrap();
 	}
-};
+	trappedPlayer = p;
+	p->trap();
+}
 
-class DeathSpace : public Space {
-public:
-	void onLand(Player p) {
-		p.moveTo(0);
-	}
-};
 
-class WinSpace : public Space {
-public:
-	void onLand(Player p) {
-		//TODO: win the game
-	}
-};
 
-class ExcessSpace : public Space {
-public:
-	void onLand(Player p) {
-		p.moveTo(p.getCurrentSpace() - 63);
-	}
-};
+DeathSpace::DeathSpace() {}
+
+void DeathSpace::onLand(Player* p) {
+	std::cout << "On death space\n";
+	p->moveTo(0);
+}
+
+
+
+WinSpace::WinSpace() {}
+
+void WinSpace::onLand(Player* p) {
+	std::cout << "On win space\n";
+	p->win();
+}
+
+
+
+ExcessSpace::ExcessSpace() {}
+
+void ExcessSpace::onLand(Player* p) {
+	std::cout << "On excess space\n";
+	p->moveTo(63 - (p->getCurrentSpaceIndex() - 63));
+}

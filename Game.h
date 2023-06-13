@@ -1,21 +1,25 @@
-#ifndef GAME_H
-#define GAME_H
-
+#pragma once
 #include <vector>
-#include <string>
 #include "Player.h"
-#include "Space.h" // Assuming there is a separate header file for the Space class
+#include "Space.h"
+
+class Player;
+class Space;
 
 class Game
 {
 private:
-    std::vector<Space*> spaces; // Changed to store pointers to Space objects
-    std::vector<Player> players;
+    
+   
 
 public:
+    std::shared_ptr<Player> currentPlayer;
+    std::vector< std::shared_ptr<Player>> players;
     Game();
-    void createSpaces();
-    std::vector<Space*> getSpaces();
+    void nextPlayer();
+    std::shared_ptr<Player> getNextPlayer();
+    std::shared_ptr<std::vector<std::shared_ptr<Space>>> spaces;
+    std::vector<std::shared_ptr<Space>> getSpaces();
+    void win(Player* p);
 };
 
-#endif // GAME_H

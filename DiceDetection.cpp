@@ -22,7 +22,7 @@ enum ResultCode {
 
 bool isRunning = false;
 bool isCalibrated = false;
-VideoCapture cap(0);
+VideoCapture cap(1);
 float calibratedDistance = 0;
 ResultCode validResult(vector<int>);
 void erodeImage(Mat *originalImage, Mat *newImage);
@@ -234,8 +234,7 @@ void DiceDetection::startDetectionWrapper(void (*callback)(const std::vector<int
 
 		//NEEDED TO SHOW IMAGES ON SEPARATE THREAD, REMOVE ON FINAL BUILD
 		//cv::waitKey(0);
-	}
-	
+	}	
 }
 
 void DiceDetection::stop() {

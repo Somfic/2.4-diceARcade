@@ -2,52 +2,50 @@
 #include <vector>
 #include <string>
 #include "Player.h"
-#include "Space.cpp"
+#include "Space.h"
+#include <iostream>
 
-class Game
-{
-	// list of spaces in the game
-	std::vector<Space> spaces;
-	// list of players in the game
-	std::vector<Player> players;
+// list of spaces in the game
+std::vector<Space*> spaces;
+// list of players in the game
+std::vector<Player> players;
 
-	Game()
-	{
-		createSpaces();
-	}
+// constructor for the game that creates the spaces
+Game::Game() {
+	spaces = std::make_shared<std::vector<std::shared_ptr<Space>>>();
+	//createSpaces();
+}
 
-	// builder for the spaces
-	void createSpaces()
-	{
-		// create a new space with a lambda function as parameter and add it to the list of spaces
-		for (int i = 0; i < 76; i++)
-		{
-			if (i == 6)
-				spaces.push_back(BridgeSpace());
-			else if (i == 19)
-				spaces.push_back(WaitSpace());
-			else if (i == 31)
-				spaces.push_back(InnSpace());
-			else if (i == 42)
-				spaces.push_back(MazeSpace());
-			else if (i == 52)
-				spaces.push_back(WaitSpace());
-			else if (i == 58)
-				spaces.push_back(DeathSpace());
-			else if (i == 63)
-				spaces.push_back(WinSpace());
-			else if (i > 63)
-				spaces.push_back(ExcessSpace());
-			else if (i % 9 == 0)
-				spaces.push_back(GooseSpace());
-			else
-				spaces.push_back(NormalSpace());
-
+void Game::nextPlayer() {
+	int currentPlayerIndex = 0;
+	for (int i = 0; i < players.size(); i++) {
+		if (players[i] == currentPlayer) {
+			currentPlayerIndex = i;
 		}
 	}
-
-	std::vector<Space> getSpaces()
-	{
-		return spaces;
+	currentPlayer = players[((currentPlayerIndex + 1) % players.size())];
+}
+std::shared_ptr<Player> Game::getNextPlayer() {
+	int currentPlayerIndex = 0;
+	for (int i = 0; i < players.size(); i++) {
+		if (players[i] == currentPlayer) {
+			currentPlayerIndex = i;
+		}
 	}
-};
+	return players[((currentPlayerIndex + 1) % players.size())];
+}
+
+std::vector<std::shared_ptr<Space>> Game::getSpaces()
+{
+	return *spaces;
+}
+
+void Game::win(Player* p) {
+	// implement GUI
+	std::cout << "Player " << p->getId() << " has WON!\n";
+
+	// each player moves to 0
+	for (int i = 0; i < players.size(); i++) {
+		players[i]->moveTo(0);
+	}
+}

@@ -1,13 +1,27 @@
 #include "MoveToComponent.h"
+#include <iostream>
 
-MoveToComponent::MoveToComponent(){}
+
+MoveToComponent::MoveToComponent(float startSpeed, glm::vec3 startPoint){
+    speed = startSpeed;
+    targetPoint = startPoint;
+}
 MoveToComponent::~MoveToComponent(){}
 
 void MoveToComponent::update(float elapsedTime) {
+    glm::vec3 direction = targetPoint - object->position;
+    float distance = glm::length(direction);
+    float movementDistance = speed * elapsedTime + 0.1f;
 
-	object->position = (1 - speed) * object->position + speed * targetPoint;
+    if (movementDistance >= distance) {
+        object->position = targetPoint;
+        return;
+    }
 
-	float angle = atan2(object->position.z - targetPoint.z, object->position.x - targetPoint.x);
+    glm::vec3 movement = direction * movementDistance;
+    object->position += movement;
 
-	object->rotation.y = 0.05f * angle + 0.95f * object->rotation.y;
+	float angle = atan2(object->position.x - targetPoint.x, object->position.z - targetPoint.z);
+
+    object->rotation.y = (angle);// *0.05f + 0.95f * object->rotation.y;
 }

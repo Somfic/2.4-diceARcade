@@ -14,7 +14,8 @@ Texture::Texture(const std::string& fileName)
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, bpp;
 	unsigned char* imgData = stbi_load(fileName.c_str(), &width, &height, &bpp, 4);
-
+	this->witdh = width;
+	this->height = height;
 
 	////flipping textures because open gl stores textures upside down.
 	//for (int i = 0; i < height / 2; i++)
@@ -39,6 +40,18 @@ Texture::Texture(const std::string& fileName)
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+void Texture::reTexture(unsigned char* imgData) {
+	glTexImage2D(GL_TEXTURE_2D,
+		0, //level
+		GL_RGBA, //internal format
+		this->witdh, //width
+		this->height, //height
+		0, //border
+		GL_RGBA, //data format
+		GL_UNSIGNED_BYTE, //data type
+		imgData);
+	stbi_image_free(imgData);
 }
 
 void Texture::bind()

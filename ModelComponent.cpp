@@ -9,73 +9,26 @@
 
 using tigl::Vertex;
 
-/**
-* Replaces a substring in a string
-*/
-static std::string replace(std::string str, const std::string& toReplace, const std::string& replacement)
-{
-	size_t index = 0;
-	while (true)
-	{
-		index = str.find(toReplace, index);
-		if (index == std::string::npos)
-			break;
-		str.replace(index, toReplace.length(), replacement);
-		++index;
-	}
-	return str;
+#include "ExtraString.h"
+ModelComponent::ModelComponent(const std::string& fileName) {
+	init(fileName, 1);
 }
-
-/**
-* Splits a string into substrings, based on a seperator
-*/
-static std::vector<std::string> split(std::string str, const std::string& seperator)
+ModelComponent::ModelComponent(const std::string& fileName, const float scale)
 {
-	std::vector<std::string> ret;
-	size_t index;
-	while (true)
-	{
-		index = str.find(seperator);
-		if (index == std::string::npos)
-			break;
-		ret.push_back(str.substr(0, index));
-		str = str.substr(index + 1);
-	}
-	ret.push_back(str);
-	return ret;
+	init(fileName, scale);
 }
-
-/**
-* Turns a string to lowercase
-*/
-static inline std::string toLower(std::string data)
+ModelComponent::ModelComponent(const std::string& fileName, const float scale, glm::vec4 color)
 {
-	std::transform(data.begin(), data.end(), data.begin(), ::tolower);
-	return data;
+	init(fileName, scale);
+	materials[0]->ambientColor = color;
 }
 
 
-/**
-* Cleans up a line for processing
-*/
-static inline std::string cleanLine(std::string line)
+ModelComponent::~ModelComponent()
 {
-	line = replace(line, "\t", " ");
-	while (line.find("  ") != std::string::npos)
-		line = replace(line, "  ", " ");
-	if (line == "")
-		return "";
-	if (line[0] == ' ')
-		line = line.substr(1);
-	if (line == "")
-		return "";
-	if (line[line.length() - 1] == ' ')
-		line = line.substr(0, line.length() - 1);
-	return line;
 }
 
-ModelComponent::ModelComponent(const std::string& fileName)
-{
+void ModelComponent::init(const std::string& fileName, const float scale) {
 	std::cout << "Loading " << fileName << std::endl;
 	std::string dirName = fileName;
 	if (dirName.rfind("/") != std::string::npos)
@@ -111,7 +64,7 @@ ModelComponent::ModelComponent(const std::string& fileName)
 		params[0] = toLower(params[0]);
 
 		if (params[0] == "v")
-			vertices.push_back(glm::vec3((float)atof(params[1].c_str()), (float)atof(params[2].c_str()), (float)atof(params[3].c_str())));
+			vertices.push_back(glm::vec3((float)atof(params[1].c_str()) * scale, (float)atof(params[2].c_str()) * scale, (float)atof(params[3].c_str()) * scale));
 		else if (params[0] == "vn")
 			normals.push_back(glm::vec3((float)atof(params[1].c_str()), (float)atof(params[2].c_str()), (float)atof(params[3].c_str())));
 		else if (params[0] == "vt")
@@ -173,9 +126,6 @@ ModelComponent::ModelComponent(const std::string& fileName)
 }
 
 
-ModelComponent::~ModelComponent()
-{
-}
 
 void ModelComponent::initModel()
 {
@@ -320,6 +270,10 @@ void ModelComponent::draw()
 {
 	for (auto group : groups) {
 		if (group->materialIndex >= 0) {
+			tigl::shader->setLightAmbient(0, glm::vec3(materials[group->materialIndex]->ambientColor.r, materials[group->materialIndex]->ambientColor.g, materials[group->materialIndex]->ambientColor.b));
+			tigl::shader->setLightDiffuse(0, glm::vec3(materials[group->materialIndex]->deffuseColor.r, materials[group->materialIndex]->deffuseColor.g, materials[group->materialIndex]->deffuseColor.b));
+			tigl::shader->setLightSpecular(0, glm::vec3(materials[group->materialIndex]->specularColor.r, materials[group->materialIndex]->specularColor.g, materials[group->materialIndex]->specularColor.b));
+			tigl::shader->setShinyness(5.0f);
 			if (materials[group->materialIndex]->texture != NULL) {
 				tigl::shader->enableTexture(true);
 				materials[group->materialIndex]->texture->bind();
