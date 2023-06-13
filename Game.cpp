@@ -51,6 +51,7 @@ void Game::win(Player* p) {
 
 	// each player moves to 0
 	for (int i = 0; i < players.size(); i++) {
+		players[i]->untrap(); 
 		players[i]->moveTo(0);
 	}
 }

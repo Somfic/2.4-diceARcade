@@ -31,6 +31,9 @@ ObjModel* model2;
 int speed = 20;
 bool started = false;
 int numPlayers = 0;
+double lastFrameTime = 0;
+double frameTime = 0;
+const double frame = (1 / 60);
 GLuint cameraTextureId = 0;
 std::vector<std::vector<glm::vec3>> cameraCoordinates;
 Gui* gui;
@@ -64,22 +67,34 @@ int main(void) {
 
     init();
     
+    double time = 0;
+    double deltaTime = 0;
 
     while (!glfwWindowShouldClose(window))
     {
         // Update
         gui->update();
 
-        // Draw
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        time = glfwGetTime();
+        deltaTime = time - lastFrameTime;
+        lastFrameTime = time;
+        frameTime += deltaTime;
 
-        gui->draw();
-        
+        if (frameTime >= frame) {
+            frameTime = 0;
+            // Draw
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        // Swap buffers and poll events
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+            gui->draw();
+
+
+            // Swap buffers and poll events
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+
+
     }
 
     // Cleanup ImGui
@@ -109,9 +124,6 @@ void init()
 
 	tigl::shader->setLightDirectional(0, false);
 	tigl::shader->setLightPosition(0, glm::vec3(0, 1000, 0));
-    
-
-    //gui->initGame();
 
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
 
@@ -121,7 +133,6 @@ void init()
 		});
 }
 float rotation = 0;
-double lastFrameTime = 0;
 
 void update()
 {
