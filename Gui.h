@@ -16,6 +16,10 @@
 #include "obj-model.h"
 #include "game.h"
 #include "ObjectManager.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/features2d.hpp>
 
 class Gui {
 public:
@@ -40,6 +44,7 @@ public:
     void drawStartOverlay();
     void drawGameOverlay();
     void initGame(int totalPlayers);
+    void drawCamera();
 
 private:
     GLFWwindow* window;
@@ -56,6 +61,8 @@ private:
     ResultCode diceStatus;
     Game game;
     ObjectManager objectManager;
+    GLuint cameraTextureId;
+    std::vector<std::vector<glm::vec3>> cameraCoordinates;
 
     std::map<ResultCode, const char*> resultCodeToString;
 

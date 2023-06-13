@@ -16,6 +16,7 @@
 #include <string>
 #include <iostream>
 #include "Gui.h"
+#include "opencv2/highgui/highgui.hpp"
 
 #define PI 3.14
 #pragma comment(lib, "glfw3.lib")
@@ -24,14 +25,14 @@
 
 GLFWwindow* window;
 DiceDetection dd;
-std::shared_ptr<GameObject> model;
-std::shared_ptr<GameObject> model3;
 std::shared_ptr < std::list<std::shared_ptr<GameObject>>> objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
 ObjModel* model2;
 
 int speed = 20;
 bool started = false;
 int numPlayers = 0;
+GLuint cameraTextureId = 0;
+std::vector<std::vector<glm::vec3>> cameraCoordinates;
 Gui* gui;
 
 void init();
@@ -106,6 +107,7 @@ void init()
 
 	tigl::shader->setLightDirectional(0, false);
 	tigl::shader->setLightPosition(0, glm::vec3(0, 1000, 0));
+    
 
     //gui->initGame();
 
