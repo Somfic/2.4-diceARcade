@@ -360,7 +360,7 @@ void Gui::drawGameOverlay() {
     //Second column
     ImGui::NextColumn();
 
-    ImGui::Image((void*)(intptr_t)texture_id, ImVec2(screenWidth * 0.33, screenHeight * 0.2), ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::Image((void*)(intptr_t)texture_id, ImVec2(screenWidth * 0.25, screenHeight * 0.2), ImVec2(0, 1), ImVec2(1, 0));
     //Third column
     ImGui::NextColumn();
     ImGui::Text(resultCodeToString[diceStatus]);
