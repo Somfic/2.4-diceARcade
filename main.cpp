@@ -48,7 +48,7 @@ int main(void) {
         throw "Could not initialize glwf";
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    window = glfwCreateWindow(mode->width, mode->height, "The Goose Game", NULL, NULL);
+    window = glfwCreateWindow(mode->width, mode->height, "The Goose Game", monitor, NULL);
     if (!window)
     {
         glfwTerminate();

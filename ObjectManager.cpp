@@ -5,11 +5,11 @@
 #include <algorithm>
 #include <string>
 
-ObjectManager::ObjectManager(std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, std::string fileName, Game* game) //Game& game,
+ObjectManager::ObjectManager(std::shared_ptr <std::list<std::shared_ptr<GameObject>>> objectList, Game* game) //Game& game,
 {
 	this->game = game;
 	this->objectList = objectList;
-	initEnvironment(fileName);
+	loaded = false;
 }
 ObjectManager::~ObjectManager() {
 
@@ -27,6 +27,7 @@ float degToRad(float degree) {
 }
 
 void ObjectManager::initEnvironment(std::string fileName) {
+	loaded = true;
 	std::cout << "Loading Environment from " << fileName << std::endl;
 	std::ifstream pFile(fileName.c_str());
 	if (!pFile.is_open())

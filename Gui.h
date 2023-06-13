@@ -43,10 +43,12 @@ public:
     void drawGame();
     void drawStartOverlay();
     void drawGameOverlay();
+    void drawLoadingScreen();
     void initGame(int totalPlayers);
     void drawCamera();
 
 private:
+    std::thread initThread;
     GLFWwindow* window;
     std::shared_ptr<GameObject> model;
     std::shared_ptr<GameObject> model3;
@@ -55,7 +57,9 @@ private:
     glm::vec3 camPostion;
     glm::vec3 camLookat;
     int speed;
+    bool loading;
     bool started;
+    bool init;
     int numPlayers;
     std::vector<int> dices;
     ResultCode diceStatus;

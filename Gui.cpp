@@ -17,7 +17,8 @@
 #include "ObjectManager.h"
 #include "tigl.h"
 
-cv::VideoCapture capture(1);
+cv::VideoCapture capture(0);
+
 
 Gui::Gui(GLFWwindow* window)
 {
@@ -36,7 +37,7 @@ Gui::Gui(GLFWwindow* window)
     this->speed = 1;
     this->game = Game();
     this->objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
-    this->objectManager = ObjectManager::ObjectManager(objects, "V1.goosegame", &game);//game, ;
+    this->objectManager = ObjectManager::ObjectManager(objects, &game);//game, ;
     this->cameraTextureId = 0;
     this->cameraCoordinates;
     resultCodeToString = {
@@ -58,6 +59,9 @@ Gui::~Gui()
 }
 
 void Gui::initGame(int totalPlayers) {
+    if (!objectManager.loaded) {
+        objectManager.initEnvironment("V1.goosegame");
+    }
     cameraCoordinates = objectManager.cameraScreens;
 
     std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
@@ -111,9 +115,13 @@ void Gui::render()
 
 void Gui::draw()
 {
-    if (started) {
+    if (started && !loading) {
         drawGame();
         drawGameOverlay();
+    }
+    else if (loading) {
+        drawLoadingScreen();
+        init = true;
     }
     else {
         drawStartOverlay();
@@ -122,7 +130,7 @@ void Gui::draw()
 
 void Gui::update()
 {
-    if (started) {
+    if (started && !loading) {
         double frameTime = glfwGetTime();
         float deltaTime = lastFrameTime - frameTime;
         lastFrameTime = frameTime;
@@ -149,6 +157,14 @@ void Gui::update()
         else {
             camLookat = game.currentPlayer->position;
             camPostion = glm::vec3(game.currentPlayer->position.x + 3, game.currentPlayer->position.y + 10, game.currentPlayer->position.z + 3);
+        }
+    }
+    else if (init) {
+        if (numPlayers > 0) {
+            initGame(numPlayers);
+            init = false;
+            loading = false;
+            started = true;
         }
     }
 }
@@ -226,8 +242,7 @@ void Gui::drawStartOverlay() {
     if (ImGui::Button("Start Game"))
     {
         if (numPlayers > 0) {
-            started = true;
-            initGame(numPlayers);
+            loading = true;
         }
         std::cout << "Starting game with " << numPlayers << " players!" << std::endl;
     }
@@ -237,6 +252,38 @@ void Gui::drawStartOverlay() {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+    glDeleteTextures(1, &texture_id);
+    stbi_image_free(image_data);
+}
+void Gui::drawLoadingScreen() {
+    int screenWidth, screenHeight;
+    glfwGetWindowSize(window, &screenWidth, &screenHeight);
+    GLuint texture_id;
+    int width, height, channels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* image_data = stbi_load("images/goose game loading.jpeg", &width, &height, &channels, 0);
+    if (image_data == nullptr)
+    {
+        // Error loading the image
+        // Handle the error accordingly
+        std::cout << "Error loading image\n";
+    }
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    ImGui::SetNextWindowPos(ImVec2(0,0));
+    ImGui::SetNextWindowSize(ImVec2(screenWidth, screenHeight));
+    ImGui::Begin("Goosegame", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+    ImGui::Image((void*)(intptr_t)texture_id, ImVec2(screenWidth, screenHeight), ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::End();
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glDeleteTextures(1, &texture_id);
     stbi_image_free(image_data);
 }

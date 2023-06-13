@@ -15,8 +15,8 @@ private:
 	
 	std::shared_ptr<Space> currentSpace;
 	int lastRoll;
-	bool trapped;
-	bool reverse;
+	bool trapped = false;
+	bool reverse = false;
 
 public:
 	std::string color;
