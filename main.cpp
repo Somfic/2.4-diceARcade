@@ -107,7 +107,7 @@ void init()
 	tigl::shader->setLightDirectional(0, false);
 	tigl::shader->setLightPosition(0, glm::vec3(0, 1000, 0));
 
-    gui->initGame();
+    //gui->initGame();
 
     void (*callback)(const std::vector<int>&) = tempDiceCallback;
 

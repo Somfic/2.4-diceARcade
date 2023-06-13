@@ -31,7 +31,7 @@ float calculateDistance(const KeyPoint& p1, const KeyPoint& p2);
 bool checkAllSame(const std::queue<std::vector<int>>& queue);
 
 queue<vector<int>> diceQueue;
-const int maxQueueSize = 5;
+const int maxQueueSize = 4;
 const int totalDice = 2;
 const float distanceTreshold = 3;
 

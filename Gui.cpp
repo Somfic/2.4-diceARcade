@@ -16,7 +16,6 @@
 #include <map>
 #include "ObjectManager.h"
 #include "tigl.h"
-#include "ObjectManager.h"
 
 Gui::Gui(GLFWwindow* window)
 {
@@ -54,13 +53,34 @@ Gui::~Gui()
     ImGui::DestroyContext();
 }
 
-void Gui::initGame() {
+void Gui::initGame(int totalPlayers) {
     std::shared_ptr<Player> player1 = std::make_shared<Player>(0, "Green", &game);
     objectManager.addPlayer(player1);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
     std::shared_ptr<Player> player2 = std::make_shared<Player>(1, "Blue", &game);
     objectManager.addPlayer(player2);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
     std::shared_ptr<Player> player3 = std::make_shared<Player>(2, "Red", &game);
     objectManager.addPlayer(player3);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
+    std::shared_ptr<Player> player4 = std::make_shared<Player>(3, "Yellow", &game);
+    objectManager.addPlayer(player4);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
+    std::shared_ptr<Player> player5 = std::make_shared<Player>(4, "Purple", &game);
+    objectManager.addPlayer(player5);
+    totalPlayers--;
+    if (totalPlayers <= 0)
+        return;
+    std::shared_ptr<Player> player6 = std::make_shared<Player>(5, "Orange", &game);
+    objectManager.addPlayer(player6);
 }
 
 void Gui::updateDice(const std::vector<int>& dice) {
@@ -199,6 +219,7 @@ void Gui::drawStartOverlay() {
     {
         if (numPlayers > 0) {
             started = true;
+            initGame(numPlayers);
         }
         std::cout << "Starting game with " << numPlayers << " players!" << std::endl;
     }
@@ -261,7 +282,10 @@ void Gui::drawGameOverlay() {
     for (int i = 0; i < numPlayers; i++) {
         std::string playerString = "Player ";
         playerString += std::to_string(i);
-        playerString += " space x";
+        playerString += " space ";
+        playerString += std::to_string(game.players[i]->getCurrentSpaceIndex());
+        playerString += " ";
+        game.players[i]->getCurrentSpace()->addName(playerString);
         ImGui::Text(playerString.c_str());
     }
 

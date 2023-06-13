@@ -39,7 +39,7 @@ public:
     void drawGame();
     void drawStartOverlay();
     void drawGameOverlay();
-    void initGame();
+    void initGame(int totalPlayers);
 
 private:
     GLFWwindow* window;
