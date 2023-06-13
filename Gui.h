@@ -71,7 +71,8 @@ private:
     std::string successString;
     GLuint cameraTextureId;
     std::vector<std::vector<glm::vec3>> cameraCoordinates;
-
+    std::string winColor;
+    bool showPopup;
     std::map<ResultCode, const char*> resultCodeToString;
 
     float rotation;

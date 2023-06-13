@@ -36,6 +36,7 @@ Gui::Gui(GLFWwindow* window)
     this->camLookat = glm::vec3(0.0f);
     this->speed = 1;
     this->game = Game();
+    this->showPopup = false;
     this->objects = std::make_shared<std::list<std::shared_ptr<GameObject>>>();
     this->objectManager = ObjectManager::ObjectManager(objects, &game);//game, ;
     std::string successString= "You threw";
@@ -44,7 +45,7 @@ Gui::Gui(GLFWwindow* window)
     successString += std::to_string(0);
     this->cameraTextureId = 0;
     this->cameraCoordinates;
-    std::string win = "";
+
     resultCodeToString = {
         {Success,successString.c_str()},
         {DiceTooNearby, "Trying to read dice...\ndice may be to nearby"},
@@ -107,7 +108,8 @@ void Gui::updateDice(const std::vector<int>& dice) {
 }
 
 void Gui::win(std::string color) {
-    
+    winColor = color;
+    showPopup = true;
 }
 
 void Gui::newFrame()
@@ -381,6 +383,19 @@ void Gui::drawGameOverlay() {
 
     ImGui::Columns(1); // Reset to single column layout
 
+    if (showPopup) {
+        ImGui::OpenPopup("Winner");
+        showPopup = false;
+    }
+
+    if (ImGui::BeginPopupModal("Winner", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        std::string popupText = winColor + " won!";
+        ImGui::Text(popupText.c_str());
+        if (ImGui::Button("Close")) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
     ImGui::End();
 
     // Render ImGui
